@@ -1,3 +1,6 @@
+# Execute Bash script remotely
+
+## cURL
 
 ```bash
 curl -s -f -L https://strappazzon.me/get.sh | sh
