@@ -17,6 +17,7 @@ main() {
 
     echo "OS: ${platform}-${arch}"
     echo "Package manager: ${pms}"
+    echo "Parameters: $@"
 }
 
 check_is_not_root() {
