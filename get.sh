@@ -6,9 +6,9 @@ declare platform;
 declare arch;
 
 main() {
-    check_is_not_root
     platform="$(uname -s)"
     arch="$(uname -m)"
+    check_is_not_root
     check_valid_platform
     check_valid_platform_architecture
     check_exist_curl_or_wget
