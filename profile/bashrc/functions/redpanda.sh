@@ -22,4 +22,3 @@ redpanda(){
 redpanda-help() {
     echo "rp topic consume <topic_name> -v -o end -n 1 -g TEST_<user_name>"
 }
-

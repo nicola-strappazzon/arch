@@ -5,22 +5,20 @@ declare -G TMP;
 declare -A osPMS;
 declare platform;
 declare arch;
+declare pms;
 
 main() {
     platform="$(uname -s)"
     arch="$(uname -m)"
-    banner
+
     check_is_not_root
     check_valid_platform
     check_valid_platform_architecture
     check_exist_curl_or_wget
-    TMP="$(mktemp -d "/tmp/strappazzon-XXXXXX")"
-    pms=($(package_manager_system))
-
-    echo "OS: ${platform}-${arch}"
-    echo "Package manager: ${pms}"
-    echo "Parameters: $@"
-    echo ""
+    create_workspace
+    package_manager_system
+    banner
+    info
 
     if [ "$#" -eq 1 ]; then
         run_remote_script $1
@@ -46,6 +44,13 @@ banner() {
     echo " ╚════██║   ██║   ██╔══██╗██╔══██║██╔═══╝ ██╔═══╝ ██╔══██║ ███╔╝   ███╔╝  ██║   ██║██║╚██╗██║   ██║╚██╔╝██║██╔══╝  "
     echo " ███████║   ██║   ██║  ██║██║  ██║██║     ██║     ██║  ██║███████╗███████╗╚██████╔╝██║ ╚████║██╗██║ ╚═╝ ██║███████╗"
     echo " ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝     ╚═╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝╚══════╝"
+    echo ""
+}
+
+info() {
+    echo "OS: ${platform}-${arch}"
+    echo "Package manager: ${pms}"
+    echo "Parameters: $@"
     echo ""
 }
 
@@ -107,9 +112,13 @@ package_manager_system() {
 
     for f in ${!osPMS[@]}; do
         if [[ -f $f ]]; then
-            echo "${osPMS[$f]}"
+            pms="${osPMS[$f]}"
         fi
     done
+}
+
+create_workspace() {
+    TMP="$(mktemp -d "/tmp/strappazzon-XXXXXX")"
 }
 
 clone() {

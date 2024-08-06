@@ -51,3 +51,11 @@ curl_json_to_table() {
 jq-help() {
     echo "To CSV: jq -r '(map(keys_unsorted) | add | unique) as \$cols | \$cols, map(. as \$row | \$cols | map(\$row[.]))[] | @csv'"
 }
+
+backup-usb() {
+    rsync -CPavzt ~/ /run/media/nsc/DATA/
+}
+
+raspberri-pi-find() {
+    sudo nmap -sP 192.168.1.0/24 | awk '/^Nmap/{ip=$NF}/B8:27:EB/{print ip}'
+}
