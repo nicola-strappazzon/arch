@@ -11,7 +11,6 @@ declare -a PACKAGES=(
     btop
     ca-certificates
     curl
-    docker
     fzf
     git
     htop

@@ -21,23 +21,16 @@ main() {
     echo "Parameters: $@"
     echo ""
 
-    if [ "$#" -eq 0 ]; then
+    if [ "$#" -eq 1 ]; then
+        run_script $1
         exit 0
     fi
 
-    URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/os/${pms}/$1.sh"
-    if curl --output /dev/null --silent --head --fail "${URI}"; then
-        echo "Load: ${1}"
-        curl -s -f -L "${URI}" | sh
-        exit 0
-    fi
-
-    URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/profile/$1.sh"
-    if curl --output /dev/null --silent --head --fail "${URI}"; then
-        echo "Load: ${1}"
-        curl -s -f -L "${URI}" | sh
-        exit 0
-    fi
+    run_script "os/packages"
+    run_script "os/yay"
+    run_script "os/docker"
+    run_script "profile/git"
+    run_script "profile/inputrc"
 }
 
 banner() {
@@ -115,6 +108,14 @@ package_manager_system() {
             echo "${osPMS[$f]}"
         fi
     done
+}
+
+run_script() {
+    URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/$1.sh"
+    if curl --output /dev/null --silent --head --fail "${URI}"; then
+        echo "Run script: ${URI}"
+        curl -s -f -L "${URI}" | sh
+    fi
 }
 
 main "$@"
