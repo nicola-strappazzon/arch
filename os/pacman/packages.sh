@@ -39,6 +39,7 @@ for PACKAGE in "${PACKAGES[@]}"; do
     pacman -Q "${PACKAGE}" &> /dev/null || EXITCODE=$?
 
     if [ "${EXITCODE}" -ne 0 ]; then
-        sudo pacman -S "$PACKAGE" --noconfirm --needed
+        echo "Install package: ${PACKAGE}"
+        sudo pacman -S "${PACKAGE}" --noconfirm --needed
     fi
 done
