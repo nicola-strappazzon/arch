@@ -9,7 +9,7 @@ cp -R "$(pwd)/profile/bashrc/." ~/.bashrc.d/
 chmod -R 0700 ~/.bashrc.d
 
 if [ ! -f /etc/profile.d/custom.sh ]; then
-    sudo cp $(pwd)/profile/bashrc/custom.sh /etc/profile.d/custom.sh
+    sudo cp $(pwd)/profile/profile.sh /etc/profile.d/custom.sh
 fi
 
 if [ -f ~/.bashrc ]; then
