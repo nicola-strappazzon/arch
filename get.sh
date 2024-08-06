@@ -25,7 +25,12 @@ main() {
         exit 0
     fi
 
-
+    url = "https://raw.githubusercontent.com/nstrappazzonc/get/main/os/${pms}/$1.sh"
+    if curl --output /dev/null --silent --head --fail "${url}"; then
+        echo "Load: ${1}"
+        curl -s -f -L "${url}" | sh
+        exit 0
+    fi
 
 #     if [ -f "${PWD}/os/${pms}/$1.sh" ]; then
 #         echo "Load: ${PWD}/os/${pms}/$1.sh"

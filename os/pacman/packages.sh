@@ -3,12 +3,16 @@ set -eu
 
 declare -I EXITCODE=0
 declare -A PACKAGES=(
+    aws-cli
     base
     base-devel
     bash-completion
     bind-tools
     btop
+    ca-certificates
     curl
+    docker
+    fzf
     git
     htop
     jq
@@ -20,9 +24,12 @@ declare -A PACKAGES=(
     pass-otp
     rsync
     tmux
+    traceroute
+    unrar
+    unzip
     usbutils
+    vim
     wget
-    fzf
 )
 
 sudo pacman -Syu --noconfirm
