@@ -31,18 +31,12 @@ main() {
         curl -s -f -L "${URI}" | sh
         exit 0
     fi
-
-#     if [ -f "${PWD}/os/${pms}/$1.sh" ]; then
-#         echo "Load: ${PWD}/os/${pms}/$1.sh"
-#         source "${PWD}/os/${pms}/$1.sh"
-#         exit 0
-#     fi
-
-#     if [ -f "${PWD}/profile/$1.sh" ]; then
-#         echo "Load: ${PWD}/profile/$1.sh"
-#         source "${PWD}/profile/$1.sh"
-#         exit 0
-#     fi
+        URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/profile/$1.sh"
+    if curl --output /dev/null --silent --head --fail "${URI}"; then
+        echo "Load: ${1}"
+        curl -s -f -L "${URI}" | sh
+        exit 0
+    fi
 }
 
 banner() {
