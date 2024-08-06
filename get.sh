@@ -31,7 +31,8 @@ main() {
         curl -s -f -L "${URI}" | sh
         exit 0
     fi
-        URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/profile/$1.sh"
+
+    URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/profile/$1.sh"
     if curl --output /dev/null --silent --head --fail "${URI}"; then
         echo "Load: ${1}"
         curl -s -f -L "${URI}" | sh
