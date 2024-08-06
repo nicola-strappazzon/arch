@@ -25,10 +25,10 @@ main() {
         exit 0
     fi
 
-    url = "https://raw.githubusercontent.com/nstrappazzonc/get/main/os/${pms}/$1.sh"
-    if curl --output /dev/null --silent --head --fail "${url}"; then
+    URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/os/${pms}/$1.sh"
+    if curl --output /dev/null --silent --head --fail "${URI}"; then
         echo "Load: ${1}"
-        curl -s -f -L "${url}" | sh
+        curl -s -f -L "${URI}" | sh
         exit 0
     fi
 
