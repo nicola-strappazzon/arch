@@ -31,6 +31,7 @@ main() {
     run_script "os/${pms}/docker"
     run_script "profile/git"
     run_script "profile/inputrc"
+    run_script "profile/bashrc"
 }
 
 banner() {
