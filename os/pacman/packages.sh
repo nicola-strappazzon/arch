@@ -2,7 +2,7 @@
 set -eu
 
 declare -I EXITCODE=0
-declare -A PACKAGES=(
+declare -a PACKAGES=(
     aws-cli
     base
     base-devel
