@@ -19,6 +19,25 @@ main() {
     echo "OS: ${platform}-${arch}"
     echo "Package manager: ${pms}"
     echo "Parameters: $@"
+    echo ""
+
+    if [ "$#" -eq 0 ]; then
+        exit 0
+    fi
+
+
+
+#     if [ -f "${PWD}/os/${pms}/$1.sh" ]; then
+#         echo "Load: ${PWD}/os/${pms}/$1.sh"
+#         source "${PWD}/os/${pms}/$1.sh"
+#         exit 0
+#     fi
+
+#     if [ -f "${PWD}/profile/$1.sh" ]; then
+#         echo "Load: ${PWD}/profile/$1.sh"
+#         source "${PWD}/profile/$1.sh"
+#         exit 0
+#     fi
 }
 
 banner() {
@@ -77,7 +96,7 @@ check_exist_curl_or_wget(){
         wget -O- "$@"
         }
     else
-        echo "Could not find 'curl' or 'wget' in your path"
+        echo "Could not find; 'curl' or 'wget'"
         exit 1
     fi
 }
