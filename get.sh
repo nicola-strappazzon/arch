@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
+declare -G TMP;
 declare -A osPMS;
 declare platform;
 declare arch;
@@ -13,7 +14,7 @@ main() {
     check_valid_platform
     check_valid_platform_architecture
     check_exist_curl_or_wget
-    tmp="$(mktemp -d "/tmp/strappazzon-XXXXXX")"
+    TMP="$(mktemp -d "/tmp/strappazzon-XXXXXX")"
     pms=($(package_manager_system))
 
     echo "OS: ${platform}-${arch}"
@@ -22,16 +23,17 @@ main() {
     echo ""
 
     if [ "$#" -eq 1 ]; then
-        run_script $1
+        run_remote_script $1
         exit 0
     fi
 
-    run_script "os/${pms}/packages"
-    run_script "os/${pms}/yay"
-    run_script "os/${pms}/docker"
-    run_script "profile/git"
-    run_script "profile/inputrc"
-    run_script "profile/bashrc"
+    clone
+    run_local_script "os/${pms}/packages"
+    run_local_script "os/${pms}/yay"
+    run_local_script "os/${pms}/docker"
+    run_local_script "profile/git"
+    run_local_script "profile/inputrc"
+    run_local_script "profile/bashrc"
 }
 
 banner() {
@@ -103,20 +105,36 @@ package_manager_system() {
     osPMS[/etc/debian_version]=apt-get
     osPMS[/etc/alpine-release]=apk
 
-    for f in ${!osPMS[@]}
-    do
-        if [[ -f $f ]];then
+    for f in ${!osPMS[@]}; do
+        if [[ -f $f ]]; then
             echo "${osPMS[$f]}"
         fi
     done
 }
 
-run_script() {
+clone() {
+    if [ ! -d "${TMP}" ]; then
+        exit 1
+    fi
+
+    if ! which git >/dev/null 2>&1; then
+        exit 1
+    fi
+
+    git clone https://github.com/nstrappazzonc/get.git $TMP 2> /dev/null
+}
+
+run_remote_script() {
     URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/$1.sh"
     if curl --output /dev/null --silent --head --fail "${URI}"; then
         echo "Run script: ${URI}"
         curl -s -f -L "${URI}" | sh
     fi
+}
+
+run_local_script() {
+    cd $TMP
+    source "./${1}.sh"
 }
 
 main "$@"

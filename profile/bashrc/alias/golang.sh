@@ -1,0 +1,1 @@
+alias gf="gofmt -w ."
