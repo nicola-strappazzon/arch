@@ -26,9 +26,9 @@ main() {
         exit 0
     fi
 
-    run_script "os/packages"
-    run_script "os/yay"
-    run_script "os/docker"
+    run_script "os/${pms}/packages"
+    run_script "os/${pms}/yay"
+    run_script "os/${pms}/docker"
     run_script "profile/git"
     run_script "profile/inputrc"
 }
