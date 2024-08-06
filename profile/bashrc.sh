@@ -5,7 +5,7 @@ mkdir -p ~/.bashrc.d/
 mkdir -p ~/.bashrc.d/alias/
 mkdir -p ~/.bashrc.d/env/
 mkdir -p ~/.bashrc.d/functions/
-cp -R "$(pwd)/bashrc/." ~/.bashrc.d/
+cp -R "$(pwd)/profile/bashrc/." ~/.bashrc.d/
 chmod -R 0700 ~/.bashrc.d
 
 if [ -f ~/.bashrc ]; then
