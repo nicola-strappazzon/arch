@@ -39,11 +39,15 @@ partitioning() {
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
+    parted --script $VOLUMEN print
+
     # delete old partitions
     echo "--> Delete old partitions."
     (parted --script $VOLUMEN rm 1) || true
     (parted --script $VOLUMEN rm 2) || true
     (parted --script $VOLUMEN rm 3) || true
+
+    parted --script $VOLUMEN print
 
     # create partitions
     echo "--> Create new partitions."
@@ -105,6 +109,14 @@ base() {
         vim \
         openssh \
     &> /dev/null
+}
+
+bootloader() {
+    if [[ ! -d "/sys/firmware/efi" ]]; then
+        grub-install --boot-directory=/mnt/boot $VOLUMEN
+    else
+        pacstrap /mnt efibootmgr --noconfirm --needed
+    fi
 }
 
 # localization() {
