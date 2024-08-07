@@ -113,6 +113,7 @@ base() {
 }
 
 bootloader() {
+    echo "--> Bootloader Install..."
     if [[ ! -d "/sys/firmware/efi" ]]; then
         grub-install --boot-directory=/mnt/boot $VOLUMEN
     else
