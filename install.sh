@@ -11,7 +11,6 @@ main() {
     mirror
     keyboard
     partitioning
-    mount
     base
 }
 
@@ -64,22 +63,8 @@ partitioning() {
     echo "--> Verify partitions."
     partprobe /dev/sda
 
-    sync
-}
-
-partition_delete() {
-    (partprobe "${VOLUMEN}${1}" --summary --dry-run &> /dev/null || EXITCODE=$?) || true
-    if [ "${EXITCODE}" -ne 0 ]; then
-        echo "--> Delete old partition: ${VOLUMEN}${1}"
-        parted --script $VOLUMEN rm $1
-        partprobe $VOLUMEN
-    fi
-    EXITCODE=0
-}
-
-mount() {
     echo "--> Mount: swap, root and boot"
-#     swapon "${VOLUMEN}2"
+    swapon "${VOLUMEN}2"
     mount "${VOLUMEN}3" /mnt
     mkdir -p /mnt/boot/efi/
     mount "${VOLUMEN}1" /mnt/boot/efi/
@@ -91,6 +76,16 @@ mount() {
     echo "--> Generate fstab."
     mkdir /mnt/etc/
     genfstab -pU /mnt >> /mnt/etc/fstab
+}
+
+partition_delete() {
+    (partprobe "${VOLUMEN}${1}" --summary --dry-run &> /dev/null || EXITCODE=$?) || true
+    if [ "${EXITCODE}" -ne 0 ]; then
+        echo "--> Delete old partition: ${VOLUMEN}${1}"
+        parted --script $VOLUMEN rm $1
+        partprobe $VOLUMEN
+    fi
+    EXITCODE=0
 }
 
 base() {
