@@ -43,9 +43,10 @@ keyboard() {
 partitioning() {
     # make sure everything is unmounted before we start
     echo "--> Umount partitions."
-    umount --all-targets --quiet --recursive /mnt
+    umount --all-targets --quiet --recursive /mnt/
 
     # delete old partitions
+    echo "--> Delete old partitions."
     partition_delete 1
     partition_delete 2
     partition_delete 3
