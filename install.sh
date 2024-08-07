@@ -40,15 +40,11 @@ partitioning() {
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
-    parted --script /dev/sda print
-
     # delete old partitions
     echo "--> Delete old partitions."
     partition_delete 1
     partition_delete 2
     partition_delete 3
-
-    parted --script /dev/sda print
 
     # create partitions
     echo "--> Create new partitions."
@@ -63,7 +59,6 @@ partitioning() {
     mkfs.fat -F32 -n UEFI "${VOLUMEN}1"
     mkswap -L SWAP "${VOLUMEN}2"
     mkfs.ext4 -L ROOT "${VOLUMEN}3"
-#     parted --script /dev/sda print
 
     # reread partition table to ensure it is correct
     echo "--> Verify partitions."
