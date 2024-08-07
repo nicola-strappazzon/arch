@@ -103,7 +103,8 @@ base() {
         grub \
         efibootmgr \
         vim \
-        openssh
+        openssh \
+    &> /dev/null
 }
 
 # localization() {
