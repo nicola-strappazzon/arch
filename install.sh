@@ -7,9 +7,9 @@ declare -I EXITCODE=0;
 main() {
     VOLUMEN="/dev/sda"
 
-    ntp
-    mirror
-    keyboard
+#     ntp
+#     mirror
+#     keyboard
     partitioning
     base
 }
