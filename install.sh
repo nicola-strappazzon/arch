@@ -8,6 +8,7 @@ main() {
     ntp
     mirror
     keyboard
+    partition
 }
 
 iso() {
@@ -28,6 +29,23 @@ mirror() {
 
 keyboard() {
     loadkeys us
+}
+
+partition() {
+    parted -s /dev/sda print
+    parted -s /dev/sda rm 1
+    parted -s /dev/sda rm 2
+    parted -s /dev/sda rm 3
+    parted -s /dev/sda mklabel gpt
+    parted -s /dev/sda mkpart efi fat32 1MiB 1024MiB
+    parted -s /dev/sda set 1 esp on
+    parted -s /dev/sda mkpart swap linux-swap 1GiB 38GiB
+    parted -s /dev/sda mkpart root ext4 38GiB 100%
+    mkfs.fat -F32 -n UEFI /dev/sda1
+    mkswap -L SWAP /dev/sda2
+    mkfs.ext4 -L ROOT /dev/sda3
+    parted -s /dev/sda print
+    partprobe /dev/sda
 }
 
 main "$@"
