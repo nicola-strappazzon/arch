@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-declare ISO
+declare ISO;
 
 main() {
     iso
