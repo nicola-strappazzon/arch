@@ -63,6 +63,8 @@ partitioning() {
     # reread partition table to ensure it is correct
     echo "--> Verify partitions."
     partprobe /dev/sda
+
+    sync
 }
 
 partition_delete() {
