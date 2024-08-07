@@ -41,9 +41,9 @@ partitioning() {
 
     # delete old partitions
     echo "--> Delete old partitions."
-    partition_delete 1
-    partition_delete 2
-    partition_delete 3
+    (parted --script $VOLUMEN rm 1) || true
+    (parted --script $VOLUMEN rm 2) || true
+    (parted --script $VOLUMEN rm 3) || true
 
     # create partitions
     echo "--> Create new partitions."
@@ -78,15 +78,15 @@ partitioning() {
     genfstab -pU /mnt >> /mnt/etc/fstab
 }
 
-partition_delete() {
-    (partprobe "${VOLUMEN}${1}" --summary --dry-run &> /dev/null || EXITCODE=$?) || true
-    if [ "${EXITCODE}" -ne 0 ]; then
-        echo "--> Delete old partition: ${VOLUMEN}${1}"
-        parted --script $VOLUMEN rm $1
-        partprobe $VOLUMEN
-    fi
-    EXITCODE=0
-}
+# partition_delete() {
+#     (partprobe "${VOLUMEN}${1}" --summary --dry-run &> /dev/null || EXITCODE=$?) || true
+#     if [ "${EXITCODE}" -ne 0 ]; then
+#         echo "--> Delete old partition: ${VOLUMEN}${1}"
+#         parted --script $VOLUMEN rm $1
+#         partprobe $VOLUMEN
+#     fi
+#     EXITCODE=0
+# }
 
 base() {
     echo "--> Installing essential packages..."
