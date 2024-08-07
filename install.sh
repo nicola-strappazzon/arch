@@ -41,29 +41,41 @@ keyboard() {
 }
 
 partitioning() {
+    # make sure everything is unmounted before we start
+    echo "--> Umount partitions."
     umount -A --recursive /mnt
 
+    # delete old partitions
     partition_delete 1
     partition_delete 2
     partition_delete 3
 
+    # create partitions
+    echo "--> Create new partitions."
     parted -s $VOLUMEN mklabel gpt
     parted -s $VOLUMEN mkpart efi fat32 1MiB 1024MiB
     parted -s $VOLUMEN set 1 esp on
     parted -s $VOLUMEN mkpart swap linux-swap 1GiB 2GiB
     parted -s $VOLUMEN mkpart root ext4 2GiB 100%
+
+    # format partitions
+    echo "--> Format partitions..."
     mkfs.fat -F32 -n UEFI "${VOLUMEN}1"
     mkswap -L SWAP "${VOLUMEN}2"
     mkfs.ext4 -L ROOT "${VOLUMEN}3"
     parted -s /dev/sda print
+
+    # reread partition table to ensure it is correct
+    echo "--> Verify partitions."
     partprobe /dev/sda
 }
 
 partition_delete() {
     (partprobe "${VOLUMEN}${1}" --summary --dry-run &> /dev/null || EXITCODE=$?) || true
     if [ "${EXITCODE}" -ne 0 ]; then
-        echo "--> Delete partition: ${VOLUMEN}${1}"
+        echo "--> Delete old partition: ${VOLUMEN}${1}"
         parted -s "${VOLUMEN}${1}" rm $1
+        partprobe ${VOLUMEN}
     fi
     EXITCODE=0
 }
