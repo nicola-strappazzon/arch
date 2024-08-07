@@ -38,12 +38,17 @@ partitioning() {
     # make sure everything is unmounted before we start
     echo "--> Umount partitions."
     (umount --all-targets --quiet --recursive /mnt/) || true
+    (swapoff --all) || true
+
+    parted --script /dev/sda print
 
     # delete old partitions
     echo "--> Delete old partitions."
     partition_delete 1
     partition_delete 2
     partition_delete 3
+
+    parted --script /dev/sda print
 
     # create partitions
     echo "--> Create new partitions."
