@@ -14,11 +14,12 @@ main() {
 #     check_is_not_root
     check_valid_platform
     check_valid_platform_architecture
+    check_valid_distribution
     check_exist_curl_or_wget
     create_workspace
-    package_manager_system
+#     package_manager_system
     banner
-    info
+#     info
 
     if [ "$#" -eq 1 ]; then
         run_remote_script $1
@@ -50,21 +51,28 @@ banner() {
 info() {
     echo "OS: ${platform}-${arch}"
     echo "Package manager: ${pms}"
-    echo "Parameters: $@"
+#     echo "Parameters: $@"
     echo ""
 }
 
-check_is_not_root() {
-    if [[ $EUID -eq 0 ]]; then
-        echo "This script must be run as not root"
+check_valid_distribution() {
+    if [[ ! -f /etc/arch-release ]]; then
+        echo "Unsupported linux distribution."
         exit 1
     fi
 }
 
+# check_is_not_root() {
+#     if [[ $EUID -eq 0 ]]; then
+#         echo "This script must be run as not root"
+#         exit 1
+#     fi
+# }
+
 check_valid_platform() {
-    if [ "$platform" = "Darwin" ]; then
-        platform="macos"
-    elif [ "$platform" = "Linux" ]; then
+#     if [ "$platform" = "Darwin" ]; then
+#         platform="macos"
+    if [ "$platform" = "Linux" ]; then
         platform="linux"
     else
         echo "Unsupported platform $platform"
@@ -102,20 +110,20 @@ check_exist_curl_or_wget(){
     fi
 }
 
-package_manager_system() {
-    osPMS[/etc/redhat-release]=yum
-    osPMS[/etc/arch-release]=pacman
-    osPMS[/etc/gentoo-release]=emerge
-    osPMS[/etc/SuSE-release]=zypp
-    osPMS[/etc/debian_version]=apt-get
-    osPMS[/etc/alpine-release]=apk
-
-    for f in ${!osPMS[@]}; do
-        if [[ -f $f ]]; then
-            pms="${osPMS[$f]}"
-        fi
-    done
-}
+# package_manager_system() {
+#     osPMS[/etc/redhat-release]=yum
+#     osPMS[/etc/arch-release]=pacman
+#     osPMS[/etc/gentoo-release]=emerge
+#     osPMS[/etc/SuSE-release]=zypp
+#     osPMS[/etc/debian_version]=apt-get
+#     osPMS[/etc/alpine-release]=apk
+#
+#     for f in ${!osPMS[@]}; do
+#         if [[ -f $f ]]; then
+#             pms="${osPMS[$f]}"
+#         fi
+#     done
+# }
 
 create_workspace() {
     TMP="$(mktemp -d "/tmp/strappazzon-XXXXXX")"
