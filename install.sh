@@ -12,6 +12,7 @@ main() {
 #     keyboard
     partitioning
     base
+    bootloader
 }
 
 ntp() {
