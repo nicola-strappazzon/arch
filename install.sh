@@ -74,8 +74,8 @@ partition_delete() {
     (partprobe "${VOLUMEN}${1}" --summary --dry-run &> /dev/null || EXITCODE=$?) || true
     if [ "${EXITCODE}" -ne 0 ]; then
         echo "--> Delete old partition: ${VOLUMEN}${1}"
-        parted -s "${VOLUMEN}${1}" rm $1
-        partprobe ${VOLUMEN}
+        parted -s $VOLUMEN rm $1
+        partprobe $VOLUMEN
     fi
     EXITCODE=0
 }
