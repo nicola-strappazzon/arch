@@ -50,7 +50,7 @@ partitioning() {
 }
 
 partition_delete() {
-    partprobe "/dev/sda${1}" --summary --dry-run &> /dev/null || EXITCODE=$?
+    (partprobe "/dev/sda${1}" --summary --dry-run &> /dev/null || EXITCODE=$?) || true
     if [ "${EXITCODE}" -ne 0 ]; then
         parted -s "/dev/sda${1}" rm $1
     fi
