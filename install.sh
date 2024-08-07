@@ -51,14 +51,14 @@ partitioning() {
     parted --script $VOLUMEN mklabel gpt
     parted --script $VOLUMEN mkpart efi fat32 1MiB 1024MiB
     parted --script $VOLUMEN set 1 esp on
-    parted --script $VOLUMEN mkpart swap linux-swap 1GiB 2GiB
-    parted --script $VOLUMEN mkpart root ext4 2GiB 100%
+    parted --script $VOLUMEN mkpart swap linux-swap 1GiB 3GiB
+    parted --script $VOLUMEN mkpart root ext4 3GiB 100%
 
     # format partitions
     echo "--> Format partitions..."
-    mkfs.fat -F32 -n UEFI "${VOLUMEN}1"
-    mkswap -L SWAP "${VOLUMEN}2"
-    mkfs.ext4 -L ROOT "${VOLUMEN}3"
+    mkfs.fat -F32 -n UEFI "${VOLUMEN}1" &> /dev/null
+    mkswap -L SWAP "${VOLUMEN}2" &> /dev/null
+    mkfs.ext4 -L ROOT "${VOLUMEN}3" &> /dev/null
 
     # reread partition table to ensure it is correct
     echo "--> Verify partitions."
@@ -78,8 +78,8 @@ partition_delete() {
 }
 
 mount() {
-    echo "--> Mount: swap, boot and root"
-    swapon "${VOLUMEN}2"
+    echo "--> Mount: swap, root and boot"
+#     swapon "${VOLUMEN}2"
     mount "${VOLUMEN}3" /mnt
     mkdir -p /mnt/boot/efi/
     mount "${VOLUMEN}1" /mnt/boot/efi/
