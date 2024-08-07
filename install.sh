@@ -22,7 +22,7 @@ ntp() {
 
 mirror() {
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    reflector -a 48 -c $iso -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
+    reflector -a 48 -c $ISO -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
     pacman -Sy
 }
 
