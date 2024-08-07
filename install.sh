@@ -100,7 +100,7 @@ base() {
         openssh
 }
 
-localization() {
-}
+# localization() {
+# }
 
 main "$@"
