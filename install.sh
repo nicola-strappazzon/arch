@@ -41,6 +41,8 @@ keyboard() {
 }
 
 partitioning() {
+    umount -A --recursive /mnt
+
     partition_delete 1
     partition_delete 2
     partition_delete 3
