@@ -25,13 +25,13 @@ main() {
         exit 0
     fi
 
-    clone
-    run_local_script "os/${pms}/packages"
-    run_local_script "os/${pms}/yay"
-    run_local_script "os/${pms}/docker"
-    run_local_script "profile/git"
-    run_local_script "profile/inputrc"
-    run_local_script "profile/bashrc"
+#     clone
+#     run_local_script "os/${pms}/packages"
+#     run_local_script "os/${pms}/yay"
+#     run_local_script "os/${pms}/docker"
+#     run_local_script "profile/git"
+#     run_local_script "profile/inputrc"
+#     run_local_script "profile/bashrc"
 }
 
 banner() {
