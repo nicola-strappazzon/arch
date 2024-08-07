@@ -11,7 +11,7 @@ main() {
 }
 
 iso() {
-    ISO=$(curl -4 ifconfig.co/country-iso)
+    ISO=$(curl -s -4 ifconfig.co/country-iso)
 }
 
 ntp() {
