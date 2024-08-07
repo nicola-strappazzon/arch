@@ -1,24 +1,18 @@
 #!/usr/bin/env sh
 set -eu
 
-declare ISO;
 declare VOLUMEN;
 declare -I EXITCODE=0;
 
 main() {
     VOLUMEN="/dev/sda"
 
-    iso
     ntp
     mirror
     keyboard
     partitioning
     mount
     base
-}
-
-iso() {
-    ISO=$(curl -s -4 ifconfig.co/country-iso)
 }
 
 ntp() {
@@ -31,7 +25,7 @@ ntp() {
 mirror() {
     echo "--> Configure mirrorlist."
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    reflector -a 48 -c $ISO -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
+    reflector -a 48 -c ES -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
     echo "--> Synchronize database..."
     pacman -Sy &> /dev/null
 }
