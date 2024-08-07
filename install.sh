@@ -2,13 +2,14 @@
 set -eu
 
 declare ISO;
+declare -I EXITCODE=0;
 
 main() {
     iso
     ntp
     mirror
     keyboard
-    partition
+    partitioning
 }
 
 iso() {
@@ -31,11 +32,11 @@ keyboard() {
     loadkeys us
 }
 
-partition() {
-    parted -s /dev/sda print
-    parted -s /dev/sda rm 1
-    parted -s /dev/sda rm 2
-    parted -s /dev/sda rm 3
+partitioning() {
+    partition_delete 1
+    partition_delete 2
+    partition_delete 3
+
     parted -s /dev/sda mklabel gpt
     parted -s /dev/sda mkpart efi fat32 1MiB 1024MiB
     parted -s /dev/sda set 1 esp on
@@ -46,6 +47,14 @@ partition() {
     mkfs.ext4 -L ROOT /dev/sda3
     parted -s /dev/sda print
     partprobe /dev/sda
+}
+
+partition_delete() {
+    partprobe "/dev/sda{$1}" --summary --dry-run &> /dev/null || EXITCODE=$?
+    if [ "${EXITCODE}" -ne 0 ]; then
+        parted -s "/dev/sda{$1}" rm $1
+    fi
+    EXITCODE=0
 }
 
 main "$@"

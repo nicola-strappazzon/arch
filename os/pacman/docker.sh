@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -eu
 
-declare -I EXITCODE=0
+declare -I EXITCODE=0;
 
 pacman -Q docker &> /dev/null || EXITCODE=$?
 
