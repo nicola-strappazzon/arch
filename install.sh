@@ -8,14 +8,14 @@ declare -I EXITCODE=0;
 main() {
     VOLUMEN="/dev/sda"
 
-    ntp
-    mirror
-    keyboard
+#     ntp
+#     mirror
+#     keyboard
     user_password
-    partitioning
-    base
-    configure
-    finish
+#     partitioning
+#     base
+#     configure
+#     finish
 }
 
 ntp() {
@@ -46,7 +46,7 @@ user_password() {
         read -s -p "    Confirm your password: " password_confirm
         echo
         [ "$password" = "$password_confirm" ] && break
-        echo "Passwords do not match. Please try again."
+        echo "--> Passwords do not match. Please try again."
     done
 
     ENCRYPTED_PASSWORD=$(openssl passwd -6 "$password")
