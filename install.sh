@@ -3,7 +3,6 @@
 
 declare VOLUMEN;
 declare PASSWORD;
-# declare -g EXITCODE=0;
 
 main() {
     VOLUMEN="/dev/sda"
@@ -127,8 +126,7 @@ configure() {
 EOF
 
     echo "--> Create user."
-    echo $PASSWORD
-    arch-chroot /mnt useradd --create-home --shell=/bin/bash --groups=wheel,uucp --password=$PASSWORD ns
+    arch-chroot /mnt useradd --create-home --shell=/bin/bash --groups=wheel,uucp --password=$PASSWORD --comment="Nicola Strappazzon" ns
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     echo "--> Install bootloader."
