@@ -40,9 +40,9 @@ keyboard() {
 
 user_password(){
     while true; do
-        read -s "Enter your password: " password
+        read -s -p "Enter your password: " password
         echo
-        read -s "Confirm your password: " password_confirm
+        read -s -p "Confirm your password: " password_confirm
         echo
         [ "$password" = "$password_confirm" ] && break
         echo "Passwords do not match. Please try again."
