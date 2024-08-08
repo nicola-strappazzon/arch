@@ -8,13 +8,13 @@ declare -I EXITCODE=0;
 main() {
     VOLUMEN="/dev/sda"
 
-#     ntp
-#     mirror
-#     keyboard
+    ntp
+    mirror
+    keyboard
     user_password
-#     partitioning
-#     base
-#     configure
+    partitioning
+    base
+    configure
 #     finish
 }
 
