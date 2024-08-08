@@ -58,9 +58,9 @@ partitioning() {
     (swapoff --all) || true
 
     echo "--> Delete old partitions."
-    (parted --script $VOLUMEN rm 1 2>&1 > /dev/null) || true
-    (parted --script $VOLUMEN rm 2 2>&1 > /dev/null) || true
-    (parted --script $VOLUMEN rm 3 2>&1 > /dev/null) || true
+    (parted --script $VOLUMEN rm 1 &> /dev/null) || true
+    (parted --script $VOLUMEN rm 2 &> /dev/null) || true
+    (parted --script $VOLUMEN rm 3 &> /dev/null) || true
 
     echo "--> Create new partitions."
     parted --script $VOLUMEN mklabel gpt
@@ -130,10 +130,8 @@ cat << EOL > /etc/hosts
 EOL
 
 # Create user
-echo "root:${ENCRYPTED_PASSWORD}" | chpasswd -e
 useradd -m -g users -G wheel -s /bin/bash ns
 usermod -a -G uucp ns
-echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd -e
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 # Install bootloader
@@ -141,6 +139,9 @@ grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB 
 grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
 
 EOF
+
+    echo "root:${ENCRYPTED_PASSWORD}" | chpasswd -R /mnt
+    echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd -R /mnt
 }
 
 finish(){
