@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # set -eu
 
-declare VOLUMEN;
-declare ENCRYPTED_PASSWORD;
-declare -I EXITCODE=0;
+declare -g VOLUMEN;
+declare -g ENCRYPTED_PASSWORD;
+declare -g EXITCODE=0;
 
 main() {
     VOLUMEN="/dev/sda"
