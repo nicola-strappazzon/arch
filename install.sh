@@ -2,7 +2,7 @@
 # set -eu
 
 declare -g VOLUMEN;
-declare -g ENCRYPTED_PASSWORD;
+declare -g PASSWORD;
 declare -g EXITCODE=0;
 
 main() {
@@ -41,16 +41,13 @@ keyboard() {
 user_password() {
     echo "--> Define password for root and user."
     while true; do
-        IFS="" read -s -p "    Enter your password: " password </dev/tty
+        IFS="" read -s -p "    Enter your password: " PASSWORD </dev/tty
         echo
         IFS="" read -s -p "    Confirm your password: " password_confirm </dev/tty
         echo
-        [ "$password" = "$password_confirm" ] && break
+        [ "$PASSWORD" = "$password_confirm" ] && break
         echo "--> Passwords do not match. Please try again."
     done
-
-#     ENCRYPTED_PASSWORD=$(openssl passwd -6 "$password")
-    ENCRYPTED_PASSWORD="${password}"
 }
 
 partitioning() {
@@ -129,11 +126,11 @@ configure() {
 127.0.1.1   ws.localdomain ws
 EOF
 
-    echo "--> Create and configure user."
+    echo "--> Create user."
     echo "    ns:${ENCRYPTED_PASSWORD}"
-    arch-chroot /mnt useradd -mU -s /bin/bash -G wheel,uucp ns
-    echo "root:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
-    echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
+    arch-chroot /mnt useradd --create-home --shell /bin/bash --groups wheel,uucp --password $PASSWORD ns
+#     echo "root:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
+#     echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     echo "--> Install bootloader."
