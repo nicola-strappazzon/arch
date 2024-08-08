@@ -49,7 +49,8 @@ user_password() {
         echo "--> Passwords do not match. Please try again."
     done
 
-    ENCRYPTED_PASSWORD=$(openssl passwd -6 "$password")
+#     ENCRYPTED_PASSWORD=$(openssl passwd -6 "$password")
+    ENCRYPTED_PASSWORD="${password}"
 }
 
 partitioning() {
@@ -112,36 +113,31 @@ base() {
 }
 
 configure() {
-    arch-chroot /mnt /bin/bash <<EOF
-# Localization
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
-echo "LANG=en_US.UTF-8" > /etc/locale.conf
-echo "LANGUAGE=en_US" >> /etc/locale.conf
-echo "LC_ALL=C" >> /etc/locale.conf
-locale-gen &> /dev/null
+    echo "--> Localization."
+    echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
+    echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
+    echo "LANGUAGE=en_US" >> /mnt/etc/locale.conf
+    echo "LC_ALL=C" >> /mnt/etc/locale.conf
+    arch-chroot /mnt locale-gen &> /dev/null
 
-# Network configuration
-echo "ws" > /etc/hostname
+    echo "--> Network configuration."
+    echo "ws" > /mnt/etc/hostname
 
-cat << EOL > /etc/hosts
+    cat << EOF > /mnt/etc/hosts
 127.0.0.1   localhost
 ::1         localhost
 127.0.1.1   ws.localdomain ws
-EOL
-
-# Create user
-useradd -m -g users -G wheel -s /bin/bash ns
-usermod -a -G uucp ns
-sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
-
-# Install bootloader
-grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
-grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
-
 EOF
 
-    echo "root:${ENCRYPTED_PASSWORD}" | chpasswd -R /mnt
-    echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd -R /mnt
+    echo "--> Create user."
+    arch-chroot /mnt useradd -mU -s /bin/bash -G wheel,uucp ns
+    echo "root:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
+    echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
+    arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+    echo "--> Install bootloader."
+    arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
+    arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
 }
 
 finish(){
