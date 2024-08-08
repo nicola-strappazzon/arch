@@ -41,9 +41,9 @@ keyboard() {
 user_password() {
     echo "--> Define password for root and user."
     while true; do
-        read -s -p '    Enter your password: ' password
+        IFS="" read -s -p '    Enter your password: ' password </dev/tty
         echo
-        read -s -p '    Confirm your password: ' password_confirm
+        IFS="" read -s -p '    Confirm your password: ' password_confirm </dev/tty
         echo
         [ "$password" = "$password_confirm" ] && break
         echo "--> Passwords do not match. Please try again."
