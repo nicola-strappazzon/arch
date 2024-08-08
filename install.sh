@@ -13,6 +13,7 @@ main() {
     partitioning
     base
     bootloader
+#     finish
 }
 
 ntp() {
@@ -40,15 +41,11 @@ partitioning() {
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
-    parted --script $VOLUMEN print
-
     # delete old partitions
     echo "--> Delete old partitions."
     (parted --script $VOLUMEN rm 1) || true
     (parted --script $VOLUMEN rm 2) || true
     (parted --script $VOLUMEN rm 3) || true
-
-    parted --script $VOLUMEN print
 
     # create partitions
     echo "--> Create new partitions."
@@ -83,16 +80,6 @@ partitioning() {
     genfstab -pU /mnt >> /mnt/etc/fstab
 }
 
-# partition_delete() {
-#     (partprobe "${VOLUMEN}${1}" --summary --dry-run &> /dev/null || EXITCODE=$?) || true
-#     if [ "${EXITCODE}" -ne 0 ]; then
-#         echo "--> Delete old partition: ${VOLUMEN}${1}"
-#         parted --script $VOLUMEN rm $1
-#         partprobe $VOLUMEN
-#     fi
-#     EXITCODE=0
-# }
-
 base() {
     echo "--> Installing essential packages..."
     pacstrap /mnt \
@@ -119,6 +106,13 @@ bootloader() {
     else
         pacstrap /mnt efibootmgr --noconfirm --needed
     fi
+}
+
+finish(){
+    echo "--> Unmount all partitions and reboot."
+    (umount --all-targets --quiet --recursive /mnt/) || true
+    (swapoff --all) || true
+    reboot
 }
 
 # localization() {
