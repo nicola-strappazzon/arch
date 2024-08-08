@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -eu
+# set -eu
 
 declare VOLUMEN;
 declare ENCRYPTED_PASSWORD;
@@ -14,7 +14,7 @@ main() {
     user_password
     partitioning
     base
-    chroot
+    configure
     finish
 }
 
@@ -38,7 +38,7 @@ keyboard() {
     loadkeys us
 }
 
-user_password(){
+user_password() {
     echo "--> Define password for root and user."
     while true; do
         read -s -p "    Enter your password: " password
@@ -111,7 +111,7 @@ base() {
     &> /dev/null
 }
 
-chroot() {
+configure() {
     arch-chroot /mnt /bin/bash <<EOF
 # Localization
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
