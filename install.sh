@@ -8,14 +8,14 @@ declare -I EXITCODE=0;
 main() {
     VOLUMEN="/dev/sda"
 
-#     ntp
-#     mirror
-#     keyboard
+    ntp
+    mirror
+    keyboard
     user_password
     partitioning
     base
-#     bootloader
-#     finish
+    chroot
+    finish
 }
 
 ntp() {
