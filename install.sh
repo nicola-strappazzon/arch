@@ -140,6 +140,7 @@ grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
 
 EOF
 
+    echo "root:${ENCRYPTED_PASSWORD}"
     echo "root:${ENCRYPTED_PASSWORD}" | chpasswd -R /mnt
     echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd -R /mnt
 }
