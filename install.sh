@@ -15,7 +15,7 @@ main() {
     partitioning
     base
     configure
-    finish
+#     finish
 }
 
 ntp() {
@@ -130,6 +130,7 @@ configure() {
 EOF
 
     echo "--> Create and configure user."
+    echo "    ns:${ENCRYPTED_PASSWORD}"
     arch-chroot /mnt useradd -mU -s /bin/bash -G wheel,uucp ns
     echo "root:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
     echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
