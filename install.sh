@@ -58,9 +58,9 @@ partitioning() {
     (swapoff --all) || true
 
     echo "--> Delete old partitions."
-    (parted --script $VOLUMEN rm 1) || true
-    (parted --script $VOLUMEN rm 2) || true
-    (parted --script $VOLUMEN rm 3) || true
+    (parted --script $VOLUMEN rm 1 2>&1 > /dev/null) || true
+    (parted --script $VOLUMEN rm 2 2>&1 > /dev/null) || true
+    (parted --script $VOLUMEN rm 3 2>&1 > /dev/null) || true
 
     echo "--> Create new partitions."
     parted --script $VOLUMEN mklabel gpt
