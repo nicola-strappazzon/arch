@@ -47,6 +47,7 @@ user_password() {
         [ "${PASSWORD}" = "${password_confirm}" ] && break
         echo "--> Passwords do not match. Please try again."
     done
+    PASSWORD=$(openssl passwd -6 "$password_confirm")
 }
 
 partitioning() {
@@ -128,7 +129,9 @@ EOF
     echo "--> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp --password=$PASSWORD --comment="Nicola Strappazzon" ns
     arch-chroot /mnt echo "root:${PASSWORD}" | chpasswd
-    arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+    #arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+    arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
+    arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
 
     echo "--> Install bootloader."
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
