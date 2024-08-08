@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # set -eu
 
-declare -g VOLUMEN;
-declare -g PASSWORD;
-declare -g EXITCODE=0;
+declare VOLUMEN;
+declare PASSWORD;
+# declare -g EXITCODE=0;
 
 main() {
     VOLUMEN="/dev/sda"
@@ -45,7 +45,7 @@ user_password() {
         echo
         IFS="" read -s -p "    Confirm your password: " password_confirm </dev/tty
         echo
-        [ "$PASSWORD" = "$password_confirm" ] && break
+        [ "${PASSWORD}" = "${password_confirm}" ] && break
         echo "--> Passwords do not match. Please try again."
     done
 }
@@ -127,10 +127,8 @@ configure() {
 EOF
 
     echo "--> Create user."
-    echo "    ns:${ENCRYPTED_PASSWORD}"
-    arch-chroot /mnt useradd --create-home --shell /bin/bash --groups wheel,uucp --password $PASSWORD ns
-#     echo "root:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
-#     echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
+    echo $PASSWORD
+    arch-chroot /mnt useradd --create-home --shell=/bin/bash --groups=wheel,uucp --password=$PASSWORD ns
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     echo "--> Install bootloader."
