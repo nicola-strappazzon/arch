@@ -37,34 +37,29 @@ keyboard() {
     loadkeys us
 }
 
-
 user_password(){
     while true; do
-    read -s -p "Enter your password: " password
-    echo
-    read -s -p "Confirm your password: " password_confirm
-    echo
-    [ "$password" = "$password_confirm" ] && break
-    echo "Passwords do not match. Please try again."
+        read -s -p "Enter your password: " password
+        echo
+        read -s -p "Confirm your password: " password_confirm
+        echo
+        [ "$password" = "$password_confirm" ] && break
+        echo "Passwords do not match. Please try again."
     done
 
-    # Encrypt the password
     ENCRYPTED_PASSWORD=$(openssl passwd -6 "$password")
 }
 
 partitioning() {
-    # make sure everything is unmounted before we start
     echo "--> Umount partitions."
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
-    # delete old partitions
     echo "--> Delete old partitions."
     (parted --script $VOLUMEN rm 1) || true
     (parted --script $VOLUMEN rm 2) || true
     (parted --script $VOLUMEN rm 3) || true
 
-    # create partitions
     echo "--> Create new partitions."
     parted --script $VOLUMEN mklabel gpt
     parted --script $VOLUMEN mkpart efi fat32 1MiB 1024MiB
@@ -72,13 +67,11 @@ partitioning() {
     parted --script $VOLUMEN mkpart swap linux-swap 1GiB 3GiB
     parted --script $VOLUMEN mkpart root ext4 3GiB 100%
 
-    # format partitions
     echo "--> Format partitions..."
     mkfs.fat -F32 -n UEFI "${VOLUMEN}1" &> /dev/null
     mkswap -L SWAP "${VOLUMEN}2" &> /dev/null
     mkfs.ext4 -L ROOT "${VOLUMEN}3" &> /dev/null
 
-    # reread partition table to ensure it is correct
     echo "--> Verify partitions."
     partprobe /dev/sda
 
@@ -115,15 +108,6 @@ base() {
         openssh \
     &> /dev/null
 }
-
-# bootloader() {
-#     echo "--> Bootloader Install..."
-#     if [[ ! -d "/sys/firmware/efi" ]]; then
-#         grub-install --boot-directory=/mnt/boot $VOLUMEN
-#     else
-#         pacstrap /mnt efibootmgr --noconfirm --needed
-#     fi
-# }
 
 chroot() {
     arch-chroot /mnt /bin/bash <<EOF
@@ -163,8 +147,5 @@ finish(){
     (swapoff --all) || true
     reboot
 }
-
-# localization() {
-# }
 
 main "$@"
