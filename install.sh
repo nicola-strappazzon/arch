@@ -2,6 +2,7 @@
 set -eu
 
 declare VOLUMEN;
+declare ENCRYPTED_PASSWORD;
 declare -I EXITCODE=0;
 
 main() {
@@ -10,9 +11,10 @@ main() {
 #     ntp
 #     mirror
 #     keyboard
+    user_password
     partitioning
     base
-    bootloader
+#     bootloader
 #     finish
 }
 
@@ -33,6 +35,21 @@ mirror() {
 
 keyboard() {
     loadkeys us
+}
+
+
+user_password(){
+    while true; do
+    read -s -p "Enter your password: " password
+    echo
+    read -s -p "Confirm your password: " password_confirm
+    echo
+    [ "$password" = "$password_confirm" ] && break
+    echo "Passwords do not match. Please try again."
+    done
+
+    # Encrypt the password
+    ENCRYPTED_PASSWORD=$(openssl passwd -6 "$password")
 }
 
 partitioning() {
@@ -99,13 +116,45 @@ base() {
     &> /dev/null
 }
 
-bootloader() {
-    echo "--> Bootloader Install..."
-    if [[ ! -d "/sys/firmware/efi" ]]; then
-        grub-install --boot-directory=/mnt/boot $VOLUMEN
-    else
-        pacstrap /mnt efibootmgr --noconfirm --needed
-    fi
+# bootloader() {
+#     echo "--> Bootloader Install..."
+#     if [[ ! -d "/sys/firmware/efi" ]]; then
+#         grub-install --boot-directory=/mnt/boot $VOLUMEN
+#     else
+#         pacstrap /mnt efibootmgr --noconfirm --needed
+#     fi
+# }
+
+chroot() {
+    arch-chroot /mnt /bin/bash <<EOF
+# Localization
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+echo "LANG=en_US.UTF-8" > /etc/locale.conf
+echo "LANGUAGE=en_US" >> /etc/locale.conf
+echo "LC_ALL=C" >> /etc/locale.conf
+locale-gen
+
+# Network configuration
+echo "ws" > /etc/hostname
+
+cat << EOL > /etc/hosts
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   ws.localdomain ws
+EOL
+
+# Create user
+echo "root:${ENCRYPTED_PASSWORD}" | chpasswd -e
+useradd -m -g users -G wheel -s /bin/bash ns
+usermod -a -G uucp ns
+echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd -e
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+# Install bootloader
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
+
+EOF
 }
 
 finish(){
