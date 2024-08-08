@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -eu
+# set -eu
 
 declare VOLUMEN;
 declare ENCRYPTED_PASSWORD;
