@@ -117,16 +117,16 @@ configure() {
     arch-chroot /mnt locale-gen &> /dev/null
 
     echo "--> Network configuration."
-    echo "ws" > /mnt/etc/hostname
+    echo "workstation" > /mnt/etc/hostname
 
     cat << EOF > /mnt/etc/hosts
 127.0.0.1   localhost
 ::1         localhost
-127.0.1.1   ws.localdomain ws
+127.0.1.1   workstation.localdomain ws
 EOF
 
     echo "--> Create user."
-    arch-chroot /mnt useradd --create-home --shell=/bin/bash --groups=wheel,uucp --password=$PASSWORD --comment="Nicola Strappazzon" ns
+    arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp --password=$PASSWORD --comment="Nicola Strappazzon" ns
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     echo "--> Install bootloader."
