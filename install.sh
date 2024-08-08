@@ -14,6 +14,7 @@ main() {
     partitioning
     base
     configure
+    services
     finish
 }
 
@@ -135,6 +136,12 @@ EOF
     echo "--> Install bootloader."
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
+}
+
+services() {
+    echo "--> Enable services."
+    arch-chroot /mnt systemctl enable NetworkManager
+    arch-chroot /mnt systemctl start NetworkManager
 }
 
 finish(){
