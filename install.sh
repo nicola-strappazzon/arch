@@ -129,7 +129,7 @@ configure() {
 127.0.1.1   ws.localdomain ws
 EOF
 
-    echo "--> Create user."
+    echo "--> Create and configure user."
     arch-chroot /mnt useradd -mU -s /bin/bash -G wheel,uucp ns
     echo "root:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
     echo "ns:${ENCRYPTED_PASSWORD}" | chpasswd --root /mnt
