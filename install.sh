@@ -134,9 +134,20 @@ EOF
     arch-chroot /mnt echo "root:${PASSWORD}" | chpasswd --encrypted
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
-    echo "--> Install bootloader."
+    echo "--> Install & configure bootloader."
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
+
+    echo "GRUB_DEFAULT=0" > /mnt/etc/default/grub.silent
+    echo "GRUB_TIMEOUT=0" >> /mnt/etc/default/grub.silent
+    echo "GRUB_RECORDFAIL_TIMEOUT=\$GRUB_TIMEOUT" >> /mnt/etc/default/grub.silent
+
+    chmod 0644 /mnt/etc/default/grub.silent
+
+    sed -i "s/timeout=5/timeout=0/" /mnt/boot/grub/grub.cfg
+    sed -i "s/echo	'Loading Linux linux ...'//" /mnt/boot/grub/grub.cfg
+    sed -i "s/echo	'Loading initial ramdisk ...'//" /mnt/boot/grub/grub.cfg
+    sed -i "s/loglevel=3 quiet/quiet loglevel=0 rd.systemd.show_status=auto rd.udev.log_level=3/" /mnt/boot/grub/grub.cfg
 }
 
 packages() {
