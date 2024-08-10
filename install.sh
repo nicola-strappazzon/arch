@@ -181,15 +181,9 @@ packages() {
 yay() {
     echo "--> Install yay."
 
-    arch-chroot /mnt /bin/bash -- << EOCHROOT
-    tmp="$(mktemp -d "/tmp/yay-XXXXXX")"
-
-    cd $tmp
-    git clone https://aur.archlinux.org/yay.git
-    cd yay
-    makepkg -si
-    yay --version
-EOCHROOT
+    mkdir -p /mnt/tmp/yay
+    git clone https://aur.archlinux.org/yay.git /mnt/tmp/yay &> /dev/null
+    arch-chroot /mnt cd /tmp/yay; makepkg -si &> /dev/null
 }
 
 services() {
