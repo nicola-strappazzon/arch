@@ -1,0 +1,15 @@
+[SddmGreeterTheme]
+Author      = Nicola Strappazzon
+ConfigFile  = theme.conf
+Copyright   = (c) 2024, Nicola Strappazzon
+Description = luna theme for SDDM
+License     = MIT
+MainScript  = Main.qml
+Name        = luna
+QtVersion   = 6
+# Screenshot  = preview.png
+Theme-API   = 2.0
+Theme-Id    = nsc
+Type        = sddm-theme
+Version     = 20240810
+Website     = https://gitlab.com/nstrappazzonc/arch

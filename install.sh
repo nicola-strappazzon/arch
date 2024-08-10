@@ -14,6 +14,8 @@ main() {
     partitioning
     base
     configure
+    packages
+    yay
     services
     finish
 }
@@ -119,7 +121,7 @@ configure() {
     arch-chroot /mnt locale-gen &> /dev/null
 
     echo "--> Network configuration."
-    echo "workstation" > /mnt/etc/hostname
+    echo workstation > /mnt/etc/hostname
 
     cat << EOF > /mnt/etc/hosts
 127.0.0.1   localhost
@@ -130,12 +132,64 @@ EOF
     echo "--> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp --password=$PASSWORD --comment="Nicola Strappazzon" ns
     arch-chroot /mnt echo "root:${PASSWORD}" | chpasswd --encrypted
-    arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
-    arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) NOPASSWD: ALL/%wheel ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+    arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     echo "--> Install bootloader."
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
+}
+
+packages() {
+    echo "--> Install aditional packages."
+    PACKAGES=(
+        aws-cli
+        base
+        base-devel
+        bash-completion
+        bind-tools
+        btop
+        ca-certificates
+        curl
+        fzf
+        git
+        htop
+        jq
+        links
+        minicom
+        neofetch
+        net-tools
+        nmap
+        pass
+        pass-otp
+        rsync
+        tmux
+        traceroute
+        unrar
+        unzip
+        usbutils
+        vim
+        wget
+    )
+
+    for PACKAGE in "${PACKAGES[@]}"; do
+        if [ "${EXITCODE}" -ne 0 ]; then
+            arch-chroot /mnt pacman -S "${PACKAGE}" --noconfirm --needed &> /dev/null
+        fi
+    done
+}
+
+yay() {
+    echo "--> Install yay."
+
+    arch-chroot /mnt /bin/bash -- << EOCHROOT
+    tmp="$(mktemp -d "/tmp/yay-XXXXXX")"
+
+    cd $tmp
+    git clone https://aur.archlinux.org/yay.git
+    cd yay
+    makepkg -si
+    yay --version
+EOCHROOT
 }
 
 services() {

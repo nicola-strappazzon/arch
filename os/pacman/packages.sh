@@ -15,6 +15,7 @@ declare -a PACKAGES=(
     git
     htop
     jq
+    links2
     minicom
     neofetch
     net-tools
