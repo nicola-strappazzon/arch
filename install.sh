@@ -166,9 +166,6 @@ fi
 EOF
 
     rm -f /mnt/etc/profile.d/perlbin.*
-    cp /mnt/etc/skel/.bashrc /mnt/root/.bashrc
-    chmod 0600 /mnt/root/.bashrc
-    arch-chroot /mnt usermod --shell /bin/bash root
 }
 
 configure_network() {
@@ -185,8 +182,13 @@ EOF
 configure_user() {
     echo "--> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp --password=$PASSWORD --comment="Nicola Strappazzon" ns
-    printf "root:${PASSWORD}" | arch-chroot /mnt chpasswd --encrypted
+
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+    cp /mnt/etc/skel/.bashrc /mnt/root/.bashrc
+    chmod 0600 /mnt/root/.bashrc
+    arch-chroot /mnt usermod --shell /bin/bash root
+    printf "root:${PASSWORD}" | arch-chroot /mnt chpasswd --encrypted
 }
 
 configure_grub() {
@@ -221,6 +223,7 @@ packages() {
         git
         htop
         jq
+        less
         links
         minicom
         neofetch
