@@ -167,6 +167,8 @@ EOF
 
     rm -f /mnt/etc/profile.d/perlbin.*
     cp /mnt/etc/skel/.bashrc /mnt/root/.bashrc
+    chmod 0600 /mnt/root/.bashrc
+    arch-chroot /mnt usermod --shell /bin/bash root
 }
 
 configure_network() {
