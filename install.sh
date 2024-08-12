@@ -203,8 +203,8 @@ configure_grub() {
     chmod 0644 /mnt/etc/default/grub.silent
 
     sed -i "s/timeout=5/timeout=0/" /mnt/boot/grub/grub.cfg
-    sed -i "s/echo 'Loading Linux linux ...'//" /mnt/boot/grub/grub.cfg
-    sed -i "s/echo 'Loading initial ramdisk ...'//" /mnt/boot/grub/grub.cfg
+    sed -i "s/echo	'Loading Linux linux ...'//" /mnt/boot/grub/grub.cfg
+    sed -i "s/echo	'Loading initial ramdisk ...'//" /mnt/boot/grub/grub.cfg
     sed -i "s/loglevel=3 quiet/quiet loglevel=0 rd.systemd.show_status=auto rd.udev.log_level=3/" /mnt/boot/grub/grub.cfg
 }
 
