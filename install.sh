@@ -15,7 +15,12 @@ main() {
     user_password
     partitioning
     base
-    configure
+    configure_input
+    configure_locale
+    configure_profile
+    configure_network
+    configure_user
+    configure_grub
     packages
     services
     finish
@@ -113,18 +118,19 @@ base() {
     &> /dev/null
 }
 
-configure() {
-    echo "--> Miscellaneous config."
+configure_input() {
     sed -i 's/#set bell-style none/set bell-style none/g' /mnt/etc/inputrc
+}
 
+configure_locale() {
     echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
     echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
     echo "LANGUAGE=en_US" >> /mnt/etc/locale.conf
     echo "LC_ALL=C" >> /mnt/etc/locale.conf
     arch-chroot /mnt locale-gen &> /dev/null
+}
 
-    rm -f /mnt/etc/profile.d/perlbin.* &> /dev/null
-
+configure_profile() {
     cat > /mnt/etc/skel/.bashrc << 'EOF'
 [[ $- != *i* ]] && return
 
@@ -159,6 +165,11 @@ else
 fi
 EOF
 
+    rm -f /mnt/etc/profile.d/perlbin.*
+    cp /mnt/etc/skel/.bashrc /mnt/root/.bashrc
+}
+
+configure_network() {
     echo "--> Network configuration."
     echo $HOSTNAME > /mnt/etc/hostname
 
@@ -167,12 +178,16 @@ EOF
 ::1         localhost
 127.0.1.1   ${HOSTNAME}.localdomain $HOSTNAME
 EOF
+}
 
+configure_user() {
     echo "--> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp --password=$PASSWORD --comment="Nicola Strappazzon" ns
     printf "root:${PASSWORD}" | arch-chroot /mnt chpasswd --encrypted
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+}
 
+configure_grub() {
     echo "--> Install & configure bootloader."
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
