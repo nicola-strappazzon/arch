@@ -9,3 +9,14 @@ curl -sfL strappazzon.me/arch | sh -s -- arg1 arg2
 bash < <(curl -sL strappazzon.me/arch)
 bash < <(curl -sL strappazzon.me/arch) -s arg1 arg2
 ```
+
+## Local
+
+```bash
+python3 -m http.server 8080 -b 0.0.0.0
+```
+
+```bash
+pacman -Sy curl
+curl -sfL 192.168.1.100:8080/main.sh | sh -s install
+```

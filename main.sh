@@ -116,21 +116,6 @@ check_exist_curl_or_wget(){
     fi
 }
 
-# package_manager_system() {
-#     osPMS[/etc/redhat-release]=yum
-#     osPMS[/etc/arch-release]=pacman
-#     osPMS[/etc/gentoo-release]=emerge
-#     osPMS[/etc/SuSE-release]=zypp
-#     osPMS[/etc/debian_version]=apt-get
-#     osPMS[/etc/alpine-release]=apk
-#
-#     for f in ${!osPMS[@]}; do
-#         if [[ -f $f ]]; then
-#             pms="${osPMS[$f]}"
-#         fi
-#     done
-# }
-
 create_workspace() {
     TMP="$(mktemp -d "/tmp/strappazzon-XXXXXX")"
 }
@@ -148,7 +133,8 @@ clone() {
 }
 
 run_remote_script() {
-    URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/$1.sh"
+    URI="192.168.1.100:8080/$1.sh"
+#     URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/$1.sh"
     if curl --output /dev/null --silent --head --fail "${URI}"; then
         echo "Run script: ${URI}"
         echo ""

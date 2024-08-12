@@ -15,7 +15,6 @@ main() {
     base
     configure
     packages
-    yay
     services
     finish
 }
@@ -70,13 +69,13 @@ partitioning() {
     parted --script $VOLUMEN mkpart swap linux-swap 1GiB 3GiB
     parted --script $VOLUMEN mkpart root ext4 3GiB 100%
 
-    echo "--> Format partitions..."
+    echo "--> Format partitions."
     mkfs.fat -F32 -n UEFI "${VOLUMEN}1" &> /dev/null
     mkswap -L SWAP "${VOLUMEN}2" &> /dev/null
     mkfs.ext4 -L ROOT "${VOLUMEN}3" &> /dev/null
 
     echo "--> Verify partitions."
-    partprobe /dev/sda
+    partprobe $VOLUMEN
 
     echo "--> Mount: swap, root and boot"
     swapon "${VOLUMEN}2"
@@ -94,7 +93,7 @@ partitioning() {
 }
 
 base() {
-    echo "--> Installing essential packages..."
+    echo "--> Installing essential packages."
     pacstrap /mnt \
         base \
         base-devel \
@@ -131,7 +130,7 @@ EOF
 
     echo "--> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp --password=$PASSWORD --comment="Nicola Strappazzon" ns
-    arch-chroot /mnt echo "root:${PASSWORD}" | chpasswd --encrypted
+    printf "root:${PASSWORD}" | arch-chroot /mnt chpasswd --encrypted
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     echo "--> Install & configure bootloader."
@@ -172,6 +171,7 @@ packages() {
         nmap
         pass
         pass-otp
+        percona-server-clients
         rsync
         tmux
         traceroute
@@ -183,22 +183,15 @@ packages() {
     )
 
     for PACKAGE in "${PACKAGES[@]}"; do
-        if [ "${EXITCODE}" -ne 0 ]; then
-            arch-chroot /mnt pacman -S "${PACKAGE}" --noconfirm --needed &> /dev/null
-        fi
+        arch-chroot /mnt pacman -S "${PACKAGE}" --noconfirm --needed &> /dev/null
     done
-}
-
-yay() {
-    echo "--> Install yay."
-
-    mkdir -p /mnt/tmp/yay
-    git clone https://aur.archlinux.org/yay.git /mnt/tmp/yay &> /dev/null
-    arch-chroot /mnt cd /tmp/yay; makepkg -si &> /dev/null
 }
 
 services() {
     echo "--> Enable services."
+    arch-chroot /mnt systemctl enable sshd
+    arch-chroot /mnt systemctl start sshd
+
     arch-chroot /mnt systemctl enable NetworkManager
     arch-chroot /mnt systemctl start NetworkManager
 }
