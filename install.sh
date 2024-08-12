@@ -2,10 +2,12 @@
 # set -eu
 
 declare VOLUMEN;
+declare HOSTNAME;
 declare PASSWORD;
 
 main() {
     VOLUMEN="/dev/sda"
+    HOSTNAME="workstation"
 
     ntp
     mirror
@@ -114,19 +116,56 @@ base() {
 configure() {
     echo "--> Miscellaneous config."
     sed -i 's/#set bell-style none/set bell-style none/g' /mnt/etc/inputrc
+
     echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
     echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
     echo "LANGUAGE=en_US" >> /mnt/etc/locale.conf
     echo "LC_ALL=C" >> /mnt/etc/locale.conf
     arch-chroot /mnt locale-gen &> /dev/null
 
+    rm -f /mnt/etc/profile.d/perlbin.* &> /dev/null
+
+    cat > /mnt/etc/skel/.bashrc << 'EOF'
+[[ $- != *i* ]] && return
+
+if [ -x /etc/profile.d ]; then
+  for i in /etc/profile.d/*.sh; do
+    if [ -f "$i" ]; then
+      . "$i"
+    fi
+  done
+fi
+EOF
+
+    cat > /mnt/etc/profile.d/custom.sh << 'EOF'
+#!/bin/sh
+
+if [ -x ~/.bashrc.d ]; then
+  for i in ~/.bashrc.d/*.sh; do
+    if [ -f "$i" ]; then
+      . "$i"
+    fi
+  done
+fi
+EOF
+
+    cat > /mnt/etc/profile.d/ps.sh << 'EOF'
+#!/bin/sh
+
+if [[ ${EUID} == 0 ]] ; then
+    PS1='\[\033[01;31m\][\h\[\033[01;36m\] \W\[\033[01;31m\]]\$\[\033[00m\] '
+else
+    PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
+fi
+EOF
+
     echo "--> Network configuration."
-    echo workstation > /mnt/etc/hostname
+    echo $HOSTNAME > /mnt/etc/hostname
 
     cat << EOF > /mnt/etc/hosts
 127.0.0.1   localhost
 ::1         localhost
-127.0.1.1   workstation.localdomain ws
+127.0.1.1   ${HOSTNAME}.localdomain $HOSTNAME
 EOF
 
     echo "--> Create user."
