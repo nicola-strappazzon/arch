@@ -112,7 +112,8 @@ base() {
 }
 
 configure() {
-    echo "--> Localization."
+    echo "--> Miscellaneous config."
+    sed -i 's/#set bell-style none/set bell-style none/g' /mnt/etc/inputrc
     echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
     echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
     echo "LANGUAGE=en_US" >> /mnt/etc/locale.conf
