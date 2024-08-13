@@ -17,6 +17,7 @@ main() {
     base
     configure_input
     configure_locale
+    configure_environment
     configure_profile
     configure_network
     configure_user
@@ -128,6 +129,14 @@ configure_locale() {
     echo "LANGUAGE=en_US" >> /mnt/etc/locale.conf
     echo "LC_ALL=C" >> /mnt/etc/locale.conf
     arch-chroot /mnt locale-gen &> /dev/null
+}
+
+configure_environment() {
+    cat > /mnt/etc/environment << 'EOF'
+EDITOR=vim
+TERM=xterm
+TERMINAL=xterm
+EOF
 }
 
 configure_profile() {
