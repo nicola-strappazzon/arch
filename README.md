@@ -20,3 +20,7 @@ python3 -m http.server 8080 -b 0.0.0.0
 pacman -Sy curl
 curl -sfL 192.168.1.100:8080/main.sh | sh -s install
 ```
+
+picom para mejorar aspectos visuales, redondear esquinas, fondo transparente.
+https://ntk148v.github.io/posts/getting-started-tiling-wm-part-6-i3-rounded-corners/
+

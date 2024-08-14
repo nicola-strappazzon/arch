@@ -14,7 +14,7 @@ main() {
     configure_polybar
     configure_xterm
     configure_rofi
-    configure_feh
+#     configure_feh
 }
 
 drivers() {
@@ -41,13 +41,13 @@ fonts() {
         ttf-dejavu \
         ttf-droid \
         ttf-font-awesome \
-        ttf-font-icons \
         ttf-inconsolata \
         ttf-indic-otf \
-        ttf-ionicons \
         ttf-liberation \
+        ttf-nerd-fonts-symbols \
     &> /dev/null
-        # ttf-nerd-fonts-symbols
+
+    fc-cache -f -v &> /dev/null
 }
 
 desktop() {
@@ -217,7 +217,7 @@ secondary = #8ABEB7
 alert = #A54242
 disabled = #707880
 
-[bar/example]
+[bar/main]
 width = 100%
 height = 18pt
 radius = 3
@@ -231,9 +231,10 @@ padding-right = 1
 module-margin = 1
 separator = |
 separator-foreground = ${colors.disabled}
-font-0 = monospace;2
+font-0 = terminus:pixelsize=10;2
+font-1 = "Symbols Nerd Font:style=Regular:pixelsize=8"
 modules-left = xworkspaces xwindow
-modules-right = filesystem pulseaudio xkeyboard memory cpu wlan eth date
+modules-right = filesystem pulseaudio xkeyboard memory cpu wlan eth date powermenu
 cursor-click = pointer
 cursor-scroll = ns-resize
 enable-ipc = true
@@ -301,9 +302,31 @@ date-alt = %Y-%m-%d %H:%M:%S
 label = %date%
 label-foreground = ${colors.primary}
 
+[module/powermenu]
+type = custom/menu
+expand-right = true
+format-spacing = 1
+
+label-open = 
+label-open-foreground = ${colors.secondary}
+label-close = Cancel
+label-close-foreground = ${colors.secondary}
+label-separator = |
+
+menu-0-0 = Reboot
+menu-0-0-exec = reboot
+menu-0-1 = Power off
+menu-0-1-exec = poweroff
+menu-0-2 = Hibernate
+menu-0-2-exec = systemctl hibernate
+
 [settings]
 screenchange-reload = true
 pseudo-transparency = true
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
 EOF
 }
 
