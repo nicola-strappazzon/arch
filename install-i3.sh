@@ -57,6 +57,9 @@ desktop() {
         feh \
         lxappearance \
         xterm \
+        nemo \
+        materia-gtk-theme \
+        papirus-icon-theme \
     &> /dev/null
 }
 
