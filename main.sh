@@ -89,7 +89,7 @@ check_exist_curl_or_wget(){
 }
 
 run_remote_script() {
-    URI="192.168.1.11:8080/$1.sh"
+    URI="192.168.1.105:8080/$1.sh"
 #     URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/$1.sh"
     if curl --output /dev/null --silent --head --fail "${URI}"; then
         echo "Run script: ${URI}"

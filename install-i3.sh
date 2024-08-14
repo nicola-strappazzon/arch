@@ -12,7 +12,9 @@ main() {
 
     configure_i3wm
     configure_polybar
-#     configure_xterm
+    configure_xterm
+    configure_rofi
+    configure_feh
 }
 
 drivers() {
@@ -81,6 +83,7 @@ packages() {
 configure_i3wm() {
     mkdir -p /home/ns/.config/i3/
     cat > /home/ns/.config/i3/config << 'EOF'
+exec --no-startup-id feh --no-fehbg --bg-fill '/home/ns/.config/feh/wallpaper.jpg'
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 set $mod Mod4
@@ -152,10 +155,7 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 floating_modifier $mod
 tiling_drag modifier titlebar
 
-
-# bindsym $mod+space exec --no-startup-id "rofi -modi window,run,ssh,calc,emoji -font 'Noto 10' -show run -kb-custom-1 Ctrl+c  -theme solarized"
-
-# exec --no-startup-id feh --no-fehbg --bg-fill '/home/ns/Downloads/bg.jpg'
+bindsym $mod+space exec --no-startup-id rofi -config /home/ns/.config/rofi/config.rasi -show drun
 
 client.focused #373B41 #282A2E #C5C8C6 #F0C674
 gaps inner 4
@@ -307,27 +307,21 @@ pseudo-transparency = true
 EOF
 }
 
-yay() {
-    echo "--> Install yay."
+configure_rofi() {
+    mkdir -p /home/ns/.config/rofi/
 
-    arch-chroot /mnt /bin/bash -- << EOCHROOT
-mkdir -p /root/yay/
-git clone https://aur.archlinux.org/yay.git /root/yay/ #&> /dev/null
-#cd /root/yay
-#makepkg -rsi
-#cd ..
-#rm -rf /root/yay
-EOCHROOT
+    cat > /home/ns/.config/rofi/config.rasi << 'EOF'
+configuration {
+ font: "Noto 10";
+ combi-modes: "window,drun,ssh";
+}
+@theme "solarized"
+EOF
+}
 
-#&> /dev/null
-
-    PACKAGES=(
-        moc-pulse
-    )
-
-#     for PACKAGE in "${PACKAGES[@]}"; do
-#         arch-chroot /mnt yay -S "${PACKAGE}" --noconfirm --needed # &> /dev/null
-#     done
+configure_feh() {
+    mkdir -p /home/ns/.config/feh/
+    cp wallpaper/wallpaper.jpg /home/ns/.config/feh/wallpaper.jpg
 }
 
 main "$@"
