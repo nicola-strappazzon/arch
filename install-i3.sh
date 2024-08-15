@@ -7,13 +7,15 @@ main() {
 #     fonts
 #     desktop
 #     display_manager
+#     theme
 #     launcher
 #     packages
+    yay
 
-    configure_i3wm
-    configure_polybar
-    configure_xterm
-    configure_rofi
+#     configure_i3wm
+#     configure_polybar
+#     configure_xterm
+#     configure_rofi
 #     configure_feh
 }
 
@@ -54,10 +56,14 @@ desktop() {
     sudo pacman -S --noconfirm --needed \
         i3-wm \
         polybar \
-        feh \
-        lxappearance \
+        feh `#Wallpaper tool`\
         xterm \
-        nemo \
+    &> /dev/null
+}
+
+theme() {
+    sudo pacman -S --noconfirm --needed \
+        lxappearance \
         materia-gtk-theme \
         papirus-icon-theme \
     &> /dev/null
@@ -79,8 +85,48 @@ launcher() {
 
 packages() {
     sudo pacman -S --noconfirm --needed \
-        firefox \
+        cheese    `#Webcam GUI`   \
+        evince    `#PDF viewer`   \
+        firefox   `#WEB browser`  \
+        flameshot `#Screenshot`   \
+        mpv       `#Video player` \
+        nemo      `#File manager` \
+        rhythmbox `#Audio player` \
+        viewnior  `#Image viewer` \
     &> /dev/null
+}
+
+yay() {
+    if ! type "git" > /dev/null; then
+        echo "Could not find: git"
+        exit 1
+    fi
+
+    if ! type "makepkg" > /dev/null; then
+        echo "Could not find: makepkg"
+        exit 1
+    fi
+
+    if ! type "go" > /dev/null; then
+        echo "Could not find: go"
+        exit 1
+    fi
+
+    if ! command yay &> /dev/null; then
+        tmp="$(mktemp -d)"
+
+        mkdir -p $tmp
+
+        if [[ ! "${tmp}" || ! -d "${tmp}" ]]; then
+            echo "Could not find ${tmp} dir"
+            exit 1
+        fi
+
+        cd $tmp
+        git clone https://aur.archlinux.org/yay.git &> /dev/null
+        cd yay
+        makepkg -sif --noconfirm &> /dev/null
+    fi
 }
 
 configure_i3wm() {

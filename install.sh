@@ -230,6 +230,7 @@ packages() {
         curl
         fzf
         git
+        go
         htop
         jq
         less
