@@ -14,7 +14,7 @@ TextField {
   }
   color: config.textDefault
   horizontalAlignment: Text.AlignHLeft
-  placeholderText: "Username"
+  placeholderText: "username"
   placeholderTextColor: config.textPlaceholder
   text: userModel.lastUser
   background: Rectangle {

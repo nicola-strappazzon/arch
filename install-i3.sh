@@ -70,7 +70,9 @@ theme() {
 }
 
 display_manager() {
-    sudo pacman -S --noconfirm --needed sddm &> /dev/null
+    sudo pacman -S --noconfirm --needed \
+        sddm \
+    &> /dev/null
     sudo systemctl enable sddm.service &> /dev/null
 }
 

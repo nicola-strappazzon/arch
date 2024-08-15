@@ -2,10 +2,10 @@
 Author      = Nicola Strappazzon
 ConfigFile  = theme.conf
 Copyright   = (c) 2024, Nicola Strappazzon
-Description = luna theme for SDDM
+Description = Luna theme for SDDM
 License     = MIT
 MainScript  = Main.qml
-Name        = luna
+Name        = Luna
 QtVersion   = 6
 # Screenshot  = preview.png
 Theme-API   = 2.0
