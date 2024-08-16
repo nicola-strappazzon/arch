@@ -219,6 +219,76 @@ Item {
                         source: Qt.resolvedUrl("../Assets/power.svg")
                         color: config.textDefault
                     }
+
+                    background: Rectangle {
+                        id: powerButtonBackground
+                        gradient: Gradient {
+                            GradientStop { id: powerButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                            GradientStop { id: powerButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                        }
+                        border.color: config.buttonBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
+                    }
+
+                    states: [
+                        State {
+                            name: "pressed"
+                            when: powerButton.down
+                            PropertyChanges {
+                                target: powerButtonBackground
+                                border.color: config.buttonBorderPressed
+                                opacity: 1
+                            }
+                            PropertyChanges {
+                                target: powerButtonGradientStop0
+                                color: config.buttonBgPressed
+                            }
+                            PropertyChanges {
+                                target: powerButtonGradientStop1
+                                color: config.buttonBgPressed
+                            }
+                        },
+                        State {
+                            name: "hovered"
+                            when: powerButton.hovered
+                            PropertyChanges {
+                                target: powerButtonGradientStop0
+                                color: config.buttonBgHovered0
+                            }
+                            PropertyChanges {
+                                target: powerButtonGradientStop1
+                                color: config.buttonBgHovered1
+                            }
+                            PropertyChanges {
+                                target: powerButtonBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: powerButton.activeFocus
+                            PropertyChanges {
+                                target: powerButtonBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        },
+                        State {
+                            name: "enabled"
+                            when: powerButton.enabled
+                            PropertyChanges {
+                                target: powerButtonBackground
+                            }
+                            PropertyChanges {
+                                target: powerButtonBackground
+                            }
+                        }
+                    ]
+
+                    onClicked: {
+                        sddm.powerOff()
+                    }
                 }
 
                 Button {
@@ -230,6 +300,76 @@ Item {
                         source: Qt.resolvedUrl("../Assets/reboot.svg")
                         color: config.textDefault
                     }
+
+                   background: Rectangle {
+                        id: rebootButtonBackground
+                        gradient: Gradient {
+                            GradientStop { id: rebootButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                            GradientStop { id: rebootButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                        }
+                        border.color: config.buttonBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
+                    }
+
+                    states: [
+                        State {
+                            name: "pressed"
+                            when: rebootButton.down
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                                border.color: config.buttonBorderPressed
+                                opacity: 1
+                            }
+                            PropertyChanges {
+                                target: rebootButtonGradientStop0
+                                color: config.buttonBgPressed
+                            }
+                            PropertyChanges {
+                                target: rebootButtonGradientStop1
+                                color: config.buttonBgPressed
+                            }
+                        },
+                        State {
+                            name: "hovered"
+                            when: rebootButton.hovered
+                            PropertyChanges {
+                                target: rebootButtonGradientStop0
+                                color: config.buttonBgHovered0
+                            }
+                            PropertyChanges {
+                                target: rebootButtonGradientStop1
+                                color: config.buttonBgHovered1
+                            }
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: rebootButton.activeFocus
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        },
+                        State {
+                            name: "enabled"
+                            when: rebootButton.enabled
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                            }
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                            }
+                        }
+                    ]
+
+                    onClicked: {
+                        sddm.reboot()
+                    }
                 }
 
                 Button {
@@ -240,6 +380,76 @@ Item {
                     icon {
                         source: Qt.resolvedUrl("../Assets/sleep.svg")
                         color: config.textDefault
+                    }
+
+                   background: Rectangle {
+                        id: sleepButtonBackground
+                        gradient: Gradient {
+                            GradientStop { id: sleepButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                            GradientStop { id: sleepButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                        }
+                        border.color: config.buttonBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
+                    }
+
+                    states: [
+                        State {
+                            name: "pressed"
+                            when: sleepButton.down
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                                border.color: config.buttonBorderPressed
+                                opacity: 1
+                            }
+                            PropertyChanges {
+                                target: sleepButtonGradientStop0
+                                color: config.buttonBgPressed
+                            }
+                            PropertyChanges {
+                                target: sleepButtonGradientStop1
+                                color: config.buttonBgPressed
+                            }
+                        },
+                        State {
+                            name: "hovered"
+                            when: sleepButton.hovered
+                            PropertyChanges {
+                                target: sleepButtonGradientStop0
+                                color: config.buttonBgHovered0
+                            }
+                            PropertyChanges {
+                                target: sleepButtonGradientStop1
+                                color: config.buttonBgHovered1
+                            }
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: sleepButton.activeFocus
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        },
+                        State {
+                            name: "enabled"
+                            when: sleepButton.enabled
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                            }
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                            }
+                        }
+                    ]
+
+                    onClicked: {
+                        sddm.suspend()
                     }
                 }
             }
