@@ -49,6 +49,11 @@ Item {
                     opacity: config.opacityDefault
                 }
 
+                palette {
+                    highlight: "#dadadc"
+                    highlightedText: "#7f7f81"
+                }
+
                 states: [
                     State {
                         name: "hovered"
@@ -95,6 +100,11 @@ Item {
                         opacity: config.opacityDefault
                     }
 
+                    palette {
+                        highlight: "#dadadc"
+                        highlightedText: "#7f7f81"
+                    }
+
                     states: [
                         State {
                             name: "hovered"
@@ -127,10 +137,10 @@ Item {
                     }
 
                     background: Rectangle {
-                        id: buttonBackground
+                        id: loginButtonBackground
                         gradient: Gradient {
-                            GradientStop { id: gradientStop0; position: 0.0; color: config.buttonBgNormal }
-                            GradientStop { id: gradientStop1; position: 1.0; color: config.buttonBgNormal }
+                            GradientStop { id: loginButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                            GradientStop { id: loginButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
                         }
                         border.color: config.buttonBorderNormal
                         border.width: 1
@@ -143,16 +153,16 @@ Item {
                             name: "pressed"
                             when: loginButton.down
                             PropertyChanges {
-                                target: buttonBackground
+                                target: loginButtonBackground
                                 border.color: config.buttonBorderPressed
                                 opacity: 1
                             }
                             PropertyChanges {
-                                target: gradientStop0
+                                target: loginButtonGradientStop0
                                 color: config.buttonBgPressed
                             }
                             PropertyChanges {
-                                target: gradientStop1
+                                target: loginButtonGradientStop1
                                 color: config.buttonBgPressed
                             }
                         },
@@ -160,15 +170,15 @@ Item {
                             name: "hovered"
                             when: loginButton.hovered
                             PropertyChanges {
-                                target: gradientStop0
+                                target: loginButtonGradientStop0
                                 color: config.buttonBgHovered0
                             }
                             PropertyChanges {
-                                target: gradientStop1
+                                target: loginButtonGradientStop1
                                 color: config.buttonBgHovered1
                             }
                             PropertyChanges {
-                                target: buttonBackground
+                                target: loginButtonBackground
                                 border.color: config.lineeditBorderHovered
                             }
                         },
@@ -176,7 +186,7 @@ Item {
                             name: "focused"
                             when: loginButton.activeFocus
                             PropertyChanges {
-                                target: buttonBackground
+                                target: loginButtonBackground
                                 border.color: config.lineeditBorderFocused
                             }
                         },
@@ -184,10 +194,10 @@ Item {
                             name: "enabled"
                             when: loginButton.enabled
                             PropertyChanges {
-                                target: buttonBackground
+                                target: loginButtonBackground
                             }
                             PropertyChanges {
-                                target: buttonBackground
+                                target: loginButtonBackground
                             }
                         }
                     ]
