@@ -34,6 +34,7 @@ Item {
                 renderType: Text.NativeRendering
                 horizontalAlignment: Text.AlignHLeft
                 width: 200
+                height: 30
                 font {
                     family: config.Font
                     pixelSize: config.FontSize
@@ -85,6 +86,7 @@ Item {
                     renderType: Text.NativeRendering
                     horizontalAlignment: Text.AlignHLeft
                     width: 162
+                    height: 30
                     font {
                         family: config.Font
                         pixelSize: config.FontSize
@@ -132,7 +134,7 @@ Item {
                     enabled: usernameInput != "" && passwordInput != "" ? true : false
                     hoverEnabled: true
                     icon {
-                        source: Qt.resolvedUrl("../Assets/login.svg")
+                        source: "login.svg"
                         color: config.textDefault
                     }
 
@@ -226,7 +228,7 @@ Item {
                     height: 30
                     hoverEnabled: true
                     icon {
-                        source: Qt.resolvedUrl("../Assets/power.svg")
+                        source: Qt.resolvedUrl("power.svg")
                         color: config.textDefault
                     }
 
@@ -307,7 +309,7 @@ Item {
                     height: 30
                     hoverEnabled: true
                     icon {
-                        source: Qt.resolvedUrl("../Assets/reboot.svg")
+                        source: Qt.resolvedUrl("reboot.svg")
                         color: config.textDefault
                     }
 
@@ -388,7 +390,7 @@ Item {
                     height: 30
                     hoverEnabled: true
                     icon {
-                        source: Qt.resolvedUrl("../Assets/sleep.svg")
+                        source: Qt.resolvedUrl("sleep.svg")
                         color: config.textDefault
                     }
 
