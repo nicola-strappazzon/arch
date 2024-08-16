@@ -197,6 +197,52 @@ Item {
                     }
                 }
             }
+
+            Row {
+                spacing: 8
+                width: parent.width
+                height: 30
+            }
+
+            Row {
+                spacing: 8
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                Button {
+                    id: powerButton
+                    width: 30
+                    height: 30
+                    hoverEnabled: true
+                    icon {
+                        source: Qt.resolvedUrl("../Assets/power.svg")
+                        color: config.textDefault
+                    }
+                }
+
+                Button {
+                    id: rebootButton
+                    width: 30
+                    height: 30
+                    hoverEnabled: true
+                    icon {
+                        source: Qt.resolvedUrl("../Assets/reboot.svg")
+                        color: config.textDefault
+                    }
+                }
+
+                Button {
+                    id: sleepButton
+                    width: 30
+                    height: 30
+                    hoverEnabled: true
+                    icon {
+                        source: Qt.resolvedUrl("../Assets/sleep.svg")
+                        color: config.textDefault
+                    }
+                }
+            }
         }
     }
 
