@@ -41,12 +41,32 @@ Item {
                 }
 
                 background: Rectangle {
+                    id: usernameInputBackground
                     color: config.lineeditBgNormal
                     border.color: config.lineeditBorderNormal
                     border.width: 1
                     radius: 2
                     opacity: config.opacityDefault
                 }
+
+                states: [
+                    State {
+                        name: "hovered"
+                        when: usernameInput.hovered
+                        PropertyChanges {
+                            target: usernameInputBackground
+                            border.color: config.lineeditBorderHovered
+                        }
+                    },
+                    State {
+                        name: "focused"
+                        when: usernameInput.activeFocus
+                        PropertyChanges {
+                            target: usernameInputBackground
+                            border.color: config.lineeditBorderFocused
+                        }
+                    }
+                ]
             }
 
             Row {
@@ -67,12 +87,32 @@ Item {
                     }
                     
                     background: Rectangle {
+                        id: passwordInputBackground
                         color: config.lineeditBgNormal
                         border.color: config.lineeditBorderNormal
                         border.width: 1
                         radius: 2
                         opacity: config.opacityDefault
                     }
+
+                    states: [
+                        State {
+                            name: "hovered"
+                            when: passwordInput.hovered
+                            PropertyChanges {
+                                target: passwordInputBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: passwordInput.activeFocus
+                            PropertyChanges {
+                                target: passwordInputBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        }
+                    ]
                 }
 
                 Button {
@@ -90,12 +130,12 @@ Item {
                         id: buttonBackground
                         gradient: Gradient {
                             GradientStop { id: gradientStop0; position: 0.0; color: config.buttonBgNormal }
-                        GradientStop { id: gradientStop1; position: 1.0; color: config.buttonBgNormal }
-                      }
-                      border.color: config.buttonBorderNormal
-                      border.width: 1
-                      radius: 2
-                      opacity: config.opacityDefault
+                            GradientStop { id: gradientStop1; position: 1.0; color: config.buttonBgNormal }
+                        }
+                        border.color: config.buttonBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
                     }
 
                     states: [
@@ -120,17 +160,24 @@ Item {
                             name: "hovered"
                             when: loginButton.hovered
                             PropertyChanges {
-                                target: buttonBackground
-                                border.color: config.buttonBorderHovered
-                                opacity: 1
-                            }
-                            PropertyChanges {
                                 target: gradientStop0
                                 color: config.buttonBgHovered0
                             }
                             PropertyChanges {
                                 target: gradientStop1
                                 color: config.buttonBgHovered1
+                            }
+                            PropertyChanges {
+                                target: buttonBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: loginButton.activeFocus
+                            PropertyChanges {
+                                target: buttonBackground
+                                border.color: config.lineeditBorderFocused
                             }
                         },
                         State {
@@ -146,7 +193,7 @@ Item {
                     ]
 
                     onClicked: {
-                        sddm.login(user, password)
+                        sddm.login(usernameInput.text, passwordInput.text, "i3")
                     }
                 }
             }
