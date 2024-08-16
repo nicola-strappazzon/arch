@@ -11,6 +11,8 @@ main() {
 #     launcher
 #     packages
     yay
+    yay_packages
+    docker
 
 #     configure_i3wm
 #     configure_polybar
@@ -128,6 +130,22 @@ yay() {
         git clone https://aur.archlinux.org/yay.git &> /dev/null
         cd yay
         makepkg -sif --noconfirm &> /dev/null
+    fi
+}
+
+yay_packages() {
+    yay -Sy --noconfirm --needed \
+        sublime-text \
+    &> /dev/null
+}
+
+docker() {
+    if ! type "docker" > /dev/null; then
+        sudo pacman -S docker --noconfirm --needed
+        sudo systemctl start docker.service
+        sudo systemctl enable docker.service
+        sudo newgrp docker
+        sudo usermod -aG docker $USER
     fi
 }
 
