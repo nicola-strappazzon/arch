@@ -9,17 +9,17 @@ Item {
         id: componentTextField
 
         TextField {
-            property string textFieldPlaceholder: ""
-            property int textFieldWidth: 200
+            property string placeholder: ""
+            property int fieldWidth: 200
             property bool isPasswordField: false
 
             id: componentTextField
             echoMode: isPasswordField ? TextInput.Password : TextInput.Normal
-            placeholderText: textFieldPlaceholder
+            placeholderText: placeholder
             placeholderTextColor: config.textPlaceholder
             renderType: Text.NativeRendering
             horizontalAlignment: Text.AlignHLeft
-            width: textFieldWidth
+            width: fieldWidth
             height: 30
             font {
                 family: config.Font
@@ -62,6 +62,98 @@ Item {
         }
     }
 
+    Component {
+        id: componentButton
+
+        Button {
+            property string iconSource: ""
+            property bool isEnabled: true
+            property var onClickAction: null
+
+            id: componentButton
+            width: 30
+            height: 30
+            enabled: isEnabled
+            hoverEnabled: true
+            icon {
+                source: iconSource
+                color: config.textDefault
+            }
+
+            background: Rectangle {
+                id: componentButtonBackground
+                gradient: Gradient {
+                    GradientStop { id: componentButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                    GradientStop { id: componentButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                }
+                border.color: config.buttonBorderNormal
+                border.width: 1
+                radius: 2
+                opacity: config.opacityDefault
+            }
+
+            states: [
+                State {
+                    name: "pressed"
+                    when: componentButton.down
+                    PropertyChanges {
+                        target: componentButtonBackground
+                        border.color: config.buttonBorderPressed
+                        opacity: 1
+                    }
+                    PropertyChanges {
+                        target: componentButtonGradientStop0
+                        color: config.buttonBgPressed
+                    }
+                    PropertyChanges {
+                        target: componentButtonGradientStop1
+                        color: config.buttonBgPressed
+                    }
+                },
+                State {
+                    name: "hovered"
+                    when: componentButton.hovered
+                    PropertyChanges {
+                        target: componentButtonGradientStop0
+                        color: config.buttonBgHovered0
+                    }
+                    PropertyChanges {
+                        target: componentButtonGradientStop1
+                        color: config.buttonBgHovered1
+                    }
+                    PropertyChanges {
+                        target: componentButtonBackground
+                        border.color: config.lineeditBorderHovered
+                    }
+                },
+                State {
+                    name: "focused"
+                    when: componentButton.activeFocus
+                    PropertyChanges {
+                        target: componentButtonBackground
+                        border.color: config.lineeditBorderFocused
+                    }
+                },
+                State {
+                    name: "enabled"
+                    when: componentButton.enabled
+                    PropertyChanges {
+                        target: componentButtonBackground
+                    }
+                    PropertyChanges {
+                        target: componentButtonBackground
+                    }
+                }
+            ]
+
+            onClicked: {
+                if (onClickAction) {
+                    onClickAction();
+                }
+            }
+        }
+    }
+
     Rectangle {
         width: parent.width
         height: parent.height
@@ -87,7 +179,7 @@ Item {
                 id: usernameInput
                 sourceComponent: componentTextField
                 onLoaded: {
-                    item.textFieldPlaceholder = "username"
+                    item.placeholder = "username"
                     item.isPasswordField = false
                 }
             }
@@ -100,90 +192,20 @@ Item {
                     sourceComponent: componentTextField
                     onLoaded: {
                         item.width = 162
-                        item.textFieldPlaceholder = "password"
+                        item.placeholder = "password"
                         item.isPasswordField = true
                     }
                 }
 
-                Button {
+                Loader {
                     id: loginButton
-                    width: 30
-                    height: 30
-                    enabled: usernameInput != "" && passwordInput != "" ? true : false
-                    hoverEnabled: true
-                    icon {
-                        source: "login.svg"
-                        color: config.textDefault
-                    }
-
-                    background: Rectangle {
-                        id: loginButtonBackground
-                        gradient: Gradient {
-                            GradientStop { id: loginButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
-                            GradientStop { id: loginButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                    sourceComponent: componentButton
+                    onLoaded: {
+                        item.iconSource = "login.svg"
+                        item.isEnabled = usernameInput != "" && passwordInput != "" ? true : false
+                        item.onClickAction = function() {
+                            sddm.login(usernameInput.text, passwordInput.text, "i3")
                         }
-                        border.color: config.buttonBorderNormal
-                        border.width: 1
-                        radius: 2
-                        opacity: config.opacityDefault
-                    }
-
-                    states: [
-                        State {
-                            name: "pressed"
-                            when: loginButton.down
-                            PropertyChanges {
-                                target: loginButtonBackground
-                                border.color: config.buttonBorderPressed
-                                opacity: 1
-                            }
-                            PropertyChanges {
-                                target: loginButtonGradientStop0
-                                color: config.buttonBgPressed
-                            }
-                            PropertyChanges {
-                                target: loginButtonGradientStop1
-                                color: config.buttonBgPressed
-                            }
-                        },
-                        State {
-                            name: "hovered"
-                            when: loginButton.hovered
-                            PropertyChanges {
-                                target: loginButtonGradientStop0
-                                color: config.buttonBgHovered0
-                            }
-                            PropertyChanges {
-                                target: loginButtonGradientStop1
-                                color: config.buttonBgHovered1
-                            }
-                            PropertyChanges {
-                                target: loginButtonBackground
-                                border.color: config.lineeditBorderHovered
-                            }
-                        },
-                        State {
-                            name: "focused"
-                            when: loginButton.activeFocus
-                            PropertyChanges {
-                                target: loginButtonBackground
-                                border.color: config.lineeditBorderFocused
-                            }
-                        },
-                        State {
-                            name: "enabled"
-                            when: loginButton.enabled
-                            PropertyChanges {
-                                target: loginButtonBackground
-                            }
-                            PropertyChanges {
-                                target: loginButtonBackground
-                            }
-                        }
-                    ]
-
-                    onClicked: {
-                        sddm.login(usernameInput.text, passwordInput.text, "i3")
                     }
                 }
             }
@@ -200,246 +222,39 @@ Item {
                     horizontalCenter: parent.horizontalCenter
                 }
 
-                Button {
+                Loader {
                     id: powerButton
-                    width: 30
-                    height: 30
-                    hoverEnabled: true
-                    icon {
-                        source: Qt.resolvedUrl("power.svg")
-                        color: config.textDefault
-                    }
-
-                    background: Rectangle {
-                        id: powerButtonBackground
-                        gradient: Gradient {
-                            GradientStop { id: powerButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
-                            GradientStop { id: powerButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                    sourceComponent: componentButton
+                    onLoaded: {
+                        item.iconSource = "power.svg"
+                        item.isEnabled = true
+                        item.onClickAction = function() {
+                            sddm.powerOff()
                         }
-                        border.color: config.buttonBorderNormal
-                        border.width: 1
-                        radius: 2
-                        opacity: config.opacityDefault
-                    }
-
-                    states: [
-                        State {
-                            name: "pressed"
-                            when: powerButton.down
-                            PropertyChanges {
-                                target: powerButtonBackground
-                                border.color: config.buttonBorderPressed
-                                opacity: 1
-                            }
-                            PropertyChanges {
-                                target: powerButtonGradientStop0
-                                color: config.buttonBgPressed
-                            }
-                            PropertyChanges {
-                                target: powerButtonGradientStop1
-                                color: config.buttonBgPressed
-                            }
-                        },
-                        State {
-                            name: "hovered"
-                            when: powerButton.hovered
-                            PropertyChanges {
-                                target: powerButtonGradientStop0
-                                color: config.buttonBgHovered0
-                            }
-                            PropertyChanges {
-                                target: powerButtonGradientStop1
-                                color: config.buttonBgHovered1
-                            }
-                            PropertyChanges {
-                                target: powerButtonBackground
-                                border.color: config.lineeditBorderHovered
-                            }
-                        },
-                        State {
-                            name: "focused"
-                            when: powerButton.activeFocus
-                            PropertyChanges {
-                                target: powerButtonBackground
-                                border.color: config.lineeditBorderFocused
-                            }
-                        },
-                        State {
-                            name: "enabled"
-                            when: powerButton.enabled
-                            PropertyChanges {
-                                target: powerButtonBackground
-                            }
-                            PropertyChanges {
-                                target: powerButtonBackground
-                            }
-                        }
-                    ]
-
-                    onClicked: {
-                        sddm.powerOff()
                     }
                 }
 
-                Button {
+                Loader {
                     id: rebootButton
-                    width: 30
-                    height: 30
-                    hoverEnabled: true
-                    icon {
-                        source: Qt.resolvedUrl("reboot.svg")
-                        color: config.textDefault
-                    }
-
-                   background: Rectangle {
-                        id: rebootButtonBackground
-                        gradient: Gradient {
-                            GradientStop { id: rebootButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
-                            GradientStop { id: rebootButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                    sourceComponent: componentButton
+                    onLoaded: {
+                        item.iconSource = "reboot.svg"
+                        item.isEnabled = true
+                        item.onClickAction = function() {
+                            sddm.reboot()
                         }
-                        border.color: config.buttonBorderNormal
-                        border.width: 1
-                        radius: 2
-                        opacity: config.opacityDefault
-                    }
-
-                    states: [
-                        State {
-                            name: "pressed"
-                            when: rebootButton.down
-                            PropertyChanges {
-                                target: rebootButtonBackground
-                                border.color: config.buttonBorderPressed
-                                opacity: 1
-                            }
-                            PropertyChanges {
-                                target: rebootButtonGradientStop0
-                                color: config.buttonBgPressed
-                            }
-                            PropertyChanges {
-                                target: rebootButtonGradientStop1
-                                color: config.buttonBgPressed
-                            }
-                        },
-                        State {
-                            name: "hovered"
-                            when: rebootButton.hovered
-                            PropertyChanges {
-                                target: rebootButtonGradientStop0
-                                color: config.buttonBgHovered0
-                            }
-                            PropertyChanges {
-                                target: rebootButtonGradientStop1
-                                color: config.buttonBgHovered1
-                            }
-                            PropertyChanges {
-                                target: rebootButtonBackground
-                                border.color: config.lineeditBorderHovered
-                            }
-                        },
-                        State {
-                            name: "focused"
-                            when: rebootButton.activeFocus
-                            PropertyChanges {
-                                target: rebootButtonBackground
-                                border.color: config.lineeditBorderFocused
-                            }
-                        },
-                        State {
-                            name: "enabled"
-                            when: rebootButton.enabled
-                            PropertyChanges {
-                                target: rebootButtonBackground
-                            }
-                            PropertyChanges {
-                                target: rebootButtonBackground
-                            }
-                        }
-                    ]
-
-                    onClicked: {
-                        sddm.reboot()
                     }
                 }
 
-                Button {
+                Loader {
                     id: sleepButton
-                    width: 30
-                    height: 30
-                    hoverEnabled: true
-                    icon {
-                        source: Qt.resolvedUrl("sleep.svg")
-                        color: config.textDefault
-                    }
-
-                   background: Rectangle {
-                        id: sleepButtonBackground
-                        gradient: Gradient {
-                            GradientStop { id: sleepButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
-                            GradientStop { id: sleepButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                    sourceComponent: componentButton
+                    onLoaded: {
+                        item.iconSource = "sleep.svg"
+                        item.isEnabled = true
+                        item.onClickAction = function() {
+                            sddm.suspend()
                         }
-                        border.color: config.buttonBorderNormal
-                        border.width: 1
-                        radius: 2
-                        opacity: config.opacityDefault
-                    }
-
-                    states: [
-                        State {
-                            name: "pressed"
-                            when: sleepButton.down
-                            PropertyChanges {
-                                target: sleepButtonBackground
-                                border.color: config.buttonBorderPressed
-                                opacity: 1
-                            }
-                            PropertyChanges {
-                                target: sleepButtonGradientStop0
-                                color: config.buttonBgPressed
-                            }
-                            PropertyChanges {
-                                target: sleepButtonGradientStop1
-                                color: config.buttonBgPressed
-                            }
-                        },
-                        State {
-                            name: "hovered"
-                            when: sleepButton.hovered
-                            PropertyChanges {
-                                target: sleepButtonGradientStop0
-                                color: config.buttonBgHovered0
-                            }
-                            PropertyChanges {
-                                target: sleepButtonGradientStop1
-                                color: config.buttonBgHovered1
-                            }
-                            PropertyChanges {
-                                target: sleepButtonBackground
-                                border.color: config.lineeditBorderHovered
-                            }
-                        },
-                        State {
-                            name: "focused"
-                            when: sleepButton.activeFocus
-                            PropertyChanges {
-                                target: sleepButtonBackground
-                                border.color: config.lineeditBorderFocused
-                            }
-                        },
-                        State {
-                            name: "enabled"
-                            when: sleepButton.enabled
-                            PropertyChanges {
-                                target: sleepButtonBackground
-                            }
-                            PropertyChanges {
-                                target: sleepButtonBackground
-                            }
-                        }
-                    ]
-
-                    onClicked: {
-                        sddm.suspend()
                     }
                 }
             }
