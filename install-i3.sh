@@ -2,31 +2,33 @@
 # set -eu
 
 main() {
-#     drivers
-#     xorg
-#     fonts
-#     desktop
-#     display_manager
-#     theme
-#     launcher
-#     packages
-    yay
-    yay_packages
-    docker
+    # drivers
+    # xorg
+    # fonts
+    # desktop
+    # display_manager
+    # theme
+    # launcher
+    # packages
+    # yay
+    # yay_packages
+    # docker
 
     configure_theme
-#     configure_i3wm
-#     configure_polybar
-#     configure_xterm
-#     configure_rofi
-#     configure_feh
+    # configure_i3wm
+    # configure_polybar
+    # configure_xterm
+    # configure_rofi
+    # configure_feh
 }
 
 drivers() {
-    sudo pacman -S --noconfirm --needed xf86-video-amdgpu
+    echo "--> Install drivers."
+    sudo pacman -S --noconfirm --needed xf86-video-amdgpu &> /dev/null
 }
 
 xorg() {
+    echo "--> Install xorg."
     sudo pacman -S --noconfirm --needed \
         xorg \
         xorg-server \
@@ -37,6 +39,7 @@ xorg() {
 }
 
 fonts() {
+    echo "--> Install fonts."
     sudo pacman -S --noconfirm --needed \
         adobe-source-sans-fonts \
         noto-fonts \
@@ -56,6 +59,7 @@ fonts() {
 }
 
 desktop() {
+    echo "--> Install desktop."
     sudo pacman -S --noconfirm --needed \
         i3-wm \
         polybar \
@@ -65,6 +69,7 @@ desktop() {
 }
 
 theme() {
+    echo "--> Install themes."
     sudo pacman -S --noconfirm --needed \
         lxappearance \
         materia-gtk-theme \
@@ -73,6 +78,7 @@ theme() {
 }
 
 display_manager() {
+    echo "--> Install display manager."
     sudo pacman -S --noconfirm --needed \
         sddm \
         qt6-svg \
@@ -83,6 +89,7 @@ display_manager() {
 }
 
 launcher() {
+    echo "--> Install application launcher."
     sudo pacman -S --noconfirm --needed \
         rofi \
         rofi-calc \
@@ -92,6 +99,7 @@ launcher() {
 }
 
 packages() {
+    echo "--> Install desktop packages."
     sudo pacman -S --noconfirm --needed \
         cheese    `#Webcam GUI`   \
         evince    `#PDF viewer`   \
@@ -105,6 +113,7 @@ packages() {
 }
 
 yay() {
+    echo "--> Install yay."
     if ! type "git" > /dev/null; then
         echo "Could not find: git"
         exit 1
@@ -138,12 +147,14 @@ yay() {
 }
 
 yay_packages() {
+    echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
         sublime-text \
     &> /dev/null
 }
 
 docker() {
+    echo "--> Install docker."
     if ! type "docker" > /dev/null; then
         sudo pacman -S docker --noconfirm --needed
         sudo systemctl start docker.service
@@ -154,10 +165,11 @@ docker() {
 }
 
 configure_theme() {
-    mkdir -p /etc/sddm.conf.d/
-    mkdir -p /usr/share/sddm/themes/luna/
+    echo "--> Configure desktop manager theme."
+    sudo mkdir -p /etc/sddm.conf.d/
+    sudo mkdir -p /usr/share/sddm/themes/luna/
 
-    cat > /etc/sddm.conf.d/settings.conf << 'EOF'
+    cat << EOF | sudo tee -a /etc/sddm.conf.d/settings.conf
 [Autologin]
 Relogin=false
 Session=i3
@@ -175,7 +187,7 @@ MinimumUid=1000
 Current=luna
 EOF
 
-    cat > /usr/share/sddm/themes/luna/login.svg << 'EOF'
+    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/login.svg
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
  <defs>
   <style id="current-color-scheme" type="text/css">
@@ -186,33 +198,33 @@ EOF
 </svg>
 EOF
 
-    cat > /usr/share/sddm/themes/luna/power.svg << 'EOF'
+    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/power.svg
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
  <path style="fill:#dfdfdf" d="M 8,1 C 8.554,1 9,1.446 9,2 V 7 C 9,7.554 8.554,8 8,8 7.446,8 7,7.554 7,7 V 2 C 7,1.446 7.446,1 8,1 Z"/>
  <path style="fill:#dfdfdf" d="M 11,3 C 10.448,3 10,3.4477 10,4 10,4.2839 10.102,4.5767 10.329,4.748 11.358,5.525 11.998,6.7108 12,8 12,10.209 10.209,12 8,12 5.7909,12 4,10.209 4,8 4.0024,6.7105 4.644,5.5253 5.6719,4.7471 5.8981,4.5759 5.9994,4.2833 6,4 6,3.4477 5.5523,3 5,3 4.7151,3 4.4724,3.1511 4.2539,3.334 2.8611,4.4998 2.0063,6.1837 2,8 2,11.314 4.6863,14 8,14 11.314,14 14,11.314 14,8 13.996,6.1678 13.137,4.4602 11.714,3.2998 11.504,3.1282 11.267,3 11,3 Z"/>
 </svg>
 EOF
 
-    cat > /usr/share/sddm/themes/luna/reboot.svg << 'EOF'
+    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/reboot.svg
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
  <path style="fill:#dfdfdf" d="M 8,2 A 1,1 0 0 0 7,3 1,1 0 0 0 8,4 4,4 0 0 1 12,8 H 10 L 13,12 16,8 H 14 A 6,6 0 0 0 8,2 Z M 3,4 0,8 H 2 A 6,6 0 0 0 8,14 1,1 0 0 0 9,13 1,1 0 0 0 8,12 4,4 0 0 1 4,8 H 6 Z"/>
 </svg>
 EOF
 
-    cat > /usr/share/sddm/themes/luna/settings.svg << 'EOF'
+    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/settings.svg
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
  <path style="fill:#dfdfdf" d="M 6.25,1 6.09,2.84 A 5.5,5.5 0 0 0 4.49,3.77 L 2.81,2.98 1.06,6.01 2.58,7.07 A 5.5,5.5 0 0 0 2.5,8 5.5,5.5 0 0 0 2.58,8.93 L 1.06,9.98 2.81,13.01 4.48,12.22 A 5.5,5.5 0 0 0 6.09,13.15 L 6.25,15 H 9.75 L 9.9,13.15 A 5.5,5.5 0 0 0 11.51,12.22 L 13.19,13.01 14.94,9.98 13.41,8.92 A 5.5,5.5 0 0 0 13.5,8 5.5,5.5 0 0 0 13.42,7.06 L 14.94,6.01 13.19,2.98 11.51,3.77 A 5.5,5.5 0 0 0 9.9,2.84 L 9.75,1 Z M 8,6 A 2,2 0 0 1 10,8 2,2 0 0 1 8,10 2,2 0 0 1 6,8 2,2 0 0 1 8,6 Z"/>
 </svg>
 EOF
 
-    cat > /usr/share/sddm/themes/luna/sleep.svg << 'EOF'
+    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/sleep.svg
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1" viewBox="0 0 16 16">
  <path style="fill:#dfdfdf" d="M 8,2 A 6,6 0 0 0 2,8 6,6 0 0 0 8,14 6,6 0 0 0 14,8 6,6 0 0 0 8,2 Z M 8,4 A 4,4 0 0 1 12,8 4,4 0 0 1 8,12 4,4 0 0 1 4,8 4,4 0 0 1 8,4 Z"/>
  <path style="fill:#dfdfdf" d="M 10,8 A 2,2 0 0 1 8,10 2,2 0 0 1 6,8 2,2 0 0 1 8,6 2,2 0 0 1 10,8 Z"/>
 </svg>
 EOF
 
-    cat > /usr/share/sddm/themes/luna/metadata.desktop << 'EOF'
+    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/metadata.desktop
 [SddmGreeterTheme]
 Author      = Nicola Strappazzon
 ConfigFile  = theme.conf
@@ -230,7 +242,7 @@ Version     = 20240810
 Website     = https://gitlab.com/nstrappazzonc/arch
 EOF
 
-    cat > /usr/share/sddm/themes/luna/theme.conf << 'EOF'
+    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/theme.conf
 [General]
 ClockEnabled            = "false"
 ClockPosition           = "center"
@@ -265,11 +277,492 @@ viewitemBorderHovered   = "#6e6e70"
 viewitemBorderPressed   = "#6e6e70"
 EOF
 
-    cat > /usr/share/sddm/themes/luna/Main.qml << 'EOF'
+    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/Main.qml
+import QtQuick 2.0
+import QtQuick.Controls 2.15
+
+Item {
+    width: 1920
+    height: 1080
+
+    Rectangle {
+        width: parent.width
+        height: parent.height
+        color: "#141416"
+        anchors.fill: parent
+    }
+
+    Rectangle {
+        width: 256
+        height: 144
+        color: config.bgDark
+        anchors.centerIn: parent
+        opacity: config.opacityPanel
+
+        Column {
+            spacing: 8
+            anchors {
+                verticalCenter: parent.verticalCenter
+                horizontalCenter: parent.horizontalCenter
+            }
+
+            TextField {
+                id: usernameInput
+                echoMode: TextInput.Normal
+                placeholderText: "username"
+                placeholderTextColor: config.textPlaceholder
+                renderType: Text.NativeRendering
+                horizontalAlignment: Text.AlignHLeft
+                width: 200
+                height: 30
+                font {
+                    family: config.Font
+                    pixelSize: config.FontSize
+                    bold: false
+                }
+
+                background: Rectangle {
+                    id: usernameInputBackground
+                    color: config.lineeditBgNormal
+                    border.color: config.lineeditBorderNormal
+                    border.width: 1
+                    radius: 2
+                    opacity: config.opacityDefault
+                }
+
+                palette {
+                    highlight: "#dadadc"
+                    highlightedText: "#7f7f81"
+                }
+
+                states: [
+                    State {
+                        name: "hovered"
+                        when: usernameInput.hovered
+                        PropertyChanges {
+                            target: usernameInputBackground
+                            border.color: config.lineeditBorderHovered
+                        }
+                    },
+                    State {
+                        name: "focused"
+                        when: usernameInput.activeFocus
+                        PropertyChanges {
+                            target: usernameInputBackground
+                            border.color: config.lineeditBorderFocused
+                        }
+                    }
+                ]
+            }
+
+            Row {
+                spacing: 8
+
+                TextField {
+                    id: passwordInput
+                    echoMode: TextInput.Password
+                    placeholderText: "password"
+                    placeholderTextColor: config.textPlaceholder
+                    renderType: Text.NativeRendering
+                    horizontalAlignment: Text.AlignHLeft
+                    width: 162
+                    height: 30
+                    font {
+                        family: config.Font
+                        pixelSize: config.FontSize
+                        bold: false
+                    }
+                    
+                    background: Rectangle {
+                        id: passwordInputBackground
+                        color: config.lineeditBgNormal
+                        border.color: config.lineeditBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
+                    }
+
+                    palette {
+                        highlight: "#dadadc"
+                        highlightedText: "#7f7f81"
+                    }
+
+                    states: [
+                        State {
+                            name: "hovered"
+                            when: passwordInput.hovered
+                            PropertyChanges {
+                                target: passwordInputBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: passwordInput.activeFocus
+                            PropertyChanges {
+                                target: passwordInputBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        }
+                    ]
+                }
+
+                Button {
+                    id: loginButton
+                    width: 30
+                    height: 30
+                    enabled: usernameInput != "" && passwordInput != "" ? true : false
+                    hoverEnabled: true
+                    icon {
+                        source: "login.svg"
+                        color: config.textDefault
+                    }
+
+                    background: Rectangle {
+                        id: loginButtonBackground
+                        gradient: Gradient {
+                            GradientStop { id: loginButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                            GradientStop { id: loginButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                        }
+                        border.color: config.buttonBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
+                    }
+
+                    states: [
+                        State {
+                            name: "pressed"
+                            when: loginButton.down
+                            PropertyChanges {
+                                target: loginButtonBackground
+                                border.color: config.buttonBorderPressed
+                                opacity: 1
+                            }
+                            PropertyChanges {
+                                target: loginButtonGradientStop0
+                                color: config.buttonBgPressed
+                            }
+                            PropertyChanges {
+                                target: loginButtonGradientStop1
+                                color: config.buttonBgPressed
+                            }
+                        },
+                        State {
+                            name: "hovered"
+                            when: loginButton.hovered
+                            PropertyChanges {
+                                target: loginButtonGradientStop0
+                                color: config.buttonBgHovered0
+                            }
+                            PropertyChanges {
+                                target: loginButtonGradientStop1
+                                color: config.buttonBgHovered1
+                            }
+                            PropertyChanges {
+                                target: loginButtonBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: loginButton.activeFocus
+                            PropertyChanges {
+                                target: loginButtonBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        },
+                        State {
+                            name: "enabled"
+                            when: loginButton.enabled
+                            PropertyChanges {
+                                target: loginButtonBackground
+                            }
+                            PropertyChanges {
+                                target: loginButtonBackground
+                            }
+                        }
+                    ]
+
+                    onClicked: {
+                        sddm.login(usernameInput.text, passwordInput.text, "i3")
+                    }
+                }
+            }
+
+            Row {
+                spacing: 8
+                width: parent.width
+                height: 30
+            }
+
+            Row {
+                spacing: 8
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                }
+
+                Button {
+                    id: powerButton
+                    width: 30
+                    height: 30
+                    hoverEnabled: true
+                    icon {
+                        source: Qt.resolvedUrl("power.svg")
+                        color: config.textDefault
+                    }
+
+                    background: Rectangle {
+                        id: powerButtonBackground
+                        gradient: Gradient {
+                            GradientStop { id: powerButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                            GradientStop { id: powerButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                        }
+                        border.color: config.buttonBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
+                    }
+
+                    states: [
+                        State {
+                            name: "pressed"
+                            when: powerButton.down
+                            PropertyChanges {
+                                target: powerButtonBackground
+                                border.color: config.buttonBorderPressed
+                                opacity: 1
+                            }
+                            PropertyChanges {
+                                target: powerButtonGradientStop0
+                                color: config.buttonBgPressed
+                            }
+                            PropertyChanges {
+                                target: powerButtonGradientStop1
+                                color: config.buttonBgPressed
+                            }
+                        },
+                        State {
+                            name: "hovered"
+                            when: powerButton.hovered
+                            PropertyChanges {
+                                target: powerButtonGradientStop0
+                                color: config.buttonBgHovered0
+                            }
+                            PropertyChanges {
+                                target: powerButtonGradientStop1
+                                color: config.buttonBgHovered1
+                            }
+                            PropertyChanges {
+                                target: powerButtonBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: powerButton.activeFocus
+                            PropertyChanges {
+                                target: powerButtonBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        },
+                        State {
+                            name: "enabled"
+                            when: powerButton.enabled
+                            PropertyChanges {
+                                target: powerButtonBackground
+                            }
+                            PropertyChanges {
+                                target: powerButtonBackground
+                            }
+                        }
+                    ]
+
+                    onClicked: {
+                        sddm.powerOff()
+                    }
+                }
+
+                Button {
+                    id: rebootButton
+                    width: 30
+                    height: 30
+                    hoverEnabled: true
+                    icon {
+                        source: Qt.resolvedUrl("reboot.svg")
+                        color: config.textDefault
+                    }
+
+                   background: Rectangle {
+                        id: rebootButtonBackground
+                        gradient: Gradient {
+                            GradientStop { id: rebootButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                            GradientStop { id: rebootButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                        }
+                        border.color: config.buttonBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
+                    }
+
+                    states: [
+                        State {
+                            name: "pressed"
+                            when: rebootButton.down
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                                border.color: config.buttonBorderPressed
+                                opacity: 1
+                            }
+                            PropertyChanges {
+                                target: rebootButtonGradientStop0
+                                color: config.buttonBgPressed
+                            }
+                            PropertyChanges {
+                                target: rebootButtonGradientStop1
+                                color: config.buttonBgPressed
+                            }
+                        },
+                        State {
+                            name: "hovered"
+                            when: rebootButton.hovered
+                            PropertyChanges {
+                                target: rebootButtonGradientStop0
+                                color: config.buttonBgHovered0
+                            }
+                            PropertyChanges {
+                                target: rebootButtonGradientStop1
+                                color: config.buttonBgHovered1
+                            }
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: rebootButton.activeFocus
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        },
+                        State {
+                            name: "enabled"
+                            when: rebootButton.enabled
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                            }
+                            PropertyChanges {
+                                target: rebootButtonBackground
+                            }
+                        }
+                    ]
+
+                    onClicked: {
+                        sddm.reboot()
+                    }
+                }
+
+                Button {
+                    id: sleepButton
+                    width: 30
+                    height: 30
+                    hoverEnabled: true
+                    icon {
+                        source: Qt.resolvedUrl("sleep.svg")
+                        color: config.textDefault
+                    }
+
+                   background: Rectangle {
+                        id: sleepButtonBackground
+                        gradient: Gradient {
+                            GradientStop { id: sleepButtonGradientStop0; position: 0.0; color: config.buttonBgNormal }
+                            GradientStop { id: sleepButtonGradientStop1; position: 1.0; color: config.buttonBgNormal }
+                        }
+                        border.color: config.buttonBorderNormal
+                        border.width: 1
+                        radius: 2
+                        opacity: config.opacityDefault
+                    }
+
+                    states: [
+                        State {
+                            name: "pressed"
+                            when: sleepButton.down
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                                border.color: config.buttonBorderPressed
+                                opacity: 1
+                            }
+                            PropertyChanges {
+                                target: sleepButtonGradientStop0
+                                color: config.buttonBgPressed
+                            }
+                            PropertyChanges {
+                                target: sleepButtonGradientStop1
+                                color: config.buttonBgPressed
+                            }
+                        },
+                        State {
+                            name: "hovered"
+                            when: sleepButton.hovered
+                            PropertyChanges {
+                                target: sleepButtonGradientStop0
+                                color: config.buttonBgHovered0
+                            }
+                            PropertyChanges {
+                                target: sleepButtonGradientStop1
+                                color: config.buttonBgHovered1
+                            }
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                                border.color: config.lineeditBorderHovered
+                            }
+                        },
+                        State {
+                            name: "focused"
+                            when: sleepButton.activeFocus
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                                border.color: config.lineeditBorderFocused
+                            }
+                        },
+                        State {
+                            name: "enabled"
+                            when: sleepButton.enabled
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                            }
+                            PropertyChanges {
+                                target: sleepButtonBackground
+                            }
+                        }
+                    ]
+
+                    onClicked: {
+                        sddm.suspend()
+                    }
+                }
+            }
+        }
+    }
+
+    Connections {
+        target: sddm
+
+        function onLoginFailed() {
+            passwordInput.text = ""
+            passwordInput.focus = true
+        }
+    }
+}
 EOF
 }
 
 configure_i3wm() {
+    echo "--> Configure desktop."
+
     mkdir -p /home/ns/.config/i3/
     cat > /home/ns/.config/i3/config << 'EOF'
 exec --no-startup-id feh --no-fehbg --bg-fill '/home/ns/.config/feh/wallpaper.jpg'
@@ -353,6 +846,8 @@ EOF
 }
 
 configure_xterm() {
+    echo "--> Install terminal."
+
     cat > /home/ns/.Xdefaults << 'EOF'
 XTerm*background: #002B36
 XTerm*borderColor: #343434
@@ -385,6 +880,8 @@ EOF
 }
 
 configure_polybar() {
+    echo "--> Install bar."
+
     mkdir -p /home/ns/.config/polybar/
     touch /home/ns/.config/polybar/launch.sh
     chmod +x /home/ns/.config/polybar/launch.sh
@@ -520,6 +1017,8 @@ EOF
 }
 
 configure_rofi() {
+    echo "--> Configure application launcher."
+
     mkdir -p /home/ns/.config/rofi/
 
     cat > /home/ns/.config/rofi/config.rasi << 'EOF'
@@ -532,6 +1031,8 @@ EOF
 }
 
 configure_feh() {
+    echo "--> Configure desktop wallpaper."
+
     mkdir -p /home/ns/.config/feh/
     cp wallpaper/wallpaper.jpg /home/ns/.config/feh/wallpaper.jpg
 }
