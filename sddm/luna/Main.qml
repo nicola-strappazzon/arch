@@ -5,6 +5,63 @@ Item {
     width: 1920
     height: 1080
 
+    Component {
+        id: componentTextField
+
+        TextField {
+            property string textFieldPlaceholder: ""
+            property int textFieldWidth: 200
+            property bool isPasswordField: false
+
+            id: componentTextField
+            echoMode: isPasswordField ? TextInput.Password : TextInput.Normal
+            placeholderText: textFieldPlaceholder
+            placeholderTextColor: config.textPlaceholder
+            renderType: Text.NativeRendering
+            horizontalAlignment: Text.AlignHLeft
+            width: textFieldWidth
+            height: 30
+            font {
+                family: config.Font
+                pixelSize: config.FontSize
+                bold: false
+            }
+
+            background: Rectangle {
+                id: componentTextFieldBackground
+                color: config.lineeditBgNormal
+                border.color: config.lineeditBorderNormal
+                border.width: 1
+                radius: 2
+                opacity: config.opacityDefault
+            }
+
+            palette {
+                highlight: "#dadadc"
+                highlightedText: "#7f7f81"
+            }
+
+            states: [
+                State {
+                    name: "hovered"
+                    when: componentTextField.hovered
+                    PropertyChanges {
+                        target: componentTextFieldBackground
+                        border.color: config.lineeditBorderHovered
+                    }
+                },
+                State {
+                    name: "focused"
+                    when: componentTextField.activeFocus
+                    PropertyChanges {
+                        target: componentTextFieldBackground
+                        border.color: config.lineeditBorderFocused
+                    }
+                }
+            ]
+        }
+    }
+
     Rectangle {
         width: parent.width
         height: parent.height
@@ -26,105 +83,26 @@ Item {
                 horizontalCenter: parent.horizontalCenter
             }
 
-            TextField {
+            Loader {
                 id: usernameInput
-                echoMode: TextInput.Normal
-                placeholderText: "username"
-                placeholderTextColor: config.textPlaceholder
-                renderType: Text.NativeRendering
-                horizontalAlignment: Text.AlignHLeft
-                width: 200
-                height: 30
-                font {
-                    family: config.Font
-                    pixelSize: config.FontSize
-                    bold: false
+                sourceComponent: componentTextField
+                onLoaded: {
+                    item.textFieldPlaceholder = "username"
+                    item.isPasswordField = false
                 }
-
-                background: Rectangle {
-                    id: usernameInputBackground
-                    color: config.lineeditBgNormal
-                    border.color: config.lineeditBorderNormal
-                    border.width: 1
-                    radius: 2
-                    opacity: config.opacityDefault
-                }
-
-                palette {
-                    highlight: "#dadadc"
-                    highlightedText: "#7f7f81"
-                }
-
-                states: [
-                    State {
-                        name: "hovered"
-                        when: usernameInput.hovered
-                        PropertyChanges {
-                            target: usernameInputBackground
-                            border.color: config.lineeditBorderHovered
-                        }
-                    },
-                    State {
-                        name: "focused"
-                        when: usernameInput.activeFocus
-                        PropertyChanges {
-                            target: usernameInputBackground
-                            border.color: config.lineeditBorderFocused
-                        }
-                    }
-                ]
             }
 
             Row {
                 spacing: 8
 
-                TextField {
+                Loader {
                     id: passwordInput
-                    echoMode: TextInput.Password
-                    placeholderText: "password"
-                    placeholderTextColor: config.textPlaceholder
-                    renderType: Text.NativeRendering
-                    horizontalAlignment: Text.AlignHLeft
-                    width: 162
-                    height: 30
-                    font {
-                        family: config.Font
-                        pixelSize: config.FontSize
-                        bold: false
+                    sourceComponent: componentTextField
+                    onLoaded: {
+                        item.width = 162
+                        item.textFieldPlaceholder = "password"
+                        item.isPasswordField = true
                     }
-                    
-                    background: Rectangle {
-                        id: passwordInputBackground
-                        color: config.lineeditBgNormal
-                        border.color: config.lineeditBorderNormal
-                        border.width: 1
-                        radius: 2
-                        opacity: config.opacityDefault
-                    }
-
-                    palette {
-                        highlight: "#dadadc"
-                        highlightedText: "#7f7f81"
-                    }
-
-                    states: [
-                        State {
-                            name: "hovered"
-                            when: passwordInput.hovered
-                            PropertyChanges {
-                                target: passwordInputBackground
-                                border.color: config.lineeditBorderHovered
-                            }
-                        },
-                        State {
-                            name: "focused"
-                            when: passwordInput.activeFocus
-                            PropertyChanges {
-                                target: passwordInputBackground
-                                border.color: config.lineeditBorderFocused
-                            }
-                        }
-                    ]
                 }
 
                 Button {
