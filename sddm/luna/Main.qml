@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Item {
@@ -12,6 +12,7 @@ Item {
             property string placeholder: ""
             property int fieldWidth: 200
             property bool isPasswordField: false
+            property var onAction: null
 
             id: componentTextField
             echoMode: isPasswordField ? TextInput.Password : TextInput.Normal
@@ -21,6 +22,8 @@ Item {
             horizontalAlignment: Text.AlignHLeft
             width: fieldWidth
             height: 30
+            color: "#AAAAAC"
+
             font {
                 family: config.Font
                 pixelSize: config.FontSize
@@ -59,6 +62,12 @@ Item {
                     }
                 }
             ]
+
+            onAccepted: {
+                if (onAction) {
+                    onAction();
+                }
+            }
         }
     }
 
@@ -68,7 +77,7 @@ Item {
         Button {
             property string iconSource: ""
             property bool isEnabled: true
-            property var onClickAction: null
+            property var onAction: null
 
             id: componentButton
             width: 30
@@ -147,8 +156,8 @@ Item {
             ]
 
             onClicked: {
-                if (onClickAction) {
-                    onClickAction();
+                if (onAction) {
+                    onAction();
                 }
             }
         }
@@ -181,6 +190,7 @@ Item {
                 onLoaded: {
                     item.placeholder = "username"
                     item.isPasswordField = false
+                    item.forceActiveFocus();
                 }
             }
 
@@ -194,6 +204,9 @@ Item {
                         item.width = 162
                         item.placeholder = "password"
                         item.isPasswordField = true
+                        item.onAction = function() {
+                            sddm.login(usernameInput.item.text, passwordInput.item.text, "i3")
+                        }
                     }
                 }
 
@@ -202,9 +215,9 @@ Item {
                     sourceComponent: componentButton
                     onLoaded: {
                         item.iconSource = "login.svg"
-                        item.isEnabled = usernameInput != "" && passwordInput != "" ? true : false
-                        item.onClickAction = function() {
-                            sddm.login(usernameInput.text, passwordInput.text, "i3")
+                        item.isEnabled = usernameInput.text != "" && passwordInput.text != "" ? true : false
+                        item.onAction = function() {
+                            sddm.login(usernameInput.item.text, passwordInput.item.text, "i3")
                         }
                     }
                 }
@@ -228,7 +241,7 @@ Item {
                     onLoaded: {
                         item.iconSource = "power.svg"
                         item.isEnabled = true
-                        item.onClickAction = function() {
+                        item.onAction = function() {
                             sddm.powerOff()
                         }
                     }
@@ -240,7 +253,7 @@ Item {
                     onLoaded: {
                         item.iconSource = "reboot.svg"
                         item.isEnabled = true
-                        item.onClickAction = function() {
+                        item.onAction = function() {
                             sddm.reboot()
                         }
                     }
@@ -252,7 +265,7 @@ Item {
                     onLoaded: {
                         item.iconSource = "sleep.svg"
                         item.isEnabled = true
-                        item.onClickAction = function() {
+                        item.onAction = function() {
                             sddm.suspend()
                         }
                     }
@@ -265,8 +278,8 @@ Item {
         target: sddm
 
         function onLoginFailed() {
-            passwordInput.text = ""
-            passwordInput.focus = true
+            passwordInput.item.text = ""
+            passwordInput.item.forceActiveFocus()
         }
     }
 }

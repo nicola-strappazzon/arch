@@ -169,7 +169,10 @@ configure_theme() {
     sudo mkdir -p /etc/sddm.conf.d/
     sudo mkdir -p /usr/share/sddm/themes/luna/
 
-    cat << EOF | sudo tee -a /etc/sddm.conf.d/settings.conf &> /dev/null
+    cat << EOF | sudo tee /etc/sddm.conf.d/settings.conf &> /dev/null
+[Debug]
+LogLevel=DEBUG
+
 [Autologin]
 Relogin=false
 Session=i3
@@ -187,7 +190,7 @@ MinimumUid=1000
 Current=luna
 EOF
 
-    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/login.svg &> /dev/null
+    cat << EOF | sudo tee /usr/share/sddm/themes/luna/login.svg &> /dev/null
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
  <defs>
   <style id="current-color-scheme" type="text/css">
@@ -198,33 +201,33 @@ EOF
 </svg>
 EOF
 
-    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/power.svg &> /dev/null
+    cat << EOF | sudo tee /usr/share/sddm/themes/luna/power.svg &> /dev/null
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
  <path style="fill:#dfdfdf" d="M 8,1 C 8.554,1 9,1.446 9,2 V 7 C 9,7.554 8.554,8 8,8 7.446,8 7,7.554 7,7 V 2 C 7,1.446 7.446,1 8,1 Z"/>
  <path style="fill:#dfdfdf" d="M 11,3 C 10.448,3 10,3.4477 10,4 10,4.2839 10.102,4.5767 10.329,4.748 11.358,5.525 11.998,6.7108 12,8 12,10.209 10.209,12 8,12 5.7909,12 4,10.209 4,8 4.0024,6.7105 4.644,5.5253 5.6719,4.7471 5.8981,4.5759 5.9994,4.2833 6,4 6,3.4477 5.5523,3 5,3 4.7151,3 4.4724,3.1511 4.2539,3.334 2.8611,4.4998 2.0063,6.1837 2,8 2,11.314 4.6863,14 8,14 11.314,14 14,11.314 14,8 13.996,6.1678 13.137,4.4602 11.714,3.2998 11.504,3.1282 11.267,3 11,3 Z"/>
 </svg>
 EOF
 
-    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/reboot.svg &> /dev/null
+    cat << EOF | sudo tee /usr/share/sddm/themes/luna/reboot.svg &> /dev/null
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
  <path style="fill:#dfdfdf" d="M 8,2 A 1,1 0 0 0 7,3 1,1 0 0 0 8,4 4,4 0 0 1 12,8 H 10 L 13,12 16,8 H 14 A 6,6 0 0 0 8,2 Z M 3,4 0,8 H 2 A 6,6 0 0 0 8,14 1,1 0 0 0 9,13 1,1 0 0 0 8,12 4,4 0 0 1 4,8 H 6 Z"/>
 </svg>
 EOF
 
-    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/settings.svg &> /dev/null
+    cat << EOF | sudo tee /usr/share/sddm/themes/luna/settings.svg &> /dev/null
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1">
  <path style="fill:#dfdfdf" d="M 6.25,1 6.09,2.84 A 5.5,5.5 0 0 0 4.49,3.77 L 2.81,2.98 1.06,6.01 2.58,7.07 A 5.5,5.5 0 0 0 2.5,8 5.5,5.5 0 0 0 2.58,8.93 L 1.06,9.98 2.81,13.01 4.48,12.22 A 5.5,5.5 0 0 0 6.09,13.15 L 6.25,15 H 9.75 L 9.9,13.15 A 5.5,5.5 0 0 0 11.51,12.22 L 13.19,13.01 14.94,9.98 13.41,8.92 A 5.5,5.5 0 0 0 13.5,8 5.5,5.5 0 0 0 13.42,7.06 L 14.94,6.01 13.19,2.98 11.51,3.77 A 5.5,5.5 0 0 0 9.9,2.84 L 9.75,1 Z M 8,6 A 2,2 0 0 1 10,8 2,2 0 0 1 8,10 2,2 0 0 1 6,8 2,2 0 0 1 8,6 Z"/>
 </svg>
 EOF
 
-    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/sleep.svg &> /dev/null
+    cat << EOF | sudo tee /usr/share/sddm/themes/luna/sleep.svg &> /dev/null
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" version="1.1" viewBox="0 0 16 16">
  <path style="fill:#dfdfdf" d="M 8,2 A 6,6 0 0 0 2,8 6,6 0 0 0 8,14 6,6 0 0 0 14,8 6,6 0 0 0 8,2 Z M 8,4 A 4,4 0 0 1 12,8 4,4 0 0 1 8,12 4,4 0 0 1 4,8 4,4 0 0 1 8,4 Z"/>
  <path style="fill:#dfdfdf" d="M 10,8 A 2,2 0 0 1 8,10 2,2 0 0 1 6,8 2,2 0 0 1 8,6 2,2 0 0 1 10,8 Z"/>
 </svg>
 EOF
 
-    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/metadata.desktop &> /dev/null
+    cat << EOF | sudo tee /usr/share/sddm/themes/luna/metadata.desktop &> /dev/null
 [SddmGreeterTheme]
 Author      = Nicola Strappazzon
 ConfigFile  = theme.conf
@@ -234,7 +237,6 @@ License     = MIT
 MainScript  = Main.qml
 Name        = Luna
 QtVersion   = 6
-# Screenshot  = preview.png
 Theme-API   = 2.0
 Theme-Id    = nsc
 Type        = sddm-theme
@@ -242,14 +244,10 @@ Version     = 20240810
 Website     = https://gitlab.com/nstrappazzonc/arch
 EOF
 
-    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/theme.conf &> /dev/null
+    cat << EOF | sudo tee /usr/share/sddm/themes/luna/theme.conf &> /dev/null
 [General]
-ClockEnabled            = "false"
-ClockPosition           = "center"
-CustomBackground        = "false"
 Font                    = "Noto Sans"
 FontSize                = 12
-LoginBackground         = "false"
 bgDark                  = "#141416"
 bgDefault               = "#1e1e20"
 buttonBgFocused0        = "#7a7a7c"
@@ -271,14 +269,10 @@ opacityPanel            = "0.95"
 textDefault             = "#aaaaac"
 textHighlight           = "#dadadc"
 textPlaceholder         = "#7f8c8d"
-viewitemBgHovered       = "#3a3a3e"
-viewitemBgPressed       = "#5c5c5e"
-viewitemBorderHovered   = "#6e6e70"
-viewitemBorderPressed   = "#6e6e70"
 EOF
 
-    cat << EOF | sudo tee -a /usr/share/sddm/themes/luna/Main.qml &> /dev/null
-import QtQuick 2.0
+    cat << EOF | sudo tee /usr/share/sddm/themes/luna/Main.qml &> /dev/null
+import QtQuick 2.15
 import QtQuick.Controls 2.15
 
 Item {
@@ -292,6 +286,7 @@ Item {
             property string placeholder: ""
             property int fieldWidth: 200
             property bool isPasswordField: false
+            property var onAction: null
 
             id: componentTextField
             echoMode: isPasswordField ? TextInput.Password : TextInput.Normal
@@ -301,6 +296,8 @@ Item {
             horizontalAlignment: Text.AlignHLeft
             width: fieldWidth
             height: 30
+            color: "#AAAAAC"
+
             font {
                 family: config.Font
                 pixelSize: config.FontSize
@@ -339,6 +336,12 @@ Item {
                     }
                 }
             ]
+
+            onAccepted: {
+                if (onAction) {
+                    onAction();
+                }
+            }
         }
     }
 
@@ -348,7 +351,7 @@ Item {
         Button {
             property string iconSource: ""
             property bool isEnabled: true
-            property var onClickAction: null
+            property var onAction: null
 
             id: componentButton
             width: 30
@@ -427,8 +430,8 @@ Item {
             ]
 
             onClicked: {
-                if (onClickAction) {
-                    onClickAction();
+                if (onAction) {
+                    onAction();
                 }
             }
         }
@@ -461,6 +464,7 @@ Item {
                 onLoaded: {
                     item.placeholder = "username"
                     item.isPasswordField = false
+                    item.forceActiveFocus();
                 }
             }
 
@@ -474,6 +478,9 @@ Item {
                         item.width = 162
                         item.placeholder = "password"
                         item.isPasswordField = true
+                        item.onAction = function() {
+                            sddm.login(usernameInput.item.text, passwordInput.item.text, "i3")
+                        }
                     }
                 }
 
@@ -482,9 +489,9 @@ Item {
                     sourceComponent: componentButton
                     onLoaded: {
                         item.iconSource = "login.svg"
-                        item.isEnabled = usernameInput != "" && passwordInput != "" ? true : false
-                        item.onClickAction = function() {
-                            sddm.login(usernameInput.text, passwordInput.text, "i3")
+                        item.isEnabled = usernameInput.text != "" && passwordInput.text != "" ? true : false
+                        item.onAction = function() {
+                            sddm.login(usernameInput.item.text, passwordInput.item.text, "i3")
                         }
                     }
                 }
@@ -508,7 +515,7 @@ Item {
                     onLoaded: {
                         item.iconSource = "power.svg"
                         item.isEnabled = true
-                        item.onClickAction = function() {
+                        item.onAction = function() {
                             sddm.powerOff()
                         }
                     }
@@ -520,7 +527,7 @@ Item {
                     onLoaded: {
                         item.iconSource = "reboot.svg"
                         item.isEnabled = true
-                        item.onClickAction = function() {
+                        item.onAction = function() {
                             sddm.reboot()
                         }
                     }
@@ -532,7 +539,7 @@ Item {
                     onLoaded: {
                         item.iconSource = "sleep.svg"
                         item.isEnabled = true
-                        item.onClickAction = function() {
+                        item.onAction = function() {
                             sddm.suspend()
                         }
                     }
@@ -545,8 +552,8 @@ Item {
         target: sddm
 
         function onLoginFailed() {
-            passwordInput.text = ""
-            passwordInput.focus = true
+            passwordInput.item.text = ""
+            passwordInput.item.forceActiveFocus()
         }
     }
 }
