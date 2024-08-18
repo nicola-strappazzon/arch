@@ -2,23 +2,23 @@
 # set -eu
 
 main() {
-    # drivers
-    # xorg
-    # fonts
-    # desktop
-    # display_manager
-    # theme
-    # launcher
-    # packages
-    # yay
-    # yay_packages
-    # docker
+    drivers
+    xorg
+    fonts
+    desktop
+    display_manager
+    theme
+    launcher
+    packages
+    yay
+    yay_packages
+    docker
 
     configure_theme
-    # configure_i3wm
-    # configure_polybar
-    # configure_xterm
-    # configure_rofi
+    configure_i3wm
+    configure_polybar
+    configure_xterm
+    configure_rofi
     # configure_feh
 }
 
