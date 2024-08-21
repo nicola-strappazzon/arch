@@ -25,7 +25,12 @@ main() {
 
 drivers() {
     echo "--> Install drivers."
-    sudo pacman -S --noconfirm --needed xf86-video-amdgpu &> /dev/null
+    sudo pacman -S --noconfirm --needed \
+        xf86-video-amdgpu \
+        alsa-firmware \
+        alsa-utils \
+        pulseaudio \
+    &> /dev/null
 }
 
 xorg() {
@@ -666,6 +671,7 @@ bindsym $mod+space exec --no-startup-id rofi -config /home/ns/.config/rofi/confi
 client.focused #373B41 #282A2E #C5C8C6 #AAAAAC
 gaps inner 4
 gaps outer 2
+gaps top -4
 
 for_window [floating] resize set 800 600
 for_window [window_role="About"]       floating enable, move position center
