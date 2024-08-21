@@ -78,18 +78,18 @@ partitioning() {
     parted --script $VOLUMEN mkpart root ext4 32GiB 100%
 
     echo "--> Format partitions."
-    mkfs.fat -F32 -n UEFI "${VOLUMEN}1" &> /dev/null
-    mkswap -L SWAP "${VOLUMEN}2" &> /dev/null
-    mkfs.ext4 -L ROOT "${VOLUMEN}3" &> /dev/null
+    mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
+    mkswap -L SWAP "${VOLUMEN}p2" &> /dev/null
+    mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
 
     echo "--> Verify partitions."
     partprobe $VOLUMEN
 
     echo "--> Mount: swap, root and boot"
-    swapon "${VOLUMEN}2"
-    mount "${VOLUMEN}3" /mnt
+    swapon "${VOLUMEN}p2"
+    mount "${VOLUMEN}p3" /mnt
     mkdir -p /mnt/boot/efi/
-    mount "${VOLUMEN}1" /mnt/boot/efi/
+    mount "${VOLUMEN}p1" /mnt/boot/efi/
 
     echo "--> Remove default directories lost+found."
     rm -rf /mnt/boot/efi/lost+found
@@ -270,7 +270,7 @@ finish(){
     echo "--> Unmount all partitions and reboot."
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
-    // reboot
+    # reboot
 }
 
 main "$@"
