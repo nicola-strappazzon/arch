@@ -14,12 +14,13 @@ main() {
     # yay_packages
     # docker
 
-    configure_theme
-    configure_i3wm
-    configure_polybar
-    configure_xterm
-    configure_rofi
+    # configure_theme
+    # configure_i3wm
+    # configure_polybar
+    # configure_xterm
+    # configure_rofi
     # configure_feh
+    configure_applications_desktop
 }
 
 drivers() {
@@ -99,14 +100,15 @@ launcher() {
 packages() {
     echo "--> Install desktop packages."
     sudo pacman -S --noconfirm --needed \
-        cheese    `#Webcam GUI`   \
-        evince    `#PDF viewer`   \
-        firefox   `#WEB browser`  \
-        flameshot `#Screenshot`   \
-        mpv       `#Video player` \
-        nemo      `#File manager` \
-        rhythmbox `#Audio player` \
-        viewnior  `#Image viewer` \
+        cheese      `#Webcam GUI`   \
+        evince      `#PDF viewer`   \
+        firefox     `#WEB browser`  \
+        flameshot   `#Screenshot`   \
+        mpv         `#Video player` \
+        nemo        `#File manager` \
+        rhythmbox   `#Audio player` \
+        viewnior    `#Image viewer` \
+        arduino-ide `#Arduino IDE` \
     &> /dev/null
 }
 
@@ -871,6 +873,133 @@ configure_feh() {
 
     mkdir -p /home/ns/.config/feh/
     cp wallpaper/wallpaper.jpg /home/ns/.config/feh/wallpaper.jpg
+}
+
+configure_applications_desktop() {
+    sudo rm -f /usr/share/applications/*
+
+    cat << EOF | sudo tee /usr/share/applications/sublime_text.desktop &> /dev/null
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Sublime Text
+Exec=/usr/bin/subl %F
+Terminal=false
+MimeType=text/plain;
+Icon=sublime-text
+Keywords=text;editor;ide;dev;
+Categories=TextEditor;Development;
+StartupNotify=true
+StartupWMClass=subl
+Actions=new-window;new-file;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=/usr/bin/subl --launch-or-new-window
+OnlyShowIn=Unity;
+
+[Desktop Action new-file]
+Name=New File
+Exec=/usr/bin/subl --command new_file
+OnlyShowIn=Unity;
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/firefox.desktop &> /dev/null
+[Desktop Entry]
+Version=1.0
+Name=Firefox
+Exec=/usr/lib/firefox/firefox %u
+Icon=firefox
+Keywords=web;browser;
+Terminal=false
+Type=Application
+MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;application/x-xpinstall;application/pdf;application/json;
+StartupNotify=true
+Categories=Network;WebBrowser;
+Actions=new-window;new-private-window;profile-manager-window;
+StartupWMClass=firefox
+
+[Desktop Action new-window]
+Name=Open a New Window
+Exec=/usr/lib/firefox/firefox --new-window %u
+
+[Desktop Action new-private-window]
+Name=Open a New Private Window
+Exec=/usr/lib/firefox/firefox --private-window %u
+
+[Desktop Action profile-manager-window]
+Name=Open the Profile Manager
+Exec=/usr/lib/firefox/firefox --ProfileManager
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/nemo.desktop &> /dev/null
+[Desktop Entry]
+Version=1.0
+Name=File Manager
+Exec=nemo %U
+Icon=system-file-manager
+Keywords=folders;filesystem;explorer;
+Terminal=false
+Type=Application
+StartupNotify=false
+Categories=GNOME;GTK;Utility;Core;
+MimeType=inode/directory;application/x-gnome-saved-search;
+Actions=open-home;open-computer;open-trash;
+
+[Desktop Action open-home]
+Name=Home
+Exec=nemo %U
+
+[Desktop Action open-computer]
+Name=Computer
+Exec=nemo computer:///
+
+[Desktop Action open-trash]
+Name=Trash
+Exec=nemo trash:///
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/lxappearance.desktop &> /dev/null
+[Desktop Entry]
+Type=Application
+Name=Look and Feel
+Keywords=windows;preferences;settings;theme;style;appearance;
+Icon=preferences-desktop-theme
+Exec=lxappearance
+NotShowIn=GNOME;KDE;XFCE;MATE;
+StartupNotify=true
+Categories=GTK;Settings;DesktopSettings;X-LXDE-Settings;
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/mpv.desktop &> /dev/null
+[Desktop Entry]
+Type=Application
+Name=Media Player
+Icon=mpv
+TryExec=mpv
+Exec=mpv --player-operation-mode=pseudo-gui -- %U
+Terminal=false
+Categories=AudioVideo;Audio;Video;Player;TV;
+MimeType=application/ogg;application/x-ogg;application/mxf;application/sdp;application/smil;application/x-smil;application/streamingmedia;application/x-streamingmedia;application/vnd.rn-realmedia;application/vnd.rn-realmedia-vbr;audio/aac;audio/x-aac;audio/vnd.dolby.heaac.1;audio/vnd.dolby.heaac.2;audio/aiff;audio/x-aiff;audio/m4a;audio/x-m4a;application/x-extension-m4a;audio/mp1;audio/x-mp1;audio/mp2;audio/x-mp2;audio/mp3;audio/x-mp3;audio/mpeg;audio/mpeg2;audio/mpeg3;audio/mpegurl;audio/x-mpegurl;audio/mpg;audio/x-mpg;audio/rn-mpeg;audio/musepack;audio/x-musepack;audio/ogg;audio/scpls;audio/x-scpls;audio/vnd.rn-realaudio;audio/wav;audio/x-pn-wav;audio/x-pn-windows-pcm;audio/x-realaudio;audio/x-pn-realaudio;audio/x-ms-wma;audio/x-pls;audio/x-wav;video/mpeg;video/x-mpeg2;video/x-mpeg3;video/mp4v-es;video/x-m4v;video/mp4;application/x-extension-mp4;video/divx;video/vnd.divx;video/msvideo;video/x-msvideo;video/ogg;video/quicktime;video/vnd.rn-realvideo;video/x-ms-afs;video/x-ms-asf;audio/x-ms-asf;application/vnd.ms-asf;video/x-ms-wmv;video/x-ms-wmx;video/x-ms-wvxvideo;video/x-avi;video/avi;video/x-flic;video/fli;video/x-flc;video/flv;video/x-flv;video/x-theora;video/x-theora+ogg;video/x-matroska;video/mkv;audio/x-matroska;application/x-matroska;video/webm;audio/webm;audio/vorbis;audio/x-vorbis;audio/x-vorbis+ogg;video/x-ogm;video/x-ogm+ogg;application/x-ogm;application/x-ogm-audio;application/x-ogm-video;application/x-shorten;audio/x-shorten;audio/x-ape;audio/x-wavpack;audio/x-tta;audio/AMR;audio/ac3;audio/eac3;audio/amr-wb;video/mp2t;audio/flac;audio/mp4;application/x-mpegurl;video/vnd.mpegurl;application/vnd.apple.mpegurl;audio/x-pn-au;video/3gp;video/3gpp;video/3gpp2;audio/3gpp;audio/3gpp2;video/dv;audio/dv;audio/opus;audio/vnd.dts;audio/vnd.dts.hd;audio/x-adpcm;application/x-cue;audio/m3u;audio/vnd.wave;video/vnd.avi;
+X-KDE-Protocols=ftp,http,https,mms,rtmp,rtsp,sftp,smb,srt,rist,webdav,webdavs
+StartupWMClass=mpv
+Keywords=mpv;media;player;video;audio;tv;
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/rhythmbox.desktop &> /dev/null
+[Desktop Entry]
+Name=Music Player
+Keywords=Audio;Song;MP3;CD;Podcast;MTP;iPod;Playlist;Last.fm;UPnP;DLNA;Radio;
+Exec=rhythmbox %U
+Terminal=false
+Type=Application
+Icon=org.gnome.Rhythmbox3
+X-GNOME-DocPath=rhythmbox/rhythmbox.xml
+Categories=GNOME;GTK;AudioVideo;Audio;Player;
+MimeType=application/x-ogg;application/ogg;audio/x-vorbis+ogg;audio/vorbis;audio/x-vorbis;audio/x-scpls;audio/x-mp3;audio/x-mpeg;audio/mpeg;audio/x-mpegurl;audio/x-flac;audio/mp4;audio/x-it;audio/x-mod;audio/x-s3m;audio/x-stm;audio/x-xm;
+StartupNotify=true
+EOF
+
 }
 
 main "$@"
