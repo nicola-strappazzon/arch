@@ -565,7 +565,7 @@ configure_i3wm() {
 
     mkdir -p /home/ns/.config/i3/
     cat > /home/ns/.config/i3/config << 'EOF'
-exec --no-startup-id feh --no-fehbg --bg-fill '/home/ns/.config/feh/wallpaper.jpg'
+exec --no-startup-id feh --no-fehbg --bg-fill '/home/ns/.config/feh/01.jpg'
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 set $mod Mod4
@@ -874,7 +874,7 @@ configure_feh() {
     echo "--> Configure desktop wallpaper."
 
     mkdir -p /home/ns/.config/feh/
-    cp wallpaper/wallpaper.jpg /home/ns/.config/feh/wallpaper.jpg
+    cp wallpaper/wallpaper.jpg /home/ns/.config/feh/01.jpg
 }
 
 configure_applications_desktop() {
