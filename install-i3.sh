@@ -2,17 +2,17 @@
 # set -eu
 
 main() {
-    drivers
-    xorg
-    fonts
-    desktop
-    display_manager
-    theme
-    launcher
-    packages
-    yay
-    yay_packages
-    docker
+    # drivers
+    # xorg
+    # fonts
+    # desktop
+    # display_manager
+    # theme
+    # launcher
+    # packages
+    # yay
+    # yay_packages
+    # docker
 
     configure_theme
     configure_i3wm
@@ -147,7 +147,7 @@ yay() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        sublime-text \
+        sublime-text-4 \
     &> /dev/null
 }
 
@@ -578,7 +578,7 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-font pango:monospace 10
+font pango:terminus 10
 
 bindsym $mod+Down focus down
 bindsym $mod+Left focus left
@@ -604,7 +604,6 @@ bindsym $mod+h split h
 bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
-bindsym $mod+r mode "resize"
 bindsym $mod+s layout stacking
 bindsym $mod+semicolon focus right
 bindsym $mod+v split v
@@ -632,14 +631,54 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the windowâs width.
+        # Pressing right will grow the windowâs width.
+        # Pressing up will shrink the windowâs height.
+        # Pressing down will grow the windowâs height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym semicolon resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
 floating_modifier $mod
 tiling_drag modifier titlebar
 
 bindsym $mod+space exec --no-startup-id rofi -config /home/ns/.config/rofi/config.rasi -show drun
 
-client.focused #373B41 #282A2E #C5C8C6 #F0C674
+client.focused #373B41 #282A2E #C5C8C6 #AAAAAC
 gaps inner 4
 gaps outer 2
+
+for_window [floating] resize set 800 600
+for_window [window_role="About"]       floating enable, move position center
+for_window [window_role="pop-up"]      floating enable, move position center
+for_window [window_role="bubble"]      floating enable, move position center
+for_window [window_role="task_dialog"] floating enable, move position center
+for_window [window_role="Preferences"] floating enable, move position center
+for_window [window_type="dialog"]      floating enable, move position center
+for_window [window_type="menu"]        floating enable, move position center
+for_window [window_role="Organizer"]   floating enable, move position center
+for_window [window_role="toolbox"]     floating enable, move position center
+for_window [window_role="page-info"]   floating enable, move position center
+for_window [window_role="webconsole"]  floating enable, move position center
+for_window [title="Open File"]         floating enable, move position center
+
 EOF
 }
 
@@ -667,13 +706,13 @@ XTerm*color8: #454545
 XTerm*color9: #CC896D
 XTerm*cursorBlink: true
 XTerm*cursorUnderLine: true
-XTerm*faceName: Bitstream Vera Serif Mono
+XTerm*faceName: terminus
 XTerm*foreground: #D2D2D2
 XTerm*scrollBar: off
 XTerm*selectToClipboard: true
 XTerm*vt100*geometry: 88x24
 xterm*eightBitInput: false
-xterm*faceSize: 11
+xterm*faceSize: 10
 EOF
 }
 
@@ -696,8 +735,7 @@ EOF
 background = #282A2E
 background-alt = #373B41
 foreground = #C5C8C6
-primary = #F0C674
-secondary = #8ABEB7
+primary = #AAAAAC
 alert = #A54242
 disabled = #707880
 
@@ -751,7 +789,7 @@ label = %title:0:60:...%
 type = internal/fs
 interval = 25
 mount-0 = /
-label-mounted = %{F#F0C674}%mountpoint%%{F-} %percentage_used%%
+label-mounted = %{F#AAAAAC}%mountpoint%%{F-} %percentage_used%%
 label-unmounted = %mountpoint% not mounted
 label-unmounted-foreground = ${colors.disabled}
 
@@ -792,9 +830,9 @@ expand-right = true
 format-spacing = 1
 
 label-open = 
-label-open-foreground = ${colors.secondary}
+label-open-foreground = ${colors.primary}
 label-close = Cancel
-label-close-foreground = ${colors.secondary}
+label-close-foreground = ${colors.primary}
 label-separator = |
 
 menu-0-0 = Reboot
@@ -821,7 +859,7 @@ configure_rofi() {
 
     cat > /home/ns/.config/rofi/config.rasi << 'EOF'
 configuration {
- font: "Noto 10";
+ font: "terminus 10";
  combi-modes: "window,drun,ssh";
 }
 @theme "solarized"
