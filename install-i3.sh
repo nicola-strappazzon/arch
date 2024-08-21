@@ -14,11 +14,11 @@ main() {
     # yay_packages
     # docker
 
-    # configure_theme
-    # configure_i3wm
-    # configure_polybar
-    # configure_xterm
-    # configure_rofi
+    configure_theme
+    configure_i3wm
+    configure_polybar
+    configure_xterm
+    configure_rofi
     # configure_feh
     configure_applications_desktop
 }
@@ -165,7 +165,7 @@ docker() {
 }
 
 configure_theme() {
-    echo "--> Configure desktop manager theme."
+    echo "--> Configure login."
     sudo mkdir -p /etc/sddm.conf.d/
     sudo mkdir -p /usr/share/sddm/themes/luna/
 
@@ -246,8 +246,8 @@ EOF
 
     cat << EOF | sudo tee /usr/share/sddm/themes/luna/theme.conf &> /dev/null
 [General]
-Font                    = "Noto Sans"
-FontSize                = 12
+Font                    = terminus
+FontSize                = 10
 bgDark                  = "#141416"
 bgDefault               = "#1e1e20"
 buttonBgFocused0        = "#7a7a7c"
@@ -682,10 +682,12 @@ for_window [window_role="webconsole"]  floating enable, move position center
 for_window [title="Open File"]         floating enable, move position center
 
 EOF
+
+    i3-msg restart &> /dev/null
 }
 
 configure_xterm() {
-    echo "--> Install terminal."
+    echo "--> Configure terminal."
 
     cat > /home/ns/.Xdefaults << 'EOF'
 XTerm*background: #002B36
@@ -719,7 +721,7 @@ EOF
 }
 
 configure_polybar() {
-    echo "--> Install bar."
+    echo "--> Configure bar."
 
     mkdir -p /home/ns/.config/polybar/
     touch /home/ns/.config/polybar/launch.sh
@@ -855,7 +857,7 @@ EOF
 }
 
 configure_rofi() {
-    echo "--> Configure application launcher."
+    echo "--> Configure launcher."
 
     mkdir -p /home/ns/.config/rofi/
 
