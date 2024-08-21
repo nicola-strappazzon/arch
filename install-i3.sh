@@ -84,8 +84,6 @@ display_manager() {
         qt6-svg \
     &> /dev/null
     sudo systemctl enable sddm.service &> /dev/null
-
-    # sddm-kcm
 }
 
 launcher() {
