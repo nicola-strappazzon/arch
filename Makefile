@@ -17,9 +17,10 @@ server: ## Run file server.
 	@python3 -m http.server 8080 -b 0.0.0.0
 
 vm: ## Run virtual machine.
+	@qemu-img create -q -f qcow2 al.qcow2 20G
 	@qemu-system-x86_64 \
 		-enable-kvm \
-		-m 8G \
+		-m 4G \
 		-smp 2 \
 		-hda al.qcow2 \
 		-bios /usr/share/ovmf/x64/OVMF_CODE.fd \
