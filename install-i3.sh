@@ -17,6 +17,7 @@ main() {
 
     configure_home_dirs
     configure_wakeup
+    configure_git
     configure_theme
     configure_i3wm
     configure_polybar
@@ -213,6 +214,15 @@ EOF
 
     sudo systemctl enable wakeup-disable.service &> /dev/null
     sudo systemctl start wakeup-disable.service &> /dev/null
+}
+
+configure_git() {
+    echo "--> Configure git."
+
+    git config --global init.defaultBranch main
+    git config --global pull.rebase true
+    git config --global user.email nicola@strappazzon.me
+    git config --global user.name "Nicola Strappazzon."
 }
 
 configure_theme() {
