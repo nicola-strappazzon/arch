@@ -682,6 +682,7 @@ gaps inner 4
 gaps outer 2
 gaps top -4
 
+for_window [class="^.*"] border pixel 1
 for_window [floating] resize set 800 600
 for_window [window_role="About"]       floating enable, move position center
 for_window [window_role="pop-up"]      floating enable, move position center
