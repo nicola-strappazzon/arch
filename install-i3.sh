@@ -115,17 +115,18 @@ launcher() {
 packages() {
     echo "--> Install desktop packages."
     sudo pacman -S --noconfirm --needed \
-        cheese      `#Webcam GUI`     \
-        evince      `#PDF viewer`     \
-        firefox     `#WEB browser`    \
-        flameshot   `#Screenshot`     \
-        mpv         `#Video player`   \
-        nemo        `#File manager`   \
-        rhythmbox   `#Audio player`   \
-        viewnior    `#Image viewer`   \
-        arduino-ide `#Arduino IDE`    \
-        nicotine+   `#Music sharing`  \
-        texmaker    `#LaTex editor`   \
+        cheese      `#Webcam GUI`               \
+        evince      `#PDF viewer`               \
+        firefox     `#WEB browser`              \
+        flameshot   `#Screenshot`               \
+        mpv         `#Video player`             \
+        nemo        `#File manager`             \
+        rhythmbox   `#Audio player`             \
+        viewnior    `#Image viewer`             \
+        arduino-ide `#Arduino IDE`              \
+        nicotine+   `#Music sharing client`     \
+        texmaker    `#LaTex editor`             \
+        qemu-full   `#Virtual Machine emulator` \
     &> /dev/null
 }
 
