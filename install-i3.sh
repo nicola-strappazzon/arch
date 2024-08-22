@@ -15,6 +15,7 @@ main() {
     yay_packages
     docker
 
+    configure_wakeup
     configure_theme
     configure_i3wm
     configure_polybar
@@ -176,6 +177,15 @@ docker() {
         sudo newgrp docker
         sudo usermod -aG docker $USER
     fi
+}
+
+configure_wakeup() {
+    echo "--> Configure wakeup."
+
+    # https://bbs.archlinux.org/viewtopic.php?pid=2004037#p2004037
+    # echo XHC0 > /proc/acpi/wakeup
+    # echo XHC1 > /proc/acpi/wakeup
+    # echo GPP0 > /proc/acpi/wakeup
 }
 
 configure_theme() {
@@ -859,8 +869,8 @@ menu-0-0 = Reboot
 menu-0-0-exec = reboot
 menu-0-1 = Power off
 menu-0-1-exec = poweroff
-menu-0-2 = Sleep
-menu-0-2-exec = systemctl sleep
+menu-0-2 = Suspend
+menu-0-2-exec = systemctl suspend
 
 [settings]
 screenchange-reload = true
