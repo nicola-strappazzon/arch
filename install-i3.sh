@@ -15,12 +15,14 @@ main() {
     yay_packages
     docker
 
+    configure_home_dirs
     configure_wakeup
     configure_theme
     configure_i3wm
     configure_polybar
     configure_xterm
     configure_rofi
+    configure_screenshot
     # configure_feh
     configure_applications_desktop
 }
@@ -182,13 +184,35 @@ docker() {
     fi
 }
 
+configure_home_dirs() {
+    echo "--> Configure home directories."
+
+    mkdir -p $HOME/Documents
+    mkdir -p $HOME/Downloads
+    mkdir -p $HOME/Music
+    mkdir -p $HOME/Pictures
+    mkdir -p $HOME/Pictures/Photos
+    mkdir -p $HOME/Pictures/Screenshots
+    mkdir -p $HOME/Sources
+    mkdir -p $HOME/Videos
+}
+
 configure_wakeup() {
     echo "--> Configure wakeup."
 
-    # https://bbs.archlinux.org/viewtopic.php?pid=2004037#p2004037
-    # echo XHC0 > /proc/acpi/wakeup
-    # echo XHC1 > /proc/acpi/wakeup
-    # echo GPP0 > /proc/acpi/wakeup
+    cat << EOF | sudo tee /etc/systemd/system/wakeup-disable.service &> /dev/null
+[Unit]
+Description=Fix suspend by disabling GPP0 sleepstate thingie
+
+[Service]
+ExecStart=/bin/bash -c "echo XHC0 > /proc/acpi/wakeup && echo XHC1 > /proc/acpi/wakeup && echo GPP0 > /proc/acpi/wakeup"
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    sudo systemctl enable wakeup-disable.service &> /dev/null
+    sudo systemctl start wakeup-disable.service &> /dev/null
 }
 
 configure_theme() {
@@ -689,6 +713,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 bindsym $mod+space exec --no-startup-id rofi -config /home/ns/.config/rofi/config.rasi -show drun
+bindsym Print exec flameshot gui
 
 client.focused #373B41 #282A2E #C5C8C6 #AAAAAC
 gaps inner 4
@@ -897,6 +922,29 @@ configuration {
 }
 @theme "solarized"
 EOF
+}
+
+configure_screenshot() {
+    echo "--> Configure screenshot."
+
+    mkdir -p /home/ns/.config/flameshot/
+
+    cat > /home/ns/.config/flameshot/flameshot.ini << 'EOF'
+[General]
+buttons=@Variant(\0\0\0\x7f\0\0\0\vQList<int>\0\0\0\0\x14\0\0\0\0\0\0\0\x1\0\0\0\x2\0\0\0\x3\0\0\0\x4\0\0\0\x5\0\0\0\x6\0\0\0\x12\0\0\0\xf\0\0\0\x16\0\0\0\x13\0\0\0\a\0\0\0\b\0\0\0\t\0\0\0\x10\0\0\0\n\0\0\0\v\0\0\0\x17\0\0\0\f\0\0\0\x11)
+contrastOpacity=188
+disabledTrayIcon=true
+drawColor=#ff0000
+savePath=/home/ns/Pictures/Screenshots
+savePathFixed=false
+showDesktopNotification=false
+showHelp=false
+showSidePanelButton=false
+showStartupLaunchMessage=true
+startupLaunch=true
+uiColor=#373B41
+EOF
+
 }
 
 configure_feh() {
