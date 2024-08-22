@@ -647,24 +647,16 @@ bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q set Master 5%- unmut
 bindsym XF86AudioMute exec --no-startup-id amixer -q set Master toggle
 
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
-
-        # Pressing left will shrink the windowâs width.
-        # Pressing right will grow the windowâs width.
-        # Pressing up will shrink the windowâs height.
-        # Pressing down will grow the windowâs height.
         bindsym j resize shrink width 10 px or 10 ppt
         bindsym k resize grow height 10 px or 10 ppt
         bindsym l resize shrink height 10 px or 10 ppt
         bindsym semicolon resize grow width 10 px or 10 ppt
 
-        # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
         bindsym Down resize grow height 10 px or 10 ppt
         bindsym Up resize shrink height 10 px or 10 ppt
         bindsym Right resize grow width 10 px or 10 ppt
 
-        # back to normal: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
