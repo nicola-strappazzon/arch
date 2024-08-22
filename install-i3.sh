@@ -849,8 +849,8 @@ menu-0-0 = Reboot
 menu-0-0-exec = reboot
 menu-0-1 = Power off
 menu-0-1-exec = poweroff
-menu-0-2 = Hibernate
-menu-0-2-exec = systemctl hibernate
+menu-0-2 = Suspend
+menu-0-2-exec = systemctl suspend
 
 [settings]
 screenchange-reload = true
