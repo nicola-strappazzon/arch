@@ -22,6 +22,8 @@ main() {
     configure_rofi
     # configure_feh
     configure_applications_desktop
+
+    sudo ip link set wlan0 down
 }
 
 ntp() {
