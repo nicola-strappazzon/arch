@@ -2,6 +2,7 @@
 # set -eu
 
 main() {
+    ntp
     drivers
     xorg
     fonts
@@ -21,6 +22,13 @@ main() {
     configure_rofi
     # configure_feh
     configure_applications_desktop
+}
+
+ntp() {
+    echo "--> Configure time zone and NTP."
+    sudo timedatectl set-timezone Europe/Madrid
+    sudo timedatectl set-ntp true
+    sudo hwclock --systohc
 }
 
 drivers() {
@@ -572,6 +580,7 @@ configure_i3wm() {
     mkdir -p /home/ns/.config/i3/
     cat > /home/ns/.config/i3/config << 'EOF'
 exec --no-startup-id feh --no-fehbg --bg-fill '/home/ns/.config/feh/01.jpg'
+exec --no-startup-id amixer -q set Master 50% unmut
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 set $mod Mod4
