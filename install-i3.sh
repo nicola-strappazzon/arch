@@ -595,7 +595,7 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-font pango:terminus 10
+font pango:terminus 8
 
 bindsym $mod+Down focus down
 bindsym $mod+Left focus left
