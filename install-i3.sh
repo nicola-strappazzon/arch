@@ -22,8 +22,6 @@ main() {
     configure_rofi
     # configure_feh
     configure_applications_desktop
-
-    sudo ip link set wlan0 down
 }
 
 ntp() {
@@ -861,8 +859,8 @@ menu-0-0 = Reboot
 menu-0-0-exec = reboot
 menu-0-1 = Power off
 menu-0-1-exec = poweroff
-menu-0-2 = Suspend
-menu-0-2-exec = systemctl suspend
+menu-0-2 = Sleep
+menu-0-2-exec = systemctl sleep
 
 [settings]
 screenchange-reload = true
