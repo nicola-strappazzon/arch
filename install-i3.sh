@@ -30,6 +30,7 @@ drivers() {
         alsa-firmware \
         alsa-utils \
         pulseaudio \
+        pulseaudio-alsa \
     &> /dev/null
 }
 
@@ -637,6 +638,13 @@ bindsym $mod+Shift+7 move container to workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
+
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
+
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -q set Master 5%+ unmute
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q set Master 5%- unmute
+bindsym XF86AudioMute exec --no-startup-id amixer -q set Master toggle
 
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
