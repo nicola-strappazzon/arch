@@ -745,7 +745,7 @@ for_window [window_role="toolbox"]     floating enable, move position center
 for_window [window_role="page-info"]   floating enable, move position center
 for_window [window_role="webconsole"]  floating enable, move position center
 for_window [title="Open File"]         floating enable, move position center
-for_window [window_role="gpg2"]        floating enable, move position center, resize set 700 300
+for_window [title="gpg2*"]             floating enable, move position center, resize set 600 200
 
 EOF
 
