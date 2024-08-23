@@ -959,30 +959,21 @@ configuration {
 }
 
 * {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    spacing: 0;
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    spacing: 0px;
 
-    bg: #282A2E;
-    bg-alt: #ff8a22;
-    fg: #e2ff00;
-    blue: #ff0000;
-
-    background-color: @bg;
-    text-color: @fg;
+    background-color: transparent;
 }
 
 window {
-    border: 0;
-    padding: 0;
+    border: 1px;
+    padding: 0px;
     location: center;
     width: 480px;
-}
-
-mainbox {
-    border:  0;
-    padding: 0;
+    border-color: #373B41;
+    background-color: #282A2E;
 }
 
 inputbar {
@@ -1007,19 +998,32 @@ listview {
 
 scrollbar {
     width:        0px;
-    border:       0;
+    border:       0px;
     handle-width: 0px;
     padding:      0px;
 }
 
-element-text {
-    background-color: #0000ff;
-    text-color:       #ff0000;
+element {
+    padding:    1px;
+    spacing:    4px;
+    orientation: horizontal;
 }
 
-element-text selected {
-    text-color: @blue;
+element normal.normal, element.alternate.normal  {
+    background-color: #282A2E;
+    text-color:       #C5C8C6;
 }
+
+element.selected.normal, element.selected.active {
+    background-color: #373B41;
+    text-color: #C5C8C6;
+}
+
+element.normal.active {
+    background-color: #282A2E;
+    text-color:       #707880;
+}
+
 EOF
 }
 
