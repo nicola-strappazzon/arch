@@ -2,28 +2,28 @@
 # set -eu
 
 main() {
-    ntp
-    drivers
-    xorg
-    fonts
-    desktop
-    display_manager
-    theme
-    launcher
-    packages
-    yay
-    yay_packages
-    docker
+    # ntp
+    # drivers
+    # xorg
+    # fonts
+    # desktop
+    # display_manager
+    # theme
+    # launcher
+    # packages
+    # yay
+    # yay_packages
+    # docker
 
-    configure_home_dirs
-    configure_wakeup
-    configure_git
-    configure_theme
+    # configure_home_dirs
+    # configure_wakeup
+    # configure_git
+    # configure_theme
     configure_i3wm
-    configure_polybar
-    configure_xterm
+    # configure_polybar
+    # configure_xterm
     configure_rofi
-    configure_screenshot
+    # configure_screenshot
     # configure_feh
     configure_applications_desktop
 }
@@ -723,6 +723,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 bindsym $mod+space exec --no-startup-id rofi -config /home/ns/.config/rofi/config.rasi -show drun
+bindsym $mod+Shift+p exec --no-startup-id rofi-pass
 bindsym Print exec flameshot gui
 
 client.focused #373B41 #282A2E #C5C8C6 #AAAAAC
@@ -744,6 +745,7 @@ for_window [window_role="toolbox"]     floating enable, move position center
 for_window [window_role="page-info"]   floating enable, move position center
 for_window [window_role="webconsole"]  floating enable, move position center
 for_window [title="Open File"]         floating enable, move position center
+for_window [window_role="gpg2"]        floating enable, move position center, resize set 700 300
 
 EOF
 
@@ -927,10 +929,97 @@ configure_rofi() {
 
     cat > /home/ns/.config/rofi/config.rasi << 'EOF'
 configuration {
- font: "terminus 10";
- combi-modes: "window,drun,ssh";
+  font: "terminus 10";
+  combi-modes: "window,drun,ssh,pass";
+
+  drun {
+    display-name: "";
+  }
+
+  run {
+    display-name: "";
+  }
+
+  window {
+    display-name: "";
+  }
+
+  ssh {
+    display-name: "";
+  }
+
+  pass {
+    display-name: "󰷡";
+  }
+
+  timeout {
+    delay: 10;
+    action: "kb-cancel";
+  }
 }
-@theme "solarized"
+
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+
+    bg: #282A2E;
+    bg-alt: #ff8a22;
+    fg: #e2ff00;
+    blue: #ff0000;
+
+    background-color: @bg;
+    text-color: @fg;
+}
+
+window {
+    border: 0;
+    padding: 0;
+    location: center;
+    width: 480px;
+}
+
+mainbox {
+    border:  0;
+    padding: 0;
+}
+
+inputbar {
+    children: [prompt, entry];
+}
+
+entry {
+    placeholder: "";
+    text-color: #C5C8C6;
+    padding: 12px 3px;
+}
+
+prompt {
+    background-color: #282A2E;
+    text-color: #C5C8C6;
+    padding: 12px 16px 12px 12px;
+}
+
+listview {
+    lines: 8;
+}
+
+scrollbar {
+    width:        0px;
+    border:       0;
+    handle-width: 0px;
+    padding:      0px;
+}
+
+element-text {
+    background-color: #0000ff;
+    text-color:       #ff0000;
+}
+
+element-text selected {
+    text-color: @blue;
+}
 EOF
 }
 
