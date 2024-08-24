@@ -57,6 +57,8 @@ xorg() {
         xorg-mkfontscale \
         xf86-video-amdgpu \
         mesa \
+        libva-mesa-driver \
+        mesa-vdpau \
     &> /dev/null
 }
 
