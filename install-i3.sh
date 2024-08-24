@@ -633,11 +633,11 @@ EOF
 configure_i3wm() {
     echo "--> Configure desktop."
 
-    mkdir -p /home/ns/.config/i3/
-    cat > /home/ns/.config/i3/config << 'EOF'
-exec --no-startup-id feh --no-fehbg --bg-fill '/home/ns/.config/feh/01.jpg'
+    mkdir -p /home/nsc/.config/i3/
+    cat > /home/nsc/.config/i3/config << 'EOF'
+exec --no-startup-id feh --no-fehbg --bg-fill '/home/nsc/.config/feh/01.jpg'
 exec --no-startup-id amixer -q set Master 50% unmut
-exec --no-startup-id /home/ns/.config/polybar/launch.sh
+exec --no-startup-id /home/nsc/.config/polybar/launch.sh
 
 set $mod Mod4
 set $ws1 "1"
@@ -731,7 +731,7 @@ bindsym $mod+r mode "resize"
 floating_modifier $mod
 tiling_drag modifier titlebar
 
-bindsym $mod+space exec --no-startup-id rofi -config /home/ns/.config/rofi/config.rasi -show drun
+bindsym $mod+space exec --no-startup-id rofi -config /home/nsc/.config/rofi/config.rasi -show drun
 bindsym $mod+Shift+p exec --no-startup-id rofi-pass
 bindsym Print exec --no-startup-id flameshot gui
 
@@ -764,7 +764,7 @@ EOF
 configure_xterm() {
     echo "--> Configure terminal."
 
-    cat > /home/ns/.Xdefaults << 'EOF'
+    cat > /home/nsc/.Xdefaults << 'EOF'
 XTerm*background: #002B36
 XTerm*borderColor: #343434
 XTerm*color0: #222222
@@ -798,18 +798,18 @@ EOF
 configure_polybar() {
     echo "--> Configure bar."
 
-    mkdir -p /home/ns/.config/polybar/
-    touch /home/ns/.config/polybar/launch.sh
-    chmod +x /home/ns/.config/polybar/launch.sh
+    mkdir -p /home/nsc/.config/polybar/
+    touch /home/nsc/.config/polybar/launch.sh
+    chmod +x /home/nsc/.config/polybar/launch.sh
 
-    cat > /home/ns/.config/polybar/launch.sh << 'EOF'
+    cat > /home/nsc/.config/polybar/launch.sh << 'EOF'
 #!/usr/bin/env bash
 
 killall -q polybar
-polybar --config=$HOME/.config/polybar/config.ini
+polybar --config=/home/nsc/.config/polybar/config.ini
 EOF
 
-    cat > /home/ns/.config/polybar/config.ini << 'EOF'
+    cat > /home/nsc/.config/polybar/config.ini << 'EOF'
 [colors]
 background = #282A2E
 background-alt = #373B41
@@ -934,9 +934,9 @@ EOF
 configure_rofi() {
     echo "--> Configure launcher."
 
-    mkdir -p /home/ns/.config/rofi/
+    mkdir -p /home/nsc/.config/rofi/
 
-    cat > /home/ns/.config/rofi/config.rasi << 'EOF'
+    cat > /home/nsc/.config/rofi/config.rasi << 'EOF'
 configuration {
   font: "terminus 10";
   combi-modes: "window,drun,ssh,pass";
@@ -1039,15 +1039,15 @@ EOF
 configure_screenshot() {
     echo "--> Configure screenshot."
 
-    mkdir -p /home/ns/.config/flameshot/
+    mkdir -p /home/nsc/.config/flameshot/
 
-    cat > /home/ns/.config/flameshot/flameshot.ini << 'EOF'
+    cat > /home/nsc/.config/flameshot/flameshot.ini << 'EOF'
 [General]
 buttons=@Variant(\0\0\0\x7f\0\0\0\vQList<int>\0\0\0\0\x14\0\0\0\0\0\0\0\x1\0\0\0\x2\0\0\0\x3\0\0\0\x4\0\0\0\x5\0\0\0\x6\0\0\0\x12\0\0\0\xf\0\0\0\x16\0\0\0\x13\0\0\0\a\0\0\0\b\0\0\0\t\0\0\0\x10\0\0\0\n\0\0\0\v\0\0\0\x17\0\0\0\f\0\0\0\x11)
 contrastOpacity=188
 disabledTrayIcon=true
 drawColor=#ff0000
-savePath=/home/ns/Pictures/Screenshots
+savePath=/home/nsc/Pictures/Screenshots
 savePathFixed=false
 showDesktopNotification=false
 showHelp=false
@@ -1062,8 +1062,8 @@ EOF
 configure_feh() {
     echo "--> Configure desktop wallpaper."
 
-    mkdir -p /home/ns/.config/feh/
-    cp wallpaper/wallpaper.jpg /home/ns/.config/feh/01.jpg
+    mkdir -p /home/nsc/.config/feh/
+    cp wallpaper/wallpaper.jpg /home/nsc/.config/feh/01.jpg
 }
 
 configure_applications_desktop() {
