@@ -47,8 +47,6 @@ drivers() {
         pulseaudio-alsa \
     &> /dev/null
 
-    # https://www.youtube.com/watch?v=MfL_JkcEFbE 
-    # https://wiki.archlinux.org/title/AMDGPU#Video_acceleration
     # vulkan-amdgpu-pro
 }
 
@@ -198,6 +196,9 @@ docker() {
 }
 
 configure_xorg() {
+    # https://www.youtube.com/watch?v=MfL_JkcEFbE 
+    # https://wiki.archlinux.org/title/AMDGPU#Video_acceleration
+
     cat << EOF | sudo tee /etc/X11/xorg.conf.d/20-amdgpu.conf &> /dev/null
 Section "OutputClass"
     Identifier "AMD"
@@ -230,7 +231,7 @@ configure_wakeup() {
 Description=Fix suspend by disabling GPP0 sleepstate thingie
 
 [Service]
-ExecStart=/bin/bash -c "echo XHC0 > /proc/acpi/wakeup && echo XHC1 > /proc/acpi/wakeup && echo GPP0 > /proc/acpi/wakeup"
+ExecStart=/bin/bash -c "/bin/echo XHC0 > /proc/acpi/wakeup && /bin/echo XHC1 > /proc/acpi/wakeup && /bin/echo GPP0 > /proc/acpi/wakeup"
 
 [Install]
 WantedBy=multi-user.target
@@ -934,7 +935,7 @@ menu-0-0-exec = reboot
 menu-0-1 = Power off
 menu-0-1-exec = poweroff
 menu-0-2 = Suspend
-menu-0-2-exec = systemctl suspend
+menu-0-2-exec = systemctl hybrid-sleep
 
 [settings]
 screenchange-reload = true
