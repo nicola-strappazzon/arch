@@ -2,18 +2,18 @@
 # set -eu
 
 main() {
-    # ntp
-    # drivers
-    # xorg
-    # fonts
-    # desktop
-    # display_manager
-    # theme
-    # launcher
-    # packages
-    # yay
-    # yay_packages
-    # docker
+    ntp
+    drivers
+    xorg
+    fonts
+    desktop
+    display_manager
+    theme
+    launcher
+    packages
+    yay
+    yay_packages
+    docker
 
     configure_home_dirs
     configure_wakeup
@@ -45,6 +45,8 @@ drivers() {
         pulseaudio \
         pulseaudio-alsa \
     &> /dev/null
+
+    # vulkan-amdgpu-pro
 }
 
 xorg() {
@@ -55,11 +57,12 @@ xorg() {
         xorg-xinit \
         xorg-fonts-misc \
         xorg-mkfontscale \
-        xf86-video-amdgpu \
-        mesa \
-        libva-mesa-driver \
-        mesa-vdpau \
     &> /dev/null
+
+    # xf86-video-amdgpu \
+    # mesa \
+    # libva-mesa-driver \
+    # mesa-vdpau \
 }
 
 fonts() {
