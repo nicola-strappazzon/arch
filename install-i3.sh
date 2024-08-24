@@ -2,30 +2,30 @@
 # set -eu
 
 main() {
-    update
-    ntp
-    drivers
-    xorg
-    fonts
-    desktop
-    display_manager
-    theme
-    launcher
-    packages
-    yay
+    #update
+    #ntp
+    #drivers
+    #xorg
+    #fonts
+    #desktop
+    #display_manager
+    #theme
+    #launcher
+    #packages
+    yay_install
     yay_packages
-    docker
+    docker_install
 
-    configure_xorg
-    configure_home_dirs
-    configure_wakeup
-    configure_git
-    configure_theme
-    configure_i3wm
-    configure_polybar
-    configure_xterm
-    configure_rofi
-    configure_screenshot
+    #configure_xorg
+    #configure_home_dirs
+    #configure_wakeup
+    #configure_git
+    #configure_theme
+    #configure_i3wm
+    #configure_polybar
+    #configure_xterm
+    #configure_rofi
+    #configure_screenshot
     # configure_feh
     # configure_applications_desktop
 }
@@ -148,7 +148,7 @@ packages() {
     &> /dev/null
 }
 
-yay() {
+yay_install() {
     echo "--> Install yay."
     if ! type "git" > /dev/null; then
         echo "Could not find: git"
@@ -165,7 +165,7 @@ yay() {
         exit 1
     fi
 
-    if ! type yay &> /dev/null; then
+    if ! type "yay" &> /dev/null; then
         tmp="$(mktemp -d)"
 
         mkdir -p $tmp
@@ -185,18 +185,18 @@ yay() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        sublime-text-4
-    # \ &> /dev/null
+        sublime-text-4 \
+    &> /dev/null
 }
 
-docker() {
+docker_install() {
     echo "--> Install docker."
     if ! type "docker" > /dev/null; then
-        sudo pacman -S docker --noconfirm --needed
-        sudo systemctl start docker.service
-        sudo systemctl enable docker.service
-        sudo newgrp docker
-        sudo usermod -aG docker $USER
+        sudo pacman -S docker --noconfirm --needed &> /dev/null
+        sudo systemctl start docker.service &> /dev/null
+        sudo systemctl enable docker.service &> /dev/null
+        sudo newgrp docker &> /dev/null
+        sudo usermod -aG docker $USER &> /dev/null
     fi
 }
 

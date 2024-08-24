@@ -6,7 +6,7 @@ declare HOSTNAME;
 declare PASSWORD;
 
 main() {
-    VOLUMEN="/dev/nvme1n1"
+    VOLUMEN="/dev/nvme0n1"
     HOSTNAME="workstation"
 
     ntp
