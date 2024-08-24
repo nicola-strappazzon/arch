@@ -1209,6 +1209,7 @@ Version=1.0
 Terminal=false
 Icon=kicad
 Type=Application
+Name=KiCad
 Categories=Science;Electronics;
 Exec=kicad %f
 StartupWMClass=kicad
