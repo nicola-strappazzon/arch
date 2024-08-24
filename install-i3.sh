@@ -2,6 +2,7 @@
 # set -eu
 
 main() {
+    update
     ntp
     drivers
     xorg
@@ -27,6 +28,10 @@ main() {
     configure_screenshot
     # configure_feh
     # configure_applications_desktop
+}
+
+update() {
+    sudo pacman -Sy &> /dev/null
 }
 
 ntp() {
@@ -160,7 +165,7 @@ yay() {
         exit 1
     fi
 
-    if ! command yay &> /dev/null; then
+    if ! type yay &> /dev/null; then
         tmp="$(mktemp -d)"
 
         mkdir -p $tmp
