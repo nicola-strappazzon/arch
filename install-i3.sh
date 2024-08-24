@@ -2,28 +2,28 @@
 # set -eu
 
 main() {
-    # ntp
-    # drivers
-    # xorg
-    # fonts
-    # desktop
-    # display_manager
-    # theme
-    # launcher
-    # packages
-    # yay
-    # yay_packages
-    # docker
+    ntp
+    drivers
+    xorg
+    fonts
+    desktop
+    display_manager
+    theme
+    launcher
+    packages
+    yay
+    yay_packages
+    docker
 
-    # configure_home_dirs
-    # configure_wakeup
-    # configure_git
-    # configure_theme
+    configure_home_dirs
+    configure_wakeup
+    configure_git
+    configure_theme
     configure_i3wm
-    # configure_polybar
-    # configure_xterm
+    configure_polybar
+    configure_xterm
     configure_rofi
-    # configure_screenshot
+    configure_screenshot
     # configure_feh
     configure_applications_desktop
 }
@@ -130,6 +130,7 @@ packages() {
         nicotine+   `#Music sharing client`     \
         texmaker    `#LaTex editor`             \
         qemu-full   `#Virtual Machine emulator` \
+        kicad       `#Electronics Design`       \
     &> /dev/null
 }
 
@@ -1180,6 +1181,47 @@ X-GNOME-DocPath=rhythmbox/rhythmbox.xml
 Categories=GNOME;GTK;AudioVideo;Audio;Player;
 MimeType=application/x-ogg;application/ogg;audio/x-vorbis+ogg;audio/vorbis;audio/x-vorbis;audio/x-scpls;audio/x-mp3;audio/x-mpeg;audio/mpeg;audio/x-mpegurl;audio/x-flac;audio/mp4;audio/x-it;audio/x-mod;audio/x-s3m;audio/x-stm;audio/x-xm;
 StartupNotify=true
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/kicad.desktop &> /dev/null
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Icon=kicad
+Type=Application
+Categories=Science;Electronics;
+Exec=kicad %f
+StartupWMClass=kicad
+MimeType=application/x-kicad-project;
+X-Desktop-File-Install-Version=0.22
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/nicotine.desktop &> /dev/null
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=Nicotine+
+Icon=org.nicotine_plus.Nicotine
+Exec=nicotine
+Terminal=false
+Categories=Network;FileTransfer;InstantMessaging;Chat;P2P;GTK;
+Keywords=Soulseek;Nicotine;sharing;chat;messaging;P2P;peer-to-peer;GTK;
+StartupNotify=true
+X-GNOME-SingleWindow=true
+X-GNOME-UsesNotifications=true
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/nicotine.desktop &> /dev/null
+[Desktop Entry]
+Type=Application
+Version=1.1
+Name=LaTeX Editor
+Icon=texmaker
+MimeType=text/x-tex;
+StartupNotify=false
+Terminal=false
+Categories=Office;Publishing;Qt;X-SuSE-Core-Office;X-Mandriva-Office-Publishing;X-Misc;
+Exec=texmaker %F
 EOF
 
 }
