@@ -1211,7 +1211,7 @@ X-GNOME-SingleWindow=true
 X-GNOME-UsesNotifications=true
 EOF
 
-    cat << EOF | sudo tee /usr/share/applications/nicotine.desktop &> /dev/null
+    cat << EOF | sudo tee /usr/share/applications/texmaker.desktop &> /dev/null
 [Desktop Entry]
 Type=Application
 Version=1.1
