@@ -2,32 +2,32 @@
 # set -eu
 
 main() {
-    #update
-    #ntp
-    #drivers
-    #xorg
-    #fonts
-    #desktop
-    #display_manager
-    #theme
-    #launcher
-    #packages
+    update
+    ntp
+    drivers
+    xorg
+    fonts
+    desktop
+    display_manager
+    theme
+    launcher
+    packages
     yay_install
     yay_packages
     docker_install
 
-    #configure_xorg
-    #configure_home_dirs
-    #configure_wakeup
-    #configure_git
-    #configure_theme
-    #configure_i3wm
-    #configure_polybar
-    #configure_xterm
-    #configure_rofi
-    #configure_screenshot
-    # configure_feh
-    # configure_applications_desktop
+    configure_xorg
+    configure_home_dirs
+    configure_wakeup
+    configure_git
+    configure_theme
+    configure_i3wm
+    configure_polybar
+    configure_xterm
+    configure_rofi
+    configure_screenshot
+    configure_feh
+    configure_applications_desktop
 }
 
 update() {
@@ -51,8 +51,6 @@ drivers() {
         pulseaudio \
         pulseaudio-alsa \
     &> /dev/null
-
-    # vulkan-amdgpu-pro
 }
 
 xorg() {
@@ -64,11 +62,6 @@ xorg() {
         xorg-fonts-misc \
         xorg-mkfontscale \
     &> /dev/null
-
-    # xf86-video-amdgpu \
-    # mesa \
-    # libva-mesa-driver \
-    # mesa-vdpau \
 }
 
 fonts() {
@@ -186,6 +179,7 @@ yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
         sublime-text-4 \
+        ivpn \
     &> /dev/null
 }
 
@@ -201,9 +195,6 @@ docker_install() {
 }
 
 configure_xorg() {
-    # https://www.youtube.com/watch?v=MfL_JkcEFbE 
-    # https://wiki.archlinux.org/title/AMDGPU#Video_acceleration
-
     cat << EOF | sudo tee /etc/X11/xorg.conf.d/20-amdgpu.conf &> /dev/null
 Section "OutputClass"
     Identifier "AMD"
@@ -1251,6 +1242,34 @@ StartupNotify=false
 Terminal=false
 Categories=Office;Publishing;Qt;X-SuSE-Core-Office;X-Mandriva-Office-Publishing;X-Misc;
 Exec=texmaker %F
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/arduino-ide.desktop &> /dev/null
+[Desktop Entry]
+Type=Application
+Name=Arduino IDE v2
+Exec=arduino-ide %U
+Icon=arduino-ide
+Terminal=false
+MimeType=text/x-arduino;
+Categories=Development;IDE;Electronics;
+Keywords=embedded electronics;avr;microcontroller;
+StartupWMClass=Arduino IDE
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/viewnior.desktop &> /dev/null
+[Desktop Entry]
+Type=Application
+Name=Viewnior
+TryExec=viewnior
+Exec=viewnior %F
+Icon=viewnior
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Graphics;Viewer;
+MimeType=image/bmp;image/gif;image/jpeg;image/jpg;image/pjpeg;image/png;image/tiff;image/x-bmp;image/x-gray;image/x-icb;image/x-ico;image/x-png;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/x-pcx;image/svg+xml;image/svg+xml-compressed;image/vnd.wap.wbmp;
+Keywords=Image;Picture;Slideshow;
 EOF
 
 }
