@@ -2,18 +2,18 @@
 # set -eu
 
 main() {
-    ntp
-    drivers
-    xorg
-    fonts
-    desktop
-    display_manager
-    theme
-    launcher
-    packages
-    yay
-    yay_packages
-    docker
+    # ntp
+    # drivers
+    # xorg
+    # fonts
+    # desktop
+    # display_manager
+    # theme
+    # launcher
+    # packages
+    # yay
+    # yay_packages
+    # docker
 
     configure_home_dirs
     configure_wakeup
@@ -25,7 +25,7 @@ main() {
     configure_rofi
     configure_screenshot
     # configure_feh
-    configure_applications_desktop
+    # configure_applications_desktop
 }
 
 ntp() {
@@ -41,6 +41,7 @@ drivers() {
         xf86-video-amdgpu \
         alsa-firmware \
         alsa-utils \
+        amd-ucode \
         pulseaudio \
         pulseaudio-alsa \
     &> /dev/null
@@ -54,6 +55,8 @@ xorg() {
         xorg-xinit \
         xorg-fonts-misc \
         xorg-mkfontscale \
+        xf86-video-amdgpu \
+        mesa \
     &> /dev/null
 }
 
@@ -171,8 +174,8 @@ yay() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        sublime-text-4 \
-    &> /dev/null
+        sublime-text-4
+    # \ &> /dev/null
 }
 
 docker() {
@@ -629,7 +632,7 @@ configure_i3wm() {
     cat > /home/ns/.config/i3/config << 'EOF'
 exec --no-startup-id feh --no-fehbg --bg-fill '/home/ns/.config/feh/01.jpg'
 exec --no-startup-id amixer -q set Master 50% unmut
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec --no-startup-id /home/ns/.config/polybar/launch.sh
 
 set $mod Mod4
 set $ws1 "1"
@@ -647,7 +650,7 @@ font pango:terminus 8
 
 bindsym $mod+Down focus down
 bindsym $mod+Left focus left
-bindsym $mod+Return exec xterm
+bindsym $mod+Return exec --no-startup-id xterm
 bindsym $mod+Right focus right
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Left move left
@@ -725,7 +728,7 @@ tiling_drag modifier titlebar
 
 bindsym $mod+space exec --no-startup-id rofi -config /home/ns/.config/rofi/config.rasi -show drun
 bindsym $mod+Shift+p exec --no-startup-id rofi-pass
-bindsym Print exec flameshot gui
+bindsym Print exec --no-startup-id flameshot gui
 
 client.focused #373B41 #282A2E #C5C8C6 #AAAAAC
 gaps inner 4
