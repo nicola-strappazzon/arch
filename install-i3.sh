@@ -15,6 +15,7 @@ main() {
     yay_packages
     docker
 
+    configure_xorg
     configure_home_dirs
     configure_wakeup
     configure_git
@@ -46,6 +47,8 @@ drivers() {
         pulseaudio-alsa \
     &> /dev/null
 
+    # https://www.youtube.com/watch?v=MfL_JkcEFbE 
+    # https://wiki.archlinux.org/title/AMDGPU#Video_acceleration
     # vulkan-amdgpu-pro
 }
 
@@ -192,6 +195,18 @@ docker() {
         sudo newgrp docker
         sudo usermod -aG docker $USER
     fi
+}
+
+configure_xorg() {
+    cat << EOF | sudo tee /etc/X11/xorg.conf.d/20-amdgpu.conf &> /dev/null
+Section "OutputClass"
+    Identifier "AMD"
+    MatchDriver "amdgpu"
+    Driver "amdgpu"
+    Option "EnablePageFlip" "off"
+    Option "TearFree" "true"
+EndSection
+EOF
 }
 
 configure_home_dirs() {
