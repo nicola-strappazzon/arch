@@ -18,7 +18,7 @@ python3 -m http.server 8080 -b 0.0.0.0
 
 ```bash
 pacman -Sy curl
-curl -sfL 192.168.1.100:8080/main.sh | sh -s install
+curl -sfL 192.168.1.100:8080/main.sh | sh -s base
 ```
 
 picom para mejorar aspectos visuales, redondear esquinas, fondo transparente.

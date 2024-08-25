@@ -222,17 +222,33 @@ configure_home_dirs() {
 configure_wakeup() {
     echo "--> Configure wakeup."
 
-    cat << EOF | sudo tee /etc/systemd/system/wakeup-disable.service &> /dev/null
-[Unit]
-Description=Fix suspend by disabling GPP0 sleepstate thingie
+    cat << EOF | sudo tee /usr/local/bin/wakeup-disable.sh &> /dev/null
+#!/usr/bin/env sh
+# set -eu
 
-[Service]
-ExecStart=/bin/bash -c "/bin/echo XHC0 > /proc/acpi/wakeup && /bin/echo XHC1 > /proc/acpi/wakeup && /bin/echo GPP0 > /proc/acpi/wakeup"
-
-[Install]
-WantedBy=multi-user.target
+/bin/echo XHC0 > /proc/acpi/wakeup
+/bin/echo XHC1 > /proc/acpi/wakeup
+/bin/echo GPP0 > /proc/acpi/wakeup
 EOF
 
+    cat << EOF | sudo tee /etc/systemd/system/wakeup-disable.service &> /dev/null
+[Unit]
+Description=Fix suspend by disabling XHC0, XHC1 and GPP0 sleepstate thingie
+After=systemd-user-sessions.service plymouth-quit-wait.service
+After=rc-local.service
+Before=getty.target
+IgnoreOnIsolate=yes
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/wakeup-disable.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=basic.target
+EOF
+
+    sudo chmod +x /usr/local/bin/wakeup-disable.sh
     sudo systemctl enable wakeup-disable.service &> /dev/null
     sudo systemctl start wakeup-disable.service &> /dev/null
 }
