@@ -132,6 +132,7 @@ packages() {
         mpv             `#Video player`             \
         nemo            `#File manager`             \
         nemo-fileroller `#File archiver extension`  \
+        nemo-preview    `#Previewer extension`      \
         rhythmbox       `#Audio player`             \
         viewnior        `#Image viewer`             \
         arduino-ide     `#Arduino IDE`              \
