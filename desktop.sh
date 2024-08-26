@@ -128,21 +128,30 @@ launcher() {
 packages() {
     echo "--> Install desktop packages."
     sudo pacman -S --noconfirm --needed \
-        cheese          `#Webcam GUI`               \
-        evince          `#PDF viewer`               \
-        firefox         `#WEB browser`              \
-        flameshot       `#Screenshot`               \
-        mpv             `#Video player`             \
-        nemo            `#File manager`             \
-        nemo-fileroller `#File archiver extension`  \
-        nemo-preview    `#Previewer extension`      \
-        rhythmbox       `#Audio player`             \
-        viewnior        `#Image viewer`             \
-        arduino-ide     `#Arduino IDE`              \
-        nicotine+       `#Music sharing client`     \
-        texmaker        `#LaTex editor`             \
-        qemu-full       `#Virtual Machine emulator` \
-        kicad           `#Electronics Design`       \
+        cheese              `#Webcam GUI`               \
+        evince              `#PDF viewer`               \
+        firefox             `#WEB browser`              \
+        flameshot           `#Screenshot`               \
+        mpv                 `#Video player`             \
+        nemo                `#File manager`             \
+        nemo-fileroller     `#File archiver extension`  \
+        nemo-preview        `#Previewer extension`      \
+        rhythmbox           `#Audio player`             \
+        viewnior            `#Image viewer`             \
+        arduino-ide         `#Arduino IDE`              \
+        nicotine+           `#Music sharing client`     \
+        texmaker            `#LaTex editor`             \
+        texlive-latexextra  `#LaTex`                    \
+        texlive-fontsextra  `#LaTex`                    \
+        texlive-bibtexextra `#LaTex`                    \
+        texlive-humanities  `#LaTex`                    \
+        texlive-langspanish `#LaTex`                    \
+        texlive-latexextra  `#LaTex`                    \
+        texlive-mathscience `#LaTex`                    \
+        texlive-pictures    `#LaTex`                    \
+        texlive-publishers  `#LaTex`                    \
+        qemu-full           `#Virtual Machine emulator` \
+        kicad               `#Electronics Design`       \
     &> /dev/null
 }
 
