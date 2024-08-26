@@ -88,10 +88,10 @@ fonts() {
 desktop() {
     echo "--> Install desktop."
     sudo pacman -S --noconfirm --needed \
-        i3-wm \
-        polybar \
-        feh `#Wallpaper tool`\
-        xterm \
+        i3-wm   `#Desktop environment` \
+        polybar `#Desktop bar`         \
+        feh     `#Wallpaper tool`      \
+        xterm   `#Terminal emulator`   \
     &> /dev/null
 }
 
