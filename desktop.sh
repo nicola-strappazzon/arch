@@ -17,11 +17,12 @@ main() {
     docker_install
 
     configure_xorg
+    configure_gtk
     configure_home_dirs
     configure_profile
     configure_wakeup
     configure_git
-    configure_theme
+    configure_login
     configure_i3wm
     configure_polybar
     configure_xterm
@@ -218,6 +219,27 @@ Section "OutputClass"
     Option "EnablePageFlip" "off"
     Option "TearFree" "true"
 EndSection
+EOF
+}
+
+configure_gtk() {
+    echo "--> Configure GTK."
+
+cat > /home/nicola/.gtkrc-2.0 << 'EOF'
+gtk-theme-name="Materia-dark"
+gtk-icon-theme-name="Adwaita"
+gtk-font-name="Terminus 10"
+gtk-cursor-theme-name="Adwaita"
+gtk-cursor-theme-size=0
+gtk-toolbar-style=GTK_TOOLBAR_BOTH
+gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images=1
+gtk-menu-images=1
+gtk-enable-event-sounds=1
+gtk-enable-input-feedback-sounds=1
+gtk-xft-antialias=1
+gtk-xft-hinting=1
+gtk-xft-hintstyle="hintfull"
 EOF
 }
 
@@ -644,7 +666,7 @@ configure_git() {
     git config --global user.name "Nicola Strappazzon."
 }
 
-configure_theme() {
+configure_login() {
     echo "--> Configure login."
     sudo mkdir -p /etc/sddm.conf.d/
     sudo mkdir -p /usr/share/sddm/themes/luna/
