@@ -1,6 +1,0 @@
-alias c="clear"
-alias diff="diff --color=auto"
-alias grep="grep -n --color"
-alias l="ls -lahS"
-alias reload="source ~/.bashrc.d/*.sh"
-alias s="fzf -i --print0 | xclip -selection clipboard"
