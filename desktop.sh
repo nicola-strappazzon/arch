@@ -145,7 +145,7 @@ packages() {
 }
 
 yay_install() {
-    echo "--> Install yay."
+    echo "--> Install yay tool."
     if ! type "git" > /dev/null; then
         echo "Could not find: git"
         exit 1
@@ -181,8 +181,9 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        sublime-text-4 \
-        ivpn \
+        moc-pulse      `#Music on Console`   \
+        sublime-text-4 `#Source code editor` \
+        ivpn           `#VPN Client`         \
     &> /dev/null
 }
 
