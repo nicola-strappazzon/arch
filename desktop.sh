@@ -211,6 +211,8 @@ docker_install() {
 }
 
 configure_xorg() {
+    echo "--> Configure XOrg."
+
     cat << EOF | sudo tee /etc/X11/xorg.conf.d/20-amdgpu.conf &> /dev/null
 Section "OutputClass"
     Identifier "AMD"
