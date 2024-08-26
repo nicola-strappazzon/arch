@@ -30,6 +30,7 @@ main() {
     configure_screenshot
     configure_feh
     configure_applications_desktop
+    configure_playerctl
     configure_mocp
 }
 
@@ -129,30 +130,31 @@ launcher() {
 packages() {
     echo "--> Install desktop packages."
     sudo pacman -S --noconfirm --needed \
-        cheese              `#Webcam GUI`               \
-        evince              `#PDF viewer`               \
-        firefox             `#WEB browser`              \
-        flameshot           `#Screenshot`               \
-        mpv                 `#Video player`             \
-        nemo                `#File manager`             \
-        nemo-fileroller     `#File archiver extension`  \
-        nemo-preview        `#Previewer extension`      \
-        rhythmbox           `#Audio player`             \
-        viewnior            `#Image viewer`             \
-        arduino-ide         `#Arduino IDE`              \
-        nicotine+           `#Music sharing client`     \
-        texmaker            `#LaTex editor`             \
-        texlive-latexextra  `#LaTex`                    \
-        texlive-fontsextra  `#LaTex`                    \
-        texlive-bibtexextra `#LaTex`                    \
-        texlive-humanities  `#LaTex`                    \
-        texlive-langspanish `#LaTex`                    \
-        texlive-latexextra  `#LaTex`                    \
-        texlive-mathscience `#LaTex`                    \
-        texlive-pictures    `#LaTex`                    \
-        texlive-publishers  `#LaTex`                    \
-        qemu-full           `#Virtual Machine emulator` \
-        kicad               `#Electronics Design`       \
+        cheese              `#Webcam GUI`                \
+        evince              `#PDF viewer`                \
+        firefox             `#WEB browser`               \
+        flameshot           `#Screenshot`                \
+        mpv                 `#Video player`              \
+        nemo                `#File manager`              \
+        nemo-fileroller     `#File archiver extension`   \
+        nemo-preview        `#Previewer extension`       \
+        rhythmbox           `#Audio player`              \
+        playerctl           `#Multimedia player control` \
+        viewnior            `#Image viewer`              \
+        arduino-ide         `#Arduino IDE`               \
+        nicotine+           `#Music sharing client`      \
+        texmaker            `#LaTex editor`              \
+        texlive-latexextra  `#LaTex`                     \
+        texlive-fontsextra  `#LaTex`                     \
+        texlive-bibtexextra `#LaTex`                     \
+        texlive-humanities  `#LaTex`                     \
+        texlive-langspanish `#LaTex`                     \
+        texlive-latexextra  `#LaTex`                     \
+        texlive-mathscience `#LaTex`                     \
+        texlive-pictures    `#LaTex`                     \
+        texlive-publishers  `#LaTex`                     \
+        qemu-full           `#Virtual Machine emulator`  \
+        kicad               `#Electronics Design`        \
     &> /dev/null
 }
 
@@ -1146,6 +1148,10 @@ bindsym XF86MonBrightnessDown exec --no-startup-id ddcutil setvcp 10 - 10
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -q set Master 5%+ unmute
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q set Master 5%- unmute
 bindsym XF86AudioMute exec --no-startup-id amixer -q set Master toggle
+bindsym XF86AudioPlay exec --no-startup-id playerctl play
+bindsym XF86AudioPause exec --no-startup-id playerctl pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 
 mode "resize" {
         bindsym j resize shrink width 10 px or 10 ppt
@@ -1699,6 +1705,27 @@ MimeType=image/bmp;image/gif;image/jpeg;image/jpg;image/pjpeg;image/png;image/ti
 Keywords=Image;Picture;Slideshow;
 EOF
 
+}
+
+configure_playerctl() {
+    echo "--> Configure playerctld."
+
+    mkdir -p /home/nicola/.config/systemd/user
+
+    cat > /home/nicola/.config/systemd/user/playerctld.service << 'EOF'
+[Unit]
+Description=Keep track of media player activity
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/playerctld daemon
+
+[Install]
+WantedBy=default.target
+EOF
+
+    systemctl enable playerctld.service --user &> /dev/null
+    systemctl start playerctld.service --user &> /dev/null
 }
 
 configure_mocp() {
