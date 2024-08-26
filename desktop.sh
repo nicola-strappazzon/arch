@@ -228,13 +228,13 @@ configure_home_dirs() {
 configure_profile() {
     echo "--> Configure profile."
 
-    mkdir -p ~/.bashrc.d/
-    mkdir -p ~/.bashrc.d/alias/
-    mkdir -p ~/.bashrc.d/env/
-    mkdir -p ~/.bashrc.d/functions/
-    chmod -R 0700 ~/.bashrc.d
+    mkdir -p $HOME/.bashrc.d/
+    mkdir -p $HOME/.bashrc.d/alias/
+    mkdir -p $HOME/.bashrc.d/env/
+    mkdir -p $HOME/.bashrc.d/functions/
+    chmod -R 0700 $HOME/.bashrc.d
 
-    cat > ~/.bashrc.d/alias.sh << 'EOF'
+    cat > $HOME/.bashrc.d/alias.sh << 'EOF'
 if [ -x ~/.bashrc.d/alias/ ]; then
   for i in $(find ~/.bashrc.d/alias/ -type f ); do
     source "$i"
@@ -242,7 +242,7 @@ if [ -x ~/.bashrc.d/alias/ ]; then
 fi
 EOF
 
-    cat > ~/.bashrc.d/env.sh << 'EOF'
+    cat > $HOME/.bashrc.d/env.sh << 'EOF'
 if [ -x ~/.bashrc.d/env/ ]; then
   for i in $(find ~/.bashrc.d/env/ -type f ); do
     source "$i"
@@ -250,7 +250,7 @@ if [ -x ~/.bashrc.d/env/ ]; then
 fi
 EOF
 
-    cat > ~/.bashrc.d/functions.sh << 'EOF'
+    cat > $HOME/.bashrc.d/functions.sh << 'EOF'
 if [ -x ~/.bashrc.d/functions/ ]; then
   for i in $(find ~/.bashrc.d/functions/ -type f ); do
     source "$i"
@@ -258,11 +258,11 @@ if [ -x ~/.bashrc.d/functions/ ]; then
 fi
 EOF
 
-    cat > ~/.bashrc.d/alias/docker.sh << 'EOF'
+    cat > $HOME/.bashrc.d/alias/docker.sh << 'EOF'
 alias dps="sudo docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}'"
 EOF
 
-    cat > ~/.bashrc.d/alias/general.sh << 'EOF'
+    cat > $HOME/.bashrc.d/alias/general.sh << 'EOF'
 alias c="clear"
 alias diff="diff --color=auto"
 alias grep="grep -n --color"
@@ -272,7 +272,7 @@ alias s="fzf -i --print0 | xclip -selection clipboard"
 alias p="mocp -T main Music/"
 EOF
 
-    cat > ~/.bashrc.d/alias/git.sh << 'EOF'
+    cat > $HOME/.bashrc.d/alias/git.sh << 'EOF'
 alias ga="git add ."
 alias gcane="git commit --amend --no-edit"
 alias gh="cd $HOME/go/src/github.com"
@@ -281,11 +281,11 @@ alias gs="git status"
 alias gw="git whatchanged"
 EOF
 
-    cat > ~/.bashrc.d/alias/golang.sh << 'EOF'
+    cat > $HOME/.bashrc.d/alias/golang.sh << 'EOF'
 alias gf="gofmt -w ."
 EOF
 
-    cat > ~/.bashrc.d/env/general.sh << 'EOF'
+    cat > $HOME/.bashrc.d/env/general.sh << 'EOF'
 export BROWSER=firefox
 export CLICOLOR=1
 export EDITOR=vim
@@ -296,7 +296,7 @@ export PS1="\[\033[32m\]\W\[\033[31m\]\[\033[32m\]$\[\e[0m\] "
 export TERM=xterm
 EOF
 
-    cat > ~/.bashrc.d/functions/aws.sh << 'EOF'
+    cat > $HOME/.bashrc.d/functions/aws.sh << 'EOF'
 aws-instances () {
     aws ec2 describe-instances | jq -c '.Reservations[].Instances[] | { instanceid:.InstanceId, name:(.Tags[]? | select(.Key=="Name") | .Value), type:.InstanceType, private_ip:.PrivateIpAddress, public_ip: .PublicIp}'
 }
@@ -399,7 +399,7 @@ aws-get-secret() {
 }
 EOF
 
-    cat > ~/.bashrc.d/functions/general.sh << 'EOF'
+    cat > $HOME/.bashrc.d/functions/general.sh << 'EOF'
 extract () {
     if [ -f $1 ] ; then
         case $1 in
@@ -455,7 +455,7 @@ jq-help() {
 }
 
 backup-usb() {
-    rsync -CPavzt ~/ /run/media/nsc/BACKUP/
+    rsync -CPavzt ~/ /run/media/nicola/BACKUP/
 }
 
 backup-icloud() {
@@ -467,7 +467,7 @@ raspberri-pi-find() {
 }
 EOF
 
-    cat > ~/.bashrc.d/functions/k8.sh << 'EOF'
+    cat > $HOME/.bashrc.d/functions/k8.sh << 'EOF'
 k8 () {
     if [ -z "$K8_NAMESPACE" ]; then
         echo "First, set environment executing: [loc|stg|prd]-<app>"
@@ -546,7 +546,7 @@ k8-help() {
 }
 EOF
 
-    cat > ~/.bashrc.d/functions/mysql.sh << 'EOF'
+    cat > $HOME/.bashrc.d/functions/mysql.sh << 'EOF'
 m () {
     if [ -z "$1" ]; then
         echo "No argument supplied."
@@ -564,7 +564,7 @@ m () {
 }
 EOF
 
-    cat > ~/.bashrc.d/functions/redpanda.sh << 'EOF'
+    cat > $HOME/.bashrc.d/functions/redpanda.sh << 'EOF'
 redpanda(){
     if [ -z "$REDPANDA_CONFIG" ]; then
         echo "First, set environment executing: [loc|stg|prd]-redpanda"
@@ -1034,11 +1034,11 @@ EOF
 configure_i3wm() {
     echo "--> Configure desktop."
 
-    mkdir -p /home/nsc/.config/i3/
-    cat > /home/nsc/.config/i3/config << 'EOF'
-exec --no-startup-id feh --no-fehbg --bg-fill '/home/nsc/.config/feh/01.jpg'
+    mkdir -p /home/nicola/.config/i3/
+    cat > /home/nicola/.config/i3/config << 'EOF'
+exec --no-startup-id feh --no-fehbg --bg-fill '/home/nicola/.config/feh/01.jpg'
 exec --no-startup-id amixer -q set Master 50% unmut
-exec --no-startup-id /home/nsc/.config/polybar/launch.sh
+exec --no-startup-id /home/nicola/.config/polybar/launch.sh
 
 set $mod Mod4
 set $ws1 "1"
@@ -1134,7 +1134,7 @@ bindsym $mod+r mode "resize"
 floating_modifier $mod
 tiling_drag modifier titlebar
 
-bindsym $mod+space exec --no-startup-id rofi -config /home/nsc/.config/rofi/config.rasi -show drun
+bindsym $mod+space exec --no-startup-id rofi -config /home/nicola/.config/rofi/config.rasi -show drun
 bindsym $mod+Shift+p exec --no-startup-id rofi-pass
 bindsym Print exec --no-startup-id flameshot gui
 
@@ -1167,7 +1167,7 @@ EOF
 configure_xterm() {
     echo "--> Configure terminal."
 
-    cat > /home/nsc/.Xdefaults << 'EOF'
+    cat > /home/nicola/.Xdefaults << 'EOF'
 XTerm*background: #002B36
 XTerm*borderColor: #343434
 XTerm*color0: #222222
@@ -1201,18 +1201,18 @@ EOF
 configure_polybar() {
     echo "--> Configure bar."
 
-    mkdir -p /home/nsc/.config/polybar/
-    touch /home/nsc/.config/polybar/launch.sh
-    chmod +x /home/nsc/.config/polybar/launch.sh
+    mkdir -p /home/nicola/.config/polybar/
+    touch /home/nicola/.config/polybar/launch.sh
+    chmod +x /home/nicola/.config/polybar/launch.sh
 
-    cat > /home/nsc/.config/polybar/launch.sh << 'EOF'
+    cat > /home/nicola/.config/polybar/launch.sh << 'EOF'
 #!/usr/bin/env bash
 
 killall -q polybar
-polybar --config=/home/nsc/.config/polybar/config.ini
+polybar --config=/home/nicola/.config/polybar/config.ini
 EOF
 
-    cat > /home/nsc/.config/polybar/config.ini << 'EOF'
+    cat > /home/nicola/.config/polybar/config.ini << 'EOF'
 [colors]
 background = #282A2E
 background-alt = #373B41
@@ -1337,9 +1337,9 @@ EOF
 configure_rofi() {
     echo "--> Configure launcher."
 
-    mkdir -p /home/nsc/.config/rofi/
+    mkdir -p /home/nicola/.config/rofi/
 
-    cat > /home/nsc/.config/rofi/config.rasi << 'EOF'
+    cat > /home/nicola/.config/rofi/config.rasi << 'EOF'
 configuration {
   font: "terminus 10";
   combi-modes: "window,drun,ssh,pass";
@@ -1442,15 +1442,15 @@ EOF
 configure_screenshot() {
     echo "--> Configure screenshot."
 
-    mkdir -p /home/nsc/.config/flameshot/
+    mkdir -p /home/nicola/.config/flameshot/
 
-    cat > /home/nsc/.config/flameshot/flameshot.ini << 'EOF'
+    cat > /home/nicola/.config/flameshot/flameshot.ini << 'EOF'
 [General]
 buttons=@Variant(\0\0\0\x7f\0\0\0\vQList<int>\0\0\0\0\x14\0\0\0\0\0\0\0\x1\0\0\0\x2\0\0\0\x3\0\0\0\x4\0\0\0\x5\0\0\0\x6\0\0\0\x12\0\0\0\xf\0\0\0\x16\0\0\0\x13\0\0\0\a\0\0\0\b\0\0\0\t\0\0\0\x10\0\0\0\n\0\0\0\v\0\0\0\x17\0\0\0\f\0\0\0\x11)
 contrastOpacity=188
 disabledTrayIcon=true
 drawColor=#ff0000
-savePath=/home/nsc/Pictures/Screenshots
+savePath=/home/nicola/Pictures/Screenshots
 savePathFixed=false
 showDesktopNotification=false
 showHelp=false
@@ -1510,8 +1510,8 @@ EOF
 configure_feh() {
     echo "--> Configure desktop wallpaper."
 
-    mkdir -p /home/nsc/.config/feh/
-    cp wallpaper/wallpaper.jpg /home/nsc/.config/feh/01.jpg
+    mkdir -p /home/nicola/.config/feh/
+    cp wallpaper/wallpaper.jpg /home/nicola/.config/feh/01.jpg
 }
 
 configure_applications_desktop() {
@@ -1716,9 +1716,9 @@ EOF
 configure_mocp() {
     echo "--> Configure moc themme."
 
-    mkdir -p /home/nsc/.moc/themes
+    mkdir -p /home/nicola/.moc/themes
 
-    cat > /home/nsc/.moc/themes/main << 'EOF'
+    cat > /home/nicola/.moc/themes/main << 'EOF'
 background           = default default
 frame                = default default
 window_title         = default default
