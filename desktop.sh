@@ -28,7 +28,6 @@ main() {
     configure_xterm
     configure_rofi
     configure_screenshot
-    configure_brightness
     configure_feh
     configure_applications_desktop
     configure_mocp
@@ -54,6 +53,7 @@ drivers() {
         amd-ucode \
         pulseaudio \
         pulseaudio-alsa \
+        ddcutil \
     &> /dev/null
 }
 
@@ -1141,8 +1141,8 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 bindsym $mod+Tab workspace next
 bindsym $mod+Shift+Tab workspace prev
 
-bindsym XF86MonBrightnessUp exec --no-startup-id /usr/local/bin/brightness.sh +
-bindsym XF86MonBrightnessDown exec --no-startup-id /usr/local/bin/brightness.sh -
+bindsym XF86MonBrightnessUp exec --no-startup-id ddcutil setvcp 10 + 10
+bindsym XF86MonBrightnessDown exec --no-startup-id ddcutil setvcp 10 - 10
 bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -q set Master 5%+ unmute
 bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q set Master 5%- unmute
 bindsym XF86AudioMute exec --no-startup-id amixer -q set Master toggle
@@ -1493,51 +1493,6 @@ startupLaunch=true
 uiColor=#373B41
 EOF
 
-}
-
-configure_brightness() {
-    echo "--> Configure brightness."
-
-    cat << 'EOF' | sudo tee /usr/local/bin/brightness.sh &> /dev/null
-#!/usr/bin/env sh
-# set -eu
-
-MON="HDMI-A-0"  # Discover monitor: xrandr --listmonitors
-STEP=5          # Step Up/Down brightnes by: 5 = ".05", 10 = ".10", etc.
-
-CurrBright=$( xrandr --verbose --current | grep ^"$MON" -A5 | tail -n1 )
-CurrBright="${CurrBright##* }"  # Get brightness level with decimal place
-
-Left=${CurrBright%%"."*}        # Extract left of decimal point
-Right=${CurrBright#*"."}        # Extract right of decimal point
-
-MathBright="0"
-[[ "$Left" != 0 && "$STEP" -lt 10 ]] && STEP=10     # > 1.0, only .1 works
-[[ "$Left" != 0 ]] && MathBright="$Left"00          # 1.0 becomes "100"
-[[ "${#Right}" -eq 1 ]] && Right="$Right"0          # 0.5 becomes "50"
-MathBright=$(( MathBright + Right ))
-
-[[ "$1" == "Up" || "$1" == "+" ]] && MathBright=$(( MathBright + STEP ))
-[[ "$1" == "Down" || "$1" == "-" ]] && MathBright=$(( MathBright - STEP ))
-[[ "${MathBright:0:1}" == "-" ]] && MathBright=0    # Negative not allowed
-[[ "$MathBright" -gt 999  ]] && MathBright=999      # Can't go over 9.99
-
-if [[ "${#MathBright}" -eq 3 ]] ; then
-    MathBright="$MathBright"000         # Pad with lots of zeros
-    CurrBright="${MathBright:0:1}.${MathBright:1:2}"
-else
-    MathBright="$MathBright"000         # Pad with lots of zeros
-    CurrBright=".${MathBright:0:2}"
-fi
-
-xrandr --output "$MON" --brightness "$CurrBright"   # Set new brightness
-
-# Display current brightness
-printf "Monitor $MON "
-echo $( xrandr --verbose --current | grep ^"$MON" -A5 | tail -n1 )
-EOF
-
-    sudo chmod +x /usr/local/bin/brightness.sh
 }
 
 configure_feh() {
