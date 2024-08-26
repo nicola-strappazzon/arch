@@ -709,10 +709,10 @@ MainScript  = Main.qml
 Name        = Luna
 QtVersion   = 6
 Theme-API   = 2.0
-Theme-Id    = nsc
+Theme-Id    = luna
 Type        = sddm-theme
 Version     = 20240810
-Website     = https://gitlab.com/nstrappazzonc/arch
+Website     = https://gitlab.com/nstrappazzonc/sddm-theme-luna
 EOF
 
     cat << EOF | sudo tee /usr/share/sddm/themes/luna/theme.conf &> /dev/null
