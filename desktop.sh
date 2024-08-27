@@ -230,7 +230,7 @@ EOF
 configure_gtk() {
     echo "--> Configure GTK."
 
-cat > /home/nicola/.gtkrc-2.0 << 'EOF'
+    cat > /home/nicola/.gtkrc-2.0 << 'EOF'
 gtk-theme-name="Materia-dark"
 gtk-icon-theme-name="Adwaita"
 gtk-font-name="Terminus 10"
