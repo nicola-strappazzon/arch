@@ -308,6 +308,7 @@ alias f="fzf -i --print0 | xclip -selection clipboard"
 alias p="mocp -T main Music/"
 alias o="nemo"
 alias s="subl"
+alias h="history"
 EOF
 
     cat > $HOME/.bashrc.d/alias/git.sh << 'EOF'
@@ -317,6 +318,7 @@ alias gh="cd $HOME/go/src/github.com"
 alias gpf="git push -f"
 alias gs="git status"
 alias gw="git whatchanged"
+alias gd="git diff"
 EOF
 
     cat > $HOME/.bashrc.d/alias/golang.sh << 'EOF'
