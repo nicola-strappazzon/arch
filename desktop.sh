@@ -299,7 +299,7 @@ alias dps="sudo docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.P
 EOF
 
     cat > $HOME/.bashrc.d/alias/general.sh << 'EOF'
-alias c="clear"
+alias c="reset;clear"
 alias d="diff --color=auto"
 alias g="grep -n --color"
 alias l="ls -lahS"
