@@ -306,6 +306,7 @@ alias l="ls -lahS"
 alias reload="source ~/.bashrc.d/*.sh"
 alias s="fzf -i --print0 | xclip -selection clipboard"
 alias p="mocp -T main Music/"
+alias o="nemo"
 EOF
 
     cat > $HOME/.bashrc.d/alias/git.sh << 'EOF'
