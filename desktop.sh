@@ -92,10 +92,11 @@ fonts() {
 desktop() {
     echo "--> Install desktop."
     sudo pacman -S --noconfirm --needed \
-        i3-wm   `#Desktop environment` \
-        polybar `#Desktop bar`         \
-        feh     `#Wallpaper tool`      \
-        xterm   `#Terminal emulator`   \
+        i3-wm   `#Desktop environment`  \
+        polybar `#Desktop bar`          \
+        dunst   `#Notification daemons` \
+        feh     `#Wallpaper tool`       \
+        xterm   `#Terminal emulator`    \
     &> /dev/null
 }
 
