@@ -300,13 +300,14 @@ EOF
 
     cat > $HOME/.bashrc.d/alias/general.sh << 'EOF'
 alias c="clear"
-alias diff="diff --color=auto"
-alias grep="grep -n --color"
+alias d="diff --color=auto"
+alias g="grep -n --color"
 alias l="ls -lahS"
-alias reload="source ~/.bashrc.d/*.sh"
-alias s="fzf -i --print0 | xclip -selection clipboard"
+alias r="source ~/.bashrc.d/*.sh"
+alias f="fzf -i --print0 | xclip -selection clipboard"
 alias p="mocp -T main Music/"
 alias o="nemo"
+alias s="subl"
 EOF
 
     cat > $HOME/.bashrc.d/alias/git.sh << 'EOF'
