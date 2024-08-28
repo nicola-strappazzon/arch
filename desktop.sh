@@ -140,7 +140,7 @@ packages() {
         nemo                `#File manager`              \
         nemo-fileroller     `#File archiver extension`   \
         nemo-preview        `#Previewer extension`       \
-        rhythmbox           `#Audio player`              \
+        pragha              `#Audio player`              \
         playerctl           `#Multimedia player control` \
         viewnior            `#Image viewer`              \
         arduino-ide         `#Arduino IDE`               \
@@ -500,7 +500,7 @@ backup-usb() {
 }
 
 backup-icloud() {
-    icloudpd --username nicola@strappazzon.me --directory ~/Pictures/iCloud/
+    icloudpd --username nicola@strappazzon.me --directory /home/nicola/Pictures/iCloud/
 }
 
 raspberri-pi-find() {
@@ -1604,18 +1604,18 @@ configure_applications_desktop() {
 
     cat << EOF | sudo tee /usr/share/applications/sublime_text.desktop &> /dev/null
 [Desktop Entry]
-Version=1.0
-Type=Application
-Name=Sublime Text
+Actions=new-window;new-file;
+Categories=TextEditor;Development;
 Exec=/usr/bin/subl %F
-Terminal=false
-MimeType=text/plain;
 Icon=sublime-text
 Keywords=text;editor;ide;dev;
-Categories=TextEditor;Development;
+MimeType=text/plain;
+Name=Sublime Text
 StartupNotify=true
 StartupWMClass=subl
-Actions=new-window;new-file;
+Terminal=false
+Type=Application
+Version=1.0
 
 [Desktop Action new-window]
 Name=New Window
@@ -1630,18 +1630,18 @@ EOF
 
     cat << EOF | sudo tee /usr/share/applications/firefox.desktop &> /dev/null
 [Desktop Entry]
-Version=1.0
-Name=Firefox
+Actions=new-window;new-private-window;profile-manager-window;
+Categories=Network;WebBrowser;
 Exec=/usr/lib/firefox/firefox %u
 Icon=firefox
 Keywords=web;browser;
+MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;application/x-xpinstall;application/pdf;application/json;
+Name=Firefox
+StartupNotify=true
+StartupWMClass=firefox
 Terminal=false
 Type=Application
-MimeType=text/html;text/xml;application/xhtml+xml;application/vnd.mozilla.xul+xml;text/mml;x-scheme-handler/http;x-scheme-handler/https;application/x-xpinstall;application/pdf;application/json;
-StartupNotify=true
-Categories=Network;WebBrowser;
-Actions=new-window;new-private-window;profile-manager-window;
-StartupWMClass=firefox
+Version=1.0
 
 [Desktop Action new-window]
 Name=Open a New Window
@@ -1658,17 +1658,17 @@ EOF
 
     cat << EOF | sudo tee /usr/share/applications/nemo.desktop &> /dev/null
 [Desktop Entry]
-Version=1.0
-Name=File Manager
+Actions=open-home;open-computer;open-trash;
+Categories=GNOME;GTK;Utility;Core;
 Exec=nemo %U
 Icon=system-file-manager
 Keywords=folders;filesystem;explorer;
+MimeType=inode/directory;application/x-gnome-saved-search;
+Name=File Manager
+StartupNotify=false
 Terminal=false
 Type=Application
-StartupNotify=false
-Categories=GNOME;GTK;Utility;Core;
-MimeType=inode/directory;application/x-gnome-saved-search;
-Actions=open-home;open-computer;open-trash;
+Version=1.0
 
 [Desktop Action open-home]
 Name=Home
@@ -1685,113 +1685,112 @@ EOF
 
     cat << EOF | sudo tee /usr/share/applications/lxappearance.desktop &> /dev/null
 [Desktop Entry]
-Type=Application
-Name=Look and Feel
-Keywords=windows;preferences;settings;theme;style;appearance;
-Icon=preferences-desktop-theme
+Categories=GTK;Settings;DesktopSettings;X-LXDE-Settings;
 Exec=lxappearance
+Icon=preferences-desktop-theme
+Keywords=windows;preferences;settings;theme;style;appearance;
+Name=Look and Feel
 NotShowIn=GNOME;KDE;XFCE;MATE;
 StartupNotify=true
-Categories=GTK;Settings;DesktopSettings;X-LXDE-Settings;
+Type=Application
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/mpv.desktop &> /dev/null
 [Desktop Entry]
-Type=Application
-Name=Media Player
-Icon=mpv
-TryExec=mpv
-Exec=mpv --player-operation-mode=pseudo-gui -- %U
-Terminal=false
 Categories=AudioVideo;Audio;Video;Player;TV;
-MimeType=application/ogg;application/x-ogg;application/mxf;application/sdp;application/smil;application/x-smil;application/streamingmedia;application/x-streamingmedia;application/vnd.rn-realmedia;application/vnd.rn-realmedia-vbr;audio/aac;audio/x-aac;audio/vnd.dolby.heaac.1;audio/vnd.dolby.heaac.2;audio/aiff;audio/x-aiff;audio/m4a;audio/x-m4a;application/x-extension-m4a;audio/mp1;audio/x-mp1;audio/mp2;audio/x-mp2;audio/mp3;audio/x-mp3;audio/mpeg;audio/mpeg2;audio/mpeg3;audio/mpegurl;audio/x-mpegurl;audio/mpg;audio/x-mpg;audio/rn-mpeg;audio/musepack;audio/x-musepack;audio/ogg;audio/scpls;audio/x-scpls;audio/vnd.rn-realaudio;audio/wav;audio/x-pn-wav;audio/x-pn-windows-pcm;audio/x-realaudio;audio/x-pn-realaudio;audio/x-ms-wma;audio/x-pls;audio/x-wav;video/mpeg;video/x-mpeg2;video/x-mpeg3;video/mp4v-es;video/x-m4v;video/mp4;application/x-extension-mp4;video/divx;video/vnd.divx;video/msvideo;video/x-msvideo;video/ogg;video/quicktime;video/vnd.rn-realvideo;video/x-ms-afs;video/x-ms-asf;audio/x-ms-asf;application/vnd.ms-asf;video/x-ms-wmv;video/x-ms-wmx;video/x-ms-wvxvideo;video/x-avi;video/avi;video/x-flic;video/fli;video/x-flc;video/flv;video/x-flv;video/x-theora;video/x-theora+ogg;video/x-matroska;video/mkv;audio/x-matroska;application/x-matroska;video/webm;audio/webm;audio/vorbis;audio/x-vorbis;audio/x-vorbis+ogg;video/x-ogm;video/x-ogm+ogg;application/x-ogm;application/x-ogm-audio;application/x-ogm-video;application/x-shorten;audio/x-shorten;audio/x-ape;audio/x-wavpack;audio/x-tta;audio/AMR;audio/ac3;audio/eac3;audio/amr-wb;video/mp2t;audio/flac;audio/mp4;application/x-mpegurl;video/vnd.mpegurl;application/vnd.apple.mpegurl;audio/x-pn-au;video/3gp;video/3gpp;video/3gpp2;audio/3gpp;audio/3gpp2;video/dv;audio/dv;audio/opus;audio/vnd.dts;audio/vnd.dts.hd;audio/x-adpcm;application/x-cue;audio/m3u;audio/vnd.wave;video/vnd.avi;
-X-KDE-Protocols=ftp,http,https,mms,rtmp,rtsp,sftp,smb,srt,rist,webdav,webdavs
-StartupWMClass=mpv
+Exec=mpv --player-operation-mode=pseudo-gui -- %U
+Icon=mpv
 Keywords=mpv;media;player;video;audio;tv;
+MimeType=application/ogg;application/x-ogg;application/mxf;application/sdp;application/smil;application/x-smil;application/streamingmedia;application/x-streamingmedia;application/vnd.rn-realmedia;application/vnd.rn-realmedia-vbr;audio/aac;audio/x-aac;audio/vnd.dolby.heaac.1;audio/vnd.dolby.heaac.2;audio/aiff;audio/x-aiff;audio/m4a;audio/x-m4a;application/x-extension-m4a;audio/mp1;audio/x-mp1;audio/mp2;audio/x-mp2;audio/mp3;audio/x-mp3;audio/mpeg;audio/mpeg2;audio/mpeg3;audio/mpegurl;audio/x-mpegurl;audio/mpg;audio/x-mpg;audio/rn-mpeg;audio/musepack;audio/x-musepack;audio/ogg;audio/scpls;audio/x-scpls;audio/vnd.rn-realaudio;audio/wav;audio/x-pn-wav;audio/x-pn-windows-pcm;audio/x-realaudio;audio/x-pn-realaudio;audio/x-ms-wma;audio/x-pls;audio/x-wav;video/mpeg;video/x-mpeg2;video/x-mpeg3;video/mp4v-es;video/x-m4v;video/mp4;application/x-extension-mp4;video/divx;video/vnd.divx;video/msvideo;video/x-msvideo;video/ogg;video/quicktime;video/vnd.rn-realvideo;video/x-ms-afs;video/x-ms-asf;audio/x-ms-asf;application/vnd.ms-asf;video/x-ms-wmv;video/x-ms-wmx;video/x-ms-wvxvideo;video/x-avi;video/avi;video/x-flic;video/fli;video/x-flc;video/flv;video/x-flv;video/x-theora;video/x-theora+ogg;video/x-matroska;video/mkv;audio/x-matroska;application/x-matroska;video/webm;audio/webm;audio/vorbis;audio/x-vorbis;audio/x-vorbis+ogg;video/x-ogm;video/x-ogm+ogg;application/x-ogm;application/x-ogm-audio;application/x-ogm-video;application/x-shorten;audio/x-shorten;audio/x-ape;audio/x-wavpack;audio/x-tta;audio/AMR;audio/ac3;audio/eac3;audio/amr-wb;video/mp2t;audio/flac;audio/mp4;application/x-mpegurl;video/vnd.mpegurl;application/vnd.apple.mpegurl;audio/x-pn-au;video/3gp;video/3gpp;video/3gpp2;audio/3gpp;audio/3gpp2;video/dv;audio/dv;audio/opus;audio/vnd.dts;audio/vnd.dts.hd;audio/x-adpcm;application/x-cue;audio/m3u;audio/vnd.wave;video/vnd.avi;
+Name=Media Player
+StartupWMClass=mpv
+Terminal=false
+TryExec=mpv
+Type=Application
+X-KDE-Protocols=ftp,http,https,mms,rtmp,rtsp,sftp,smb,srt,rist,webdav,webdavs
 EOF
 
-    cat << EOF | sudo tee /usr/share/applications/rhythmbox.desktop &> /dev/null
+    cat << EOF | sudo tee /usr/share/applications/pragha.desktop &> /dev/null
 [Desktop Entry]
+Categories=GTK;AudioVideo;Player;
+Exec=pragha %F
+Icon=pragha
+MimeType=application/x-ape;audio/ape;audio/x-ape;audio/x-m4a;video/x-ms-asf;audio/x-ms-wma;audio/x-mp3;audio/mpeg;audio/x-mpeg;audio/mpeg3;audio/mp3;application/ogg;application/x-ogg;audio/vorbis;audio/x-vorbis;audio/ogg;audio/x-ogg;audio/x-flac;application/x-flac;audio/flac;audio/x-wav;audio/mpegurl;audio/x-mpegurl;audio/x-scpls;application/xspf+xml;audio/x-ms-wax;
 Name=Music Player
-Keywords=Audio;Song;MP3;CD;Podcast;MTP;iPod;Playlist;Last.fm;UPnP;DLNA;Radio;
-Exec=rhythmbox %U
-Terminal=false
-Type=Application
-Icon=org.gnome.Rhythmbox3
-X-GNOME-DocPath=rhythmbox/rhythmbox.xml
-Categories=GNOME;GTK;AudioVideo;Audio;Player;
-MimeType=application/x-ogg;application/ogg;audio/x-vorbis+ogg;audio/vorbis;audio/x-vorbis;audio/x-scpls;audio/x-mp3;audio/x-mpeg;audio/mpeg;audio/x-mpegurl;audio/x-flac;audio/mp4;audio/x-it;audio/x-mod;audio/x-s3m;audio/x-stm;audio/x-xm;
 StartupNotify=true
+Terminal=false
+TryExec=pragha
+Type=Application
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/kicad.desktop &> /dev/null
 [Desktop Entry]
-Version=1.0
-Terminal=false
-Icon=kicad
-Type=Application
-Name=KiCad
 Categories=Science;Electronics;
 Exec=kicad %f
-StartupWMClass=kicad
+Icon=kicad
 MimeType=application/x-kicad-project;
+Name=KiCad
+StartupWMClass=kicad
+Terminal=false
+Type=Application
+Version=1.0
 X-Desktop-File-Install-Version=0.22
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/nicotine.desktop &> /dev/null
 [Desktop Entry]
+Categories=Network;FileTransfer;InstantMessaging;Chat;P2P;GTK;
+Exec=nicotine
+Icon=org.nicotine_plus.Nicotine
+Keywords=Soulseek;Nicotine;sharing;chat;messaging;P2P;peer-to-peer;GTK;
+Name=Nicotine+
+StartupNotify=true
+Terminal=false
 Type=Application
 Version=1.1
-Name=Nicotine+
-Icon=org.nicotine_plus.Nicotine
-Exec=nicotine
-Terminal=false
-Categories=Network;FileTransfer;InstantMessaging;Chat;P2P;GTK;
-Keywords=Soulseek;Nicotine;sharing;chat;messaging;P2P;peer-to-peer;GTK;
-StartupNotify=true
 X-GNOME-SingleWindow=true
 X-GNOME-UsesNotifications=true
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/texmaker.desktop &> /dev/null
 [Desktop Entry]
-Type=Application
-Version=1.1
-Name=LaTeX Editor
-Icon=texmaker
-MimeType=text/x-tex;
-StartupNotify=false
-Terminal=false
 Categories=Office;Publishing;Qt;X-SuSE-Core-Office;X-Mandriva-Office-Publishing;X-Misc;
 Exec=texmaker %F
+Icon=texmaker
+MimeType=text/x-tex;
+Name=LaTeX Editor
+StartupNotify=false
+Terminal=false
+Type=Application
+Version=1.1
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/arduino-ide.desktop &> /dev/null
 [Desktop Entry]
-Type=Application
-Name=Arduino IDE v2
+Categories=Development;IDE;Electronics;
 Exec=arduino-ide %U
 Icon=arduino-ide
-Terminal=false
-MimeType=text/x-arduino;
-Categories=Development;IDE;Electronics;
 Keywords=embedded electronics;avr;microcontroller;
+MimeType=text/x-arduino;
+Name=Arduino IDE v2
 StartupWMClass=Arduino IDE
+Terminal=false
+Type=Application
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/viewnior.desktop &> /dev/null
 [Desktop Entry]
-Type=Application
-Name=Viewnior
-TryExec=viewnior
+Categories=GNOME;GTK;Graphics;Viewer;
 Exec=viewnior %F
 Icon=viewnior
+Keywords=Image;Picture;Slideshow;
+MimeType=image/bmp;image/gif;image/jpeg;image/jpg;image/pjpeg;image/png;image/tiff;image/x-bmp;image/x-gray;image/x-icb;image/x-ico;image/x-png;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/x-pcx;image/svg+xml;image/svg+xml-compressed;image/vnd.wap.wbmp;
+Name=Viewnior
 StartupNotify=true
 Terminal=false
+TryExec=viewnior
 Type=Application
-Categories=GNOME;GTK;Graphics;Viewer;
-MimeType=image/bmp;image/gif;image/jpeg;image/jpg;image/pjpeg;image/png;image/tiff;image/x-bmp;image/x-gray;image/x-icb;image/x-ico;image/x-png;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/x-pcx;image/svg+xml;image/svg+xml-compressed;image/vnd.wap.wbmp;
-Keywords=Image;Picture;Slideshow;
+Type=Application
 EOF
 
 }
