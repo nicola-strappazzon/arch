@@ -1185,6 +1185,7 @@ tiling_drag modifier titlebar
 
 bindsym $mod+space exec --no-startup-id rofi -config /home/nicola/.config/rofi/config.rasi -show drun
 bindsym $mod+Shift+p exec --no-startup-id rofi-pass
+bindsym $mod+c exec --no-startup-id rofi -config /home/nicola/.config/rofi/config.rasi -show calc -modi calc -no-show-match -no-sort
 bindsym Print exec --no-startup-id flameshot gui
 
 client.focused #373B41 #282A2E #C5C8C6 #AAAAAC
@@ -1496,8 +1497,12 @@ configuration {
     display-name: "󰷡";
   }
 
+  calc {
+    display-name: "";
+  }
+
   timeout {
-    delay: 10;
+    delay: 60;
     action: "kb-cancel";
   }
 }
