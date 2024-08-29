@@ -157,7 +157,6 @@ packages() {
         qemu-full           `#Virtual Machine emulator`  \
         kicad               `#Electronics Design`        \
         qimgv               `#Image viever`              \
-        xcolor              `#Color picker`              \
     &> /dev/null
 }
 
@@ -314,7 +313,6 @@ alias p="mocp -T main Music/"
 alias o="nemo"
 alias s="subl"
 alias h="history"
-alias x="xcolor | xclip -selection clipboard"
 EOF
 
     cat > $HOME/.bashrc.d/alias/git.sh << 'EOF'
