@@ -158,6 +158,10 @@ packages() {
         qemu-full           `#Virtual Machine emulator`  \
         kicad               `#Electronics Design`        \
     &> /dev/null
+
+    # https://github.com/easymodo/qimgv
+    # https://github.com/jakar/qt-heif-image-plugin
+    # https://github.com/nulloy/nulloy
 }
 
 yay_install() {
@@ -1470,7 +1474,7 @@ configure_rofi() {
     cat > /home/nicola/.config/rofi/config.rasi << 'EOF'
 configuration {
   font: "terminus 10";
-  combi-modes: "window,drun,ssh,pass";
+  combi-modes: "window,drun,ssh,pass,calc";
 
   drun {
     display-name: "";
