@@ -1787,19 +1787,17 @@ Terminal=false
 Type=Application
 EOF
 
-    cat << EOF | sudo tee /usr/share/applications/viewnior.desktop &> /dev/null
+    cat << EOF | sudo tee /usr/share/applications/qimgv.desktop &> /dev/null
 [Desktop Entry]
-Categories=GNOME;GTK;Graphics;Viewer;
-Exec=viewnior %F
-Icon=viewnior
-Keywords=Image;Picture;Slideshow;
-MimeType=image/bmp;image/gif;image/jpeg;image/jpg;image/pjpeg;image/png;image/tiff;image/x-bmp;image/x-gray;image/x-icb;image/x-ico;image/x-png;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-xbitmap;image/x-xpixmap;image/x-pcx;image/svg+xml;image/svg+xml-compressed;image/vnd.wap.wbmp;
-Name=Viewnior
-StartupNotify=true
+Version=1.0
+Name=Image Viewer
+Exec=qimgv %f
+Icon=qimgv
 Terminal=false
-TryExec=viewnior
 Type=Application
-Type=Application
+Categories=Qt;Graphics;Viewer;
+MimeType=video/webm;image/jpeg;image/gif;image/png;image/bmp;image/webp;
+Keywords=image;view;qimgv;picture;gif;jpeg;webm;
 EOF
 
 }
