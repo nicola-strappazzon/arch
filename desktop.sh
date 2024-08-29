@@ -142,7 +142,6 @@ packages() {
         nemo-preview        `#Previewer extension`       \
         pragha              `#Audio player`              \
         playerctl           `#Multimedia player control` \
-        viewnior            `#Image viewer`              \
         arduino-ide         `#Arduino IDE`               \
         nicotine+           `#Music sharing client`      \
         texmaker            `#LaTex editor`              \
@@ -157,11 +156,9 @@ packages() {
         texlive-publishers  `#LaTex`                     \
         qemu-full           `#Virtual Machine emulator`  \
         kicad               `#Electronics Design`        \
+        qimgv               `#Image viever`              \
+        xcolor              `#Color picker`              \
     &> /dev/null
-
-    # https://github.com/easymodo/qimgv
-    # https://github.com/jakar/qt-heif-image-plugin
-    # https://github.com/nulloy/nulloy
 }
 
 yay_install() {
@@ -201,9 +198,12 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        moc-pulse      `#Music on Console`   \
-        sublime-text-4 `#Source code editor` \
-        ivpn           `#VPN Client`         \
+        moc-pulse            `#Music on Console`             \
+        sublime-text-4       `#Source code editor`           \
+        ivpn                 `#VPN Client`                   \
+        colorpicker          `#Terminal color picker`        \
+        qt-heif-image-plugin `#Image format plugin for HEIF` \
+        nulloy               `#Minimal music player`         \
     &> /dev/null
 }
 
@@ -314,6 +314,7 @@ alias p="mocp -T main Music/"
 alias o="nemo"
 alias s="subl"
 alias h="history"
+alias x="xcolor | xclip -selection clipboard"
 EOF
 
     cat > $HOME/.bashrc.d/alias/git.sh << 'EOF'
@@ -1587,7 +1588,7 @@ buttons=@Variant(\0\0\0\x7f\0\0\0\vQList<int>\0\0\0\0\x14\0\0\0\0\0\0\0\x1\0\0\0
 contrastOpacity=188
 contrastUiColor=#707880
 disabledTrayIcon=true
-drawColor=#02cac5
+drawColor=#c4df90
 savePath=/home/nicola/Pictures/Screenshots
 savePathFixed=false
 showDesktopNotification=false
