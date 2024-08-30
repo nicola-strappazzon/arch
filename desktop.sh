@@ -1789,15 +1789,15 @@ EOF
 
     cat << EOF | sudo tee /usr/share/applications/qimgv.desktop &> /dev/null
 [Desktop Entry]
-Version=1.0
-Name=Image Viewer
+Categories=Qt;Graphics;Viewer;
 Exec=qimgv %f
 Icon=qimgv
+Keywords=image;view;qimgv;picture;gif;jpeg;webm;
+MimeType=video/webm;image/jpeg;image/gif;image/png;image/bmp;image/webp;
+Name=Image Viewer
 Terminal=false
 Type=Application
-Categories=Qt;Graphics;Viewer;
-MimeType=video/webm;image/jpeg;image/gif;image/png;image/bmp;image/webp;
-Keywords=image;view;qimgv;picture;gif;jpeg;webm;
+Version=1.0
 EOF
 
 }
