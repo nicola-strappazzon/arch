@@ -230,6 +230,11 @@ Section "OutputClass"
     Option "TearFree" "true"
 EndSection
 EOF
+
+    # Configure black screensaver.
+    xset s on
+    # Configure turn off screen.
+    xset s 600 600
 }
 
 configure_gtk() {
