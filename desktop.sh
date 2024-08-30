@@ -157,6 +157,7 @@ packages() {
         qemu-full           `#Virtual Machine emulator`  \
         kicad               `#Electronics Design`        \
         qimgv               `#Image viever`              \
+        thunderbird         `#Email client`              \
     &> /dev/null
 }
 
