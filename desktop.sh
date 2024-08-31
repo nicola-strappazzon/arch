@@ -30,6 +30,7 @@ main() {
     configure_rofi
     configure_screenshot
     configure_feh
+    configure_vim
     configure_applications_desktop
     configure_playerctl
     configure_mocp
@@ -1610,6 +1611,44 @@ configure_feh() {
 
     mkdir -p /home/nicola/.config/feh/
     cp wallpaper/wallpaper.jpg /home/nicola/.config/feh/01.jpg
+}
+
+configure_vim() {
+    echo "--> Configure vim."
+
+    cat > /home/nicola/.vimrc << 'EOF'
+" Global settings
+set hidden                                                  " don't unload buffer when switching away
+set modeline                                                " allow per-file settings via modeline
+set modelines=3
+set exrc                                                    " enable per-directory .vimrc files
+set secure                                                  " disable unsafe commands in local .vimrc files
+set encoding=utf-8 fileencoding=utf-8 termencoding=utf-8    " saving and encoding
+set nobackup nowritebackup noswapfile autoread              " no backup or swap
+set hlsearch incsearch ignorecase smartcase                 " search
+set wildmenu                                                " completion
+set backspace=indent,eol,start                              " sane backspace
+set clipboard=unnamed                                       " use the system clipboard for yank/put/delete
+set mouse=a                                                 " enable mouse for all modes settings
+set nomousehide                                             " don't hide the mouse cursor while typing
+set mousemodel=popup                                        " right-click pops up context menu
+set ruler                                                   " show cursor position in status bar
+"set relativenumber                                         " show relative line numbers
+set number                                                  " show absolute line number of the current line
+"set nofoldenable                                           " I fucking hate code folding
+"set scrolloff=10                                           " scroll the window so we can always see 10 lines around the cursor
+set textwidth=80                                            " show a vertical line at the 79th character
+"set cursorline                                             " highlight the current line
+set printoptions=paper:letter                               " use letter as the print output format
+set laststatus=2                                            " always show status bar
+set nocompatible                                            " stops vim from behaving in a strongly vi
+set nowrap                                                  " no wrap line
+"set visualbell                                             " don't beep
+set noerrorbells                                            " don't beep
+set nosmartindent
+set noautoindent
+set filetype=on
+EOF
 }
 
 configure_applications_desktop() {
