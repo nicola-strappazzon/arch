@@ -12,6 +12,7 @@ main() {
     theme
     launcher
     packages
+    printing
     yay_install
     yay_packages
     docker_install
@@ -160,6 +161,16 @@ packages() {
         qimgv               `#Image viever`              \
         thunderbird         `#Email client`              \
     &> /dev/null
+}
+
+printing() {
+    # echo "--> Install printing system."
+    # sudo pacman -S --noconfirm --needed \
+    #     cups `#Printing system`         \
+    # &> /dev/null
+
+    # sudo systemctl start cups.service &> /dev/null
+    # sudo systemctl enable cups.service &> /dev/null
 }
 
 yay_install() {
