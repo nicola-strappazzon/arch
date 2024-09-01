@@ -1857,7 +1857,7 @@ EOF
 
 cat << EOF | sudo tee /usr/share/applications/evince.desktop &> /dev/null
 [Desktop Entry]
-Name=Document Viewer\
+Name=Document Viewer
 Keywords=pdf;ps;postscript;dvi;xps;djvu;tiff;document;presentation;viewer;evince;
 TryExec=evince
 Exec=evince %U
