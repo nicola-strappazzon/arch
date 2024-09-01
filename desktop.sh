@@ -1855,6 +1855,25 @@ Terminal=false
 Type=Application
 EOF
 
+cat << EOF | sudo tee /usr/share/applications/evince.desktop &> /dev/null
+[Desktop Entry]
+Name=Document Viewer\
+Keywords=pdf;ps;postscript;dvi;xps;djvu;tiff;document;presentation;viewer;evince;
+TryExec=evince
+Exec=evince %U
+StartupNotify=true
+Terminal=false
+Type=Application
+Icon=@app_id@
+Categories=GNOME;GTK;Office;Viewer;Graphics;2DGraphics;VectorGraphics;
+MimeType=@EVINCE_MIME_TYPES@;
+Actions=new-window;
+
+[Desktop Action new-window]
+Name=New Window
+Exec=evince --new-window
+EOF
+
 }
 
 configure_playerctl() {
