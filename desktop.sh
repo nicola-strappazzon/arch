@@ -166,12 +166,13 @@ packages() {
 
 printing() {
     echo "--> Install printing system."
-    # sudo pacman -S --noconfirm --needed \
-    #     cups `#Printing system`         \
-    # &> /dev/null
+    sudo pacman -S --noconfirm --needed \
+        cups                  `#Printing system`         \
+        system-config-printer `#Print settings`          \
+    &> /dev/null
 
-    # sudo systemctl start cups.service &> /dev/null
-    # sudo systemctl enable cups.service &> /dev/null
+    sudo systemctl start cups.service &> /dev/null
+    sudo systemctl enable cups.service &> /dev/null
 }
 
 yay_install() {
