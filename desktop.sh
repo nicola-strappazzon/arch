@@ -158,13 +158,14 @@ packages() {
         texlive-publishers  `#LaTex`                     \
         qemu-full           `#Virtual Machine emulator`  \
         kicad               `#Electronics Design`        \
-        qimgv               `#Image viever`              \
+        qimgv               `#Image viewer`              \
         thunderbird         `#Email client`              \
+        evince              `#Document viewer`           \
     &> /dev/null
 }
 
 printing() {
-    # echo "--> Install printing system."
+    echo "--> Install printing system."
     # sudo pacman -S --noconfirm --needed \
     #     cups `#Printing system`         \
     # &> /dev/null
