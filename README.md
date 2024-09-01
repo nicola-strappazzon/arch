@@ -29,3 +29,9 @@ lock screen
 
 https://i3-for-unity-users.readthedocs.io/en/stable/07-SuspendLockShutdown/
 https://gist.github.com/rometsch/6b35524bcc123deb7cd30b293f2088d8
+https://faq.i3wm.org/question/5102/i3lock-how-to-enable-auto-lock-after-wake-up-from-suspend-solved.1.html
+
+
+xmenu
+
+https://gideonwolfe.com/posts/workflow/xmenu/

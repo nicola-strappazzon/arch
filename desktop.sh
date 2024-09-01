@@ -1193,6 +1193,7 @@ bindsym $mod+space exec --no-startup-id rofi -config /home/nicola/.config/rofi/c
 bindsym $mod+Shift+p exec --no-startup-id rofi-pass
 bindsym $mod+Shift+plus exec --no-startup-id rofi -config /home/nicola/.config/rofi/config.rasi -show calc -modi calc -no-show-match -no-sort
 bindsym Print exec --no-startup-id flameshot gui
+bindsym $mod+Control+s exec --no-startup-id systemctl suspend
 
 client.focused #373B41 #282A2E #C5C8C6 #AAAAAC
 gaps inner 4
