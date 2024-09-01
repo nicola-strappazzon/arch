@@ -1683,7 +1683,6 @@ StartupNotify=true
 StartupWMClass=subl
 Terminal=false
 Type=Application
-Version=1.0
 
 [Desktop Action new-window]
 Name=New Window
@@ -1709,7 +1708,6 @@ StartupNotify=true
 StartupWMClass=firefox
 Terminal=false
 Type=Application
-Version=1.0
 
 [Desktop Action new-window]
 Name=Open a New Window
@@ -1736,7 +1734,6 @@ Name=File Manager
 StartupNotify=false
 Terminal=false
 Type=Application
-Version=1.0
 
 [Desktop Action open-home]
 Name=Home
@@ -1758,7 +1755,6 @@ Exec=lxappearance
 Icon=preferences-desktop-theme
 Keywords=windows;preferences;settings;theme;style;appearance;
 Name=Look and Feel
-NotShowIn=GNOME;KDE;XFCE;MATE;
 StartupNotify=true
 Type=Application
 EOF
@@ -1773,9 +1769,7 @@ MimeType=application/ogg;application/x-ogg;application/mxf;application/sdp;appli
 Name=Media Player
 StartupWMClass=mpv
 Terminal=false
-TryExec=mpv
 Type=Application
-X-KDE-Protocols=ftp,http,https,mms,rtmp,rtsp,sftp,smb,srt,rist,webdav,webdavs
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/pragha.desktop &> /dev/null
@@ -1787,7 +1781,6 @@ MimeType=application/x-ape;audio/ape;audio/x-ape;audio/x-m4a;video/x-ms-asf;audi
 Name=Music Player
 StartupNotify=true
 Terminal=false
-TryExec=pragha
 Type=Application
 EOF
 
@@ -1801,8 +1794,6 @@ Name=KiCad
 StartupWMClass=kicad
 Terminal=false
 Type=Application
-Version=1.0
-X-Desktop-File-Install-Version=0.22
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/nicotine.desktop &> /dev/null
@@ -1815,9 +1806,6 @@ Name=Nicotine+
 StartupNotify=true
 Terminal=false
 Type=Application
-Version=1.1
-X-GNOME-SingleWindow=true
-X-GNOME-UsesNotifications=true
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/texmaker.desktop &> /dev/null
@@ -1830,7 +1818,6 @@ Name=LaTeX Editor
 StartupNotify=false
 Terminal=false
 Type=Application
-Version=1.1
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/arduino-ide.desktop &> /dev/null
@@ -1856,7 +1843,16 @@ MimeType=video/webm;image/jpeg;image/gif;image/png;image/bmp;image/webp;
 Name=Image Viewer
 Terminal=false
 Type=Application
-Version=1.0
+EOF
+
+    cat << EOF | sudo tee /usr/share/applications/system-config-printer.desktop &> /dev/null
+[Desktop Entry]
+Exec=system-config-printer
+Icon=printer
+Name=Print Settings
+StartupNotify=true
+Terminal=false
+Type=Application
 EOF
 
 }
