@@ -158,6 +158,8 @@ packages() {
         texlive-publishers  `#LaTex`                     \
         qemu-full           `#Virtual Machine emulator`  \
         kicad               `#Electronics Design`        \
+        kicad-library       `#Electronics Design`        \
+        kicad-library-3d    `#Electronics Design`        \
         qimgv               `#Image viewer`              \
         thunderbird         `#Email client`              \
         evince              `#Document viewer`           \
