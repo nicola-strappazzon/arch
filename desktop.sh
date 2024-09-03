@@ -163,6 +163,7 @@ packages() {
         qimgv               `#Image viewer`              \
         thunderbird         `#Email client`              \
         evince              `#Document viewer`           \
+        testdisk            `#Recovery tool`             \
     &> /dev/null
 }
 
