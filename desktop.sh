@@ -368,7 +368,6 @@ aws-instances () {
 }
 
 aws-databases-list () {
-    aws-reload-keys
     aws rds describe-db-instances --query 'DBInstances[].DBInstanceIdentifier[]'
 }
 
@@ -379,7 +378,6 @@ aws-database-describe () {
         return
     fi
 
-    aws-reload-keys
     aws rds describe-db-instances \
         --db-instance-identifier=$1 \
         --output table
