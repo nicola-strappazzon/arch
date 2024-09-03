@@ -132,7 +132,7 @@ launcher() {
 }
 
 packages() {
-    echo "--> Install desktop packages."
+    echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
         cheese              `#Webcam GUI`                \
         evince              `#PDF viewer`                \
