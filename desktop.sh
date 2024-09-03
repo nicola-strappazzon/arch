@@ -164,6 +164,7 @@ packages() {
         thunderbird         `#Email client`              \
         evince              `#Document viewer`           \
         testdisk            `#Recovery tool`             \
+        dosfstools          `#DOS file system & tools`   \
     &> /dev/null
 }
 
