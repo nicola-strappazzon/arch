@@ -106,10 +106,24 @@ desktop() {
 theme() {
     echo "--> Install themes."
     sudo pacman -S --noconfirm --needed \
+        qt5ct \
         lxappearance \
         materia-gtk-theme \
         papirus-icon-theme \
     &> /dev/null
+
+    #adwaita-dark
+    #adwaita-qt5-git
+    # sudo pacman -S materia-kde kvantum-theme-materia
+    # export QT_QPA_PLATFORMTHEME="qt5ct"
+# gsettings get org.gnome.desktop.interface gtk-theme
+#    gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
+#    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+# ~/.config/gtk-3.0/settings.ini
+    # GTK -> GNOME
+    # Qt  -> KDE
+
+    # /etc/environment
 }
 
 display_manager() {
@@ -142,6 +156,7 @@ packages() {
         nemo                `#File manager`              \
         nemo-fileroller     `#File archiver extension`   \
         nemo-preview        `#Previewer extension`       \
+        nitrogen            `#Wallpaper browser`         \
         pragha              `#Audio player`              \
         playerctl           `#Multimedia player control` \
         arduino-ide         `#Arduino IDE`               \
@@ -163,6 +178,7 @@ packages() {
         qimgv               `#Image viewer`              \
         thunderbird         `#Email client`              \
         evince              `#Document viewer`           \
+        qbittorrent         `#Bittorrent client`         \
         testdisk            `#Recovery tool`             \
         dosfstools          `#DOS file system & tools`   \
     &> /dev/null
