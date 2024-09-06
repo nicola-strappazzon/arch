@@ -248,6 +248,7 @@ yay_packages() {
         colorpicker          `#Terminal color picker`        \
         qt-heif-image-plugin `#Image format plugin for HEIF` \
         nulloy               `#Minimal music player`         \
+        freetube             `#YouTube player`               \
     &> /dev/null
 }
 
@@ -1953,6 +1954,42 @@ Name=New Window
 Exec=evince --new-window
 EOF
 
+cat << EOF | sudo tee /usr/share/applications/transmission.desktop &> /dev/null
+[Desktop Entry]
+Name=BitTorrent Client
+Keywords=torrents;downloading;uploading;share;sharing;
+Exec=transmission-gtk %U
+Icon=transmission
+Terminal=false
+TryExec=transmission-gtk
+Type=Application
+StartupNotify=true
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;
+Categories=Network;FileTransfer;P2P;GTK;
+X-Ubuntu-Gettext-Domain=transmission
+X-AppInstall-Keywords=torrent
+Actions=Pause;Minimize;
+
+[Desktop Action Pause]
+Name=Start Transmission with All Torrents Paused
+Exec=transmission-gtk --paused
+
+[Desktop Action Minimize]
+Name=Start Transmission Minimized
+Exec=transmission-gtk --minimized
+EOF
+
+cat << EOF | sudo tee /usr/share/applications/freetube.desktop &> /dev/null
+[Desktop Entry]
+Name=YouTube player
+Exec=freetube %U
+Terminal=false
+Type=Application
+Icon=freetube
+MimeType=x-scheme-handler/freetube;
+Categories=Network;
+StartupWMClass=FreeTube
+EOF
 }
 
 configure_playerctl() {
