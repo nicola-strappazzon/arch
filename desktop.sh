@@ -187,6 +187,7 @@ packages() {
         qimgv               `#Image viewer`              \
         thunderbird         `#Email client`              \
         evince              `#Document viewer`           \
+        guvcview            `#Webcam viewer`             \
         transmission-cli    `#Bittorrent client for CLI` \
         transmission-gtk    `#Bittorrent client for GUI` \
         testdisk            `#Recovery tool`             \
@@ -1990,6 +1991,42 @@ MimeType=x-scheme-handler/freetube;
 Categories=Network;
 StartupWMClass=FreeTube
 EOF
+
+cat << EOF | sudo tee /usr/share/applications/guvcview.desktop &> /dev/null
+[Desktop Entry]
+Name=Webcam viewer
+TryExec=guvcview
+Exec=guvcview
+Icon=@prefix@/share/pixmaps/guvcview/guvcview.png
+Terminal=false
+Type=Application
+Categories=Video;AudioVideo;
+X-GNOME-Gettext-Domain=guvcview
+StartupNotify=true
+EOF
+
+cat << EOF | sudo tee /usr/share/applications/thunderbird.desktop &> /dev/null
+[Desktop Entry]
+Name=e-mail client
+Exec=thunderbird %u
+Terminal=false
+Type=Application
+Icon=org.mozilla.Thunderbird
+Categories=Network;Email;
+MimeType=message/rfc822;x-scheme-handler/mailto;text/calendar;text/vcard;text/x-vcard;x-scheme-handler/webcal;x-scheme-handler/webcals;x-scheme-handler/mid;
+StartupNotify=true
+StartupWMClass=thunderbird
+Actions=ComposeMessage;OpenAddressBook;
+
+[Desktop Action ComposeMessage]
+Name=Write new message
+Exec=thunderbird -compose
+
+[Desktop Action OpenAddressBook]
+Name=Open address book
+Exec=thunderbird -addressbook
+EOF
+
 }
 
 configure_playerctl() {
