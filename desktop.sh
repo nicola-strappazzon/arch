@@ -100,29 +100,38 @@ desktop() {
         dunst   `#Notification daemons` \
         feh     `#Wallpaper tool`       \
         xterm   `#Terminal emulator`    \
+        conky   `#System monitor`       \
     &> /dev/null
 }
 
 theme() {
     echo "--> Install themes."
     sudo pacman -S --noconfirm --needed \
-        qt5ct \
         lxappearance \
-        materia-gtk-theme \
+        arc-gtk-theme \
         papirus-icon-theme \
     &> /dev/null
 
-    #adwaita-dark
-    #adwaita-qt5-git
+
+        # kvantum-theme-materia \
+        # qt5ct \
+        # kvantum-qt5 \
+    # materia-gtk-theme \
+
+    # gnome-tweaks
+    # export GTK_THEME=Arc-Dark
+    # adwaita-dark
+    # adwaita-qt5-git
     # sudo pacman -S materia-kde kvantum-theme-materia
     # export QT_QPA_PLATFORMTHEME="qt5ct"
-# gsettings get org.gnome.desktop.interface gtk-theme
-#    gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita'
-#    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-# ~/.config/gtk-3.0/settings.ini
-    # GTK -> GNOME
-    # Qt  -> KDE
-
+    # gsettings get org.gnome.desktop.interface gtk-theme
+    # gsettings set org.gnome.desktop.interface gtk-theme 'Arc-Dark'
+    # gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    # gtk-application-prefer-dark-theme = true
+    # ~/.config/gtk-3.0/settings.ini
+    # GTK (lxappearance) -> GNOME transmission, nicotine, 
+    # Qt  (qt5ct)        -> KDE
+    # kvantummanager
     # /etc/environment
 }
 
@@ -178,7 +187,8 @@ packages() {
         qimgv               `#Image viewer`              \
         thunderbird         `#Email client`              \
         evince              `#Document viewer`           \
-        qbittorrent         `#Bittorrent client`         \
+        transmission-cli    `#Bittorrent client for CLI` \
+        transmission-gtk    `#Bittorrent client for GUI` \
         testdisk            `#Recovery tool`             \
         dosfstools          `#DOS file system & tools`   \
     &> /dev/null
@@ -274,21 +284,67 @@ EOF
 configure_gtk() {
     echo "--> Configure GTK."
 
+    mkdir -p .config/gtk-3.0/
+    mkdir -p .config/gtk-4.0/
+
     cat > /home/nicola/.gtkrc-2.0 << 'EOF'
-gtk-theme-name="Materia-dark"
-gtk-icon-theme-name="Adwaita"
+gtk-theme-name="Arc-Dark"
+gtk-icon-theme-name="Papirus-Dark"
 gtk-font-name="Terminus 10"
-gtk-cursor-theme-name="Adwaita"
 gtk-cursor-theme-size=0
 gtk-toolbar-style=GTK_TOOLBAR_BOTH
 gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
 gtk-button-images=1
 gtk-menu-images=1
-gtk-enable-event-sounds=1
-gtk-enable-input-feedback-sounds=1
+gtk-enable-event-sounds=0
+gtk-enable-input-feedback-sounds=0
 gtk-xft-antialias=1
 gtk-xft-hinting=1
 gtk-xft-hintstyle="hintfull"
+EOF
+
+    cat > /home/nicola/.config/gtk-3.0/settings.ini << 'EOF'
+[Settings]
+gtk-theme-name=Arc-Dark
+gtk-icon-theme-name=Papirus-Dark
+gtk-font-name=Terminus 10
+gtk-cursor-theme-size=0
+gtk-toolbar-style=GTK_TOOLBAR_BOTH
+gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images=1
+gtk-menu-images=1
+gtk-enable-event-sounds=0
+gtk-enable-input-feedback-sounds=0
+gtk-xft-antialias=1
+gtk-xft-hinting=1
+gtk-xft-hintstyle=hintfull
+EOF
+
+    cat > /home/nicola/.config/gtk-4.0/settings.ini << 'EOF'
+[Settings]
+gtk-theme-name=Arc-Dark
+gtk-icon-theme-name=Papirus-Dark
+gtk-font-name=Terminus 10
+gtk-cursor-theme-size=0
+gtk-toolbar-style=GTK_TOOLBAR_BOTH
+gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images=1
+gtk-menu-images=1
+gtk-enable-event-sounds=0
+gtk-enable-input-feedback-sounds=0
+gtk-xft-antialias=1
+gtk-xft-hinting=1
+gtk-xft-hintstyle=hintfull
+EOF
+
+    cat > /home/nicola/.config/gtk-4.0/gtk.css << 'EOF'
+popover contents {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow: none;
+}
 EOF
 }
 
@@ -538,6 +594,11 @@ jq-help() {
 
 backup-usb() {
     rsync -CPavzt ~/ /run/media/nicola/BACKUP/
+}
+
+backup-synology() {
+    /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Music/ nicola@192.168.1.100:/var/services/homes/nicola/music/
+    /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Pictures/ nicola@192.168.1.100:/var/services/homes/nicola/Photos/
 }
 
 backup-icloud() {
