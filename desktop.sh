@@ -184,7 +184,7 @@ packages() {
         kicad               `#Electronics Design`        \
         kicad-library       `#Electronics Design`        \
         kicad-library-3d    `#Electronics Design`        \
-        qimgv               `#Image viewer`              \
+        gthumb              `#Image viewer`              \
         thunderbird         `#Email client`              \
         evince              `#Document viewer`           \
         guvcview            `#Webcam viewer`             \
@@ -1914,12 +1914,12 @@ Terminal=false
 Type=Application
 EOF
 
-    cat << EOF | sudo tee /usr/share/applications/qimgv.desktop &> /dev/null
+    cat << EOF | sudo tee /usr/share/applications/gthumb.desktop &> /dev/null
 [Desktop Entry]
 Categories=Qt;Graphics;Viewer;
-Exec=qimgv %f
-Icon=qimgv
-Keywords=image;view;qimgv;picture;gif;jpeg;webm;
+Exec=gthumb %f
+Icon=gthumb
+Keywords=image;view;gthumb;picture;gif;jpeg;webm;
 MimeType=video/webm;image/jpeg;image/gif;image/png;image/bmp;image/webp;
 Name=Image Viewer
 Terminal=false
