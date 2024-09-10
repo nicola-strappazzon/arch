@@ -599,7 +599,7 @@ backup-usb() {
 }
 
 backup-synology() {
-    /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Music/ nicola@192.168.1.100:/var/services/homes/nicola/music/
+    /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Music/ nicola@192.168.1.100:/volume1/music/
     /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Pictures/ nicola@192.168.1.100:/var/services/homes/nicola/Photos/
 }
 
@@ -1309,6 +1309,7 @@ for_window [window_role="page-info"]   floating enable, move position center
 for_window [window_role="webconsole"]  floating enable, move position center
 for_window [title="Open File"]         floating enable, move position center
 for_window [title="gpg2*"]             floating enable, move position center, resize set 600 200
+for_window [title="Extract*"]          floating enable, move position center, resize set 400 200
 
 EOF
 
