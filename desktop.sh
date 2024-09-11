@@ -251,6 +251,8 @@ yay_packages() {
         nulloy               `#Minimal music player`         \
         freetube             `#YouTube player`               \
     &> /dev/null
+
+    # portmaster-stub-bin  `#Firewall`
 }
 
 docker_install() {
