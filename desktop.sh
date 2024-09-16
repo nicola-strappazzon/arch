@@ -192,6 +192,13 @@ packages() {
         transmission-gtk    `#Bittorrent client for GUI` \
         testdisk            `#Recovery tool`             \
         dosfstools          `#DOS file system & tools`   \
+        avr-gcc \
+        avr-binutils \
+        avr-libc \
+        avr-gdb \
+        avrdude \
+        libusb \
+        dfu-programmer \
     &> /dev/null
 }
 
