@@ -3,19 +3,33 @@
 ## Pacman
 
 Install packages
+
+```bash
 user $ sudo pacman -Syu [PackageName]
+```
 
 Uninstall packages
+
+```bash
 user $ sudo pacman -Rns [PackageName]
+```
 
 Search for a package
+
+```bash
 user $ pacman -Ss [PackageName]
+```
 
 Update installed packages
-user $ sudo pacman -Syu
 
+```bash
+user $ sudo pacman -Syu
+```
 Check for updates
+
+```bash
 user $ sudo pacman -Syu 
+```
 
 ## Maintenance
 
