@@ -5,30 +5,30 @@
 Install packages
 
 ```bash
-user $ sudo pacman -Syu [PackageName]
+$ sudo pacman -Syu [PackageName]
 ```
 
 Uninstall packages
 
 ```bash
-user $ sudo pacman -Rns [PackageName]
+$ sudo pacman -Rns [PackageName]
 ```
 
 Search for a package
 
 ```bash
-user $ pacman -Ss [PackageName]
+$ pacman -Ss [PackageName]
 ```
 
 Update installed packages
 
 ```bash
-user $ sudo pacman -Syu
+$ sudo pacman -Syu
 ```
 Check for updates
 
 ```bash
-user $ sudo pacman -Syu 
+$ sudo pacman -Syu 
 ```
 
 ## Maintenance
