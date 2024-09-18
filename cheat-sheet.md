@@ -20,6 +20,12 @@ Search for a package
 pacman -Ss [PackageName]
 ```
 
+Query package info
+
+```bash
+pacman -F [PackageName]
+```
+
 Update installed packages
 
 ```bash
@@ -29,6 +35,12 @@ Check for updates
 
 ```bash
 sudo pacman -Syu 
+```
+
+Clean cache
+
+```bash
+pacman -Scc
 ```
 
 ## Maintenance
