@@ -23,7 +23,7 @@ pacman -Ss [PackageName]
 Query package info
 
 ```bash
-pacman -F [PackageName]
+sudo pacman -Fy [PackageName]
 ```
 
 Update installed packages
@@ -40,7 +40,7 @@ sudo pacman -Syu
 Clean cache
 
 ```bash
-pacman -Scc
+sudo pacman -Scc
 ```
 
 ## Maintenance
