@@ -168,7 +168,7 @@ packages() {
         nitrogen            `#Wallpaper browser`         \
         pragha              `#Audio player`              \
         playerctl           `#Multimedia player control` \
-        arduino-ide         `#Arduino IDE`               \
+        arduino-cli         `#Arduino CLI`               \
         nicotine+           `#Music sharing client`      \
         texmaker            `#LaTex editor`              \
         texlive-latexextra  `#LaTex`                     \
@@ -1908,19 +1908,6 @@ Icon=texmaker
 MimeType=text/x-tex;
 Name=LaTeX Editor
 StartupNotify=false
-Terminal=false
-Type=Application
-EOF
-
-    cat << EOF | sudo tee /usr/share/applications/arduino-ide.desktop &> /dev/null
-[Desktop Entry]
-Categories=Development;IDE;Electronics;
-Exec=arduino-ide %U
-Icon=arduino-ide
-Keywords=embedded electronics;avr;microcontroller;
-MimeType=text/x-arduino;
-Name=Arduino IDE v2
-StartupWMClass=Arduino IDE
 Terminal=false
 Type=Application
 EOF
