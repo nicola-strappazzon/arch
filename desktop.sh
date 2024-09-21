@@ -162,9 +162,7 @@ packages() {
         firefox             `#WEB browser`               \
         flameshot           `#Screenshot`                \
         mpv                 `#Video player`              \
-        nemo                `#File manager`              \
-        nemo-fileroller     `#File archiver extension`   \
-        nemo-preview        `#Previewer extension`       \
+        thunar              `#File manager`              \
         nitrogen            `#Wallpaper browser`         \
         pragha              `#Audio player`              \
         playerctl           `#Multimedia player control` \
@@ -1814,30 +1812,30 @@ Name=Open the Profile Manager
 Exec=/usr/lib/firefox/firefox --ProfileManager
 EOF
 
-    cat << EOF | sudo tee /usr/share/applications/nemo.desktop &> /dev/null
+    cat << EOF | sudo tee /usr/share/applications/thunar.desktop &> /dev/null
 [Desktop Entry]
 Actions=open-home;open-computer;open-trash;
-Categories=GNOME;GTK;Utility;Core;
-Exec=nemo %U
-Icon=system-file-manager
-Keywords=folders;filesystem;explorer;
-MimeType=inode/directory;application/x-gnome-saved-search;
+Categories=System;Core;GTK;FileTools;FileManager;
+Exec=thunar %U
+Icon=org.xfce.thunar
+Keywords=file manager;explorer;finder;browser;folders;directory;directories;partitions;drives;network;devices;rename;move;copy;delete;permissions;home;trash;
+MimeType=inode/directory;
 Name=File Manager
-StartupNotify=false
+StartupNotify=true
 Terminal=false
 Type=Application
 
 [Desktop Action open-home]
 Name=Home
-Exec=nemo %U
+Exec=thunar %U
 
 [Desktop Action open-computer]
 Name=Computer
-Exec=nemo computer:///
+Exec=thunar computer:///
 
 [Desktop Action open-trash]
 Name=Trash
-Exec=nemo trash:///
+Exec=thunar trash:///
 EOF
 
     cat << EOF | sudo tee /usr/share/applications/lxappearance.desktop &> /dev/null
