@@ -157,40 +157,41 @@ launcher() {
 packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
-        cheese                `#Webcam GUI`                \
-        evince                `#PDF viewer`                \
-        firefox               `#WEB browser`               \
-        flameshot             `#Screenshot`                \
-        mpv                   `#Video player`              \
-        thunar                `#File manager`              \
-        thunar-archive-plugin `#File manager archive tool` \
-        nitrogen              `#Wallpaper browser`         \
-        pragha                `#Audio player`              \
-        playerctl             `#Multimedia player control` \
-        arduino-cli           `#Arduino CLI`               \
-        nicotine+             `#Music sharing client`      \
-        texmaker              `#LaTex editor`              \
-        texlive-latexextra    `#LaTex`                     \
-        texlive-fontsextra    `#LaTex`                     \
-        texlive-bibtexextra   `#LaTex`                     \
-        texlive-humanities    `#LaTex`                     \
-        texlive-langspanish   `#LaTex`                     \
-        texlive-latexextra    `#LaTex`                     \
-        texlive-mathscience   `#LaTex`                     \
-        texlive-pictures      `#LaTex`                     \
-        texlive-publishers    `#LaTex`                     \
-        qemu-full             `#Virtual Machine emulator`  \
-        kicad                 `#Electronics Design`        \
-        kicad-library         `#Electronics Design`        \
-        kicad-library-3d      `#Electronics Design`        \
-        gthumb                `#Image viewer`              \
-        thunderbird           `#Email client`              \
-        evince                `#Document viewer`           \
-        guvcview              `#Webcam viewer`             \
-        transmission-cli      `#Bittorrent client for CLI` \
-        transmission-gtk      `#Bittorrent client for GUI` \
-        testdisk              `#Recovery tool`             \
-        dosfstools            `#DOS file system & tools`   \
+        cheese                `#Webcam GUI`                  \
+        evince                `#PDF viewer`                  \
+        firefox               `#WEB browser`                 \
+        flameshot             `#Screenshot`                  \
+        mpv                   `#Video player`                \
+        thunar                `#File manager`                \
+        thunar-archive-plugin `#File manager archive tool`   \
+        xarchiver             `#Command line archivers tools`\
+        nitrogen              `#Wallpaper browser`           \
+        pragha                `#Audio player`                \
+        playerctl             `#Multimedia player control`   \
+        arduino-cli           `#Arduino CLI`                 \
+        nicotine+             `#Music sharing client`        \
+        texmaker              `#LaTex editor`                \
+        texlive-latexextra    `#LaTex`                       \
+        texlive-fontsextra    `#LaTex`                       \
+        texlive-bibtexextra   `#LaTex`                       \
+        texlive-humanities    `#LaTex`                       \
+        texlive-langspanish   `#LaTex`                       \
+        texlive-latexextra    `#LaTex`                       \
+        texlive-mathscience   `#LaTex`                       \
+        texlive-pictures      `#LaTex`                       \
+        texlive-publishers    `#LaTex`                       \
+        qemu-full             `#Virtual Machine emulator`    \
+        kicad                 `#Electronics Design`          \
+        kicad-library         `#Electronics Design`          \
+        kicad-library-3d      `#Electronics Design`          \
+        gthumb                `#Image viewer`                \
+        thunderbird           `#Email client`                \
+        evince                `#Document viewer`             \
+        guvcview              `#Webcam viewer`               \
+        transmission-cli      `#Bittorrent client for CLI`   \
+        transmission-gtk      `#Bittorrent client for GUI`   \
+        testdisk              `#Recovery tool`               \
+        dosfstools            `#DOS file system & tools`     \
         avr-gcc \
         avr-binutils \
         avr-libc \
