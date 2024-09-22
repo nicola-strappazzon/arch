@@ -2,42 +2,42 @@
 
 ## Pacman
 
-Install packages
+Install packages:
 
 ```bash
 sudo pacman -Syu [PackageName]
 ```
 
-Uninstall packages
+Uninstall packages:
 
 ```bash
 sudo pacman -Rns [PackageName]
 ```
 
-Search for a package
+Search for a package:
 
 ```bash
 pacman -Ss [PackageName]
 ```
 
-Query package info
+Query package info:
 
 ```bash
 sudo pacman -Fy [PackageName]
 ```
 
-Update installed packages
+Update installed packages:
 
 ```bash
 sudo pacman -Syu
 ```
-Check for updates
+Check for updates:
 
 ```bash
 sudo pacman -Syu 
 ```
 
-Clean cache
+Clean cache:
 
 ```bash
 sudo pacman -Scc
@@ -46,30 +46,53 @@ sudo pacman -Scc
 ## Maintenance
 
 Generates a random mirrorlist for the users and sort them by their current access time.
-user $ sudo pacman-mirrors --fasttrack
 
-Generate cache list
-user $ du -sh ~/.cache/*
+```bash
+sudo pacman-mirrors --fasttrack
+```
 
-Purge files not accessed in 100 days
-user $ find ~/.cache/ -type f -atime +100 -delete
+Generate cache list:
 
-Report journal current size
-user $ journalctl --disk-usage
+```bash
+du -sh ~/.cache/*
+```
 
-Remove but recent entries by size or time
-user $ journalctl --vacuum-size=50M
+Purge files not accessed in 100 days:
 
-user $ journalctl --vacuum-time=2weeks
+```bash
+find ~/.cache/ -type f -atime +100 -delete
+```
 
-Check for orphaned packages
-user $ pamac list -o
+Report journal current size:
 
-Remove all orphans
-user $ pamac remove -o
+```bash
+journalctl --disk-usage
+```
 
-Remove all packages except the latest 3 versions
-user $ pamac clean --keep 3
+Remove but recent entries by size or time:
+
+```bash
+journalctl --vacuum-size=50M
+journalctl --vacuum-time=2weeks
+```
+
+Check for orphaned packages:
+
+```bash
+pamac list -o
+```
+
+Remove all orphans:
+
+```bash
+pamac remove -o
+```
+
+Remove all packages except the latest 3 versions:
+
+```bash
+pamac clean --keep 3
+```
 
 ## AUR
 
