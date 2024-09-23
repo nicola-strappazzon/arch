@@ -164,7 +164,9 @@ packages() {
         mpv                   `#Video player`                \
         thunar                `#File manager`                \
         thunar-archive-plugin `#File manager archive tool`   \
-        xarchiver             `#Command line archivers tools`\
+        tumbler               `#Thumbnails`                  \
+        xarchiver             `#Archivers tools`             \
+        ffmpegthumbnailer     `#Lightweight thumbnailer`     \
         nitrogen              `#Wallpaper browser`           \
         pragha                `#Audio player`                \
         playerctl             `#Multimedia player control`   \
