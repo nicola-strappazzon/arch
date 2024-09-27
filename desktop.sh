@@ -259,6 +259,7 @@ yay_packages() {
         qt-heif-image-plugin `#Image format plugin for HEIF` \
         nulloy               `#Minimal music player`         \
         freetube             `#YouTube player`               \
+        thonny               `#Python IDE for beginners`     \
     &> /dev/null
 
     # portmaster-stub-bin  `#Firewall`
