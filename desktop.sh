@@ -1372,6 +1372,7 @@ configure_udev() {
 SUBSYSTEMS="usb", ATTRS{product}== "Arduino Uno", GROUP="users", MODE="0666"
 SUBSYSTEMS="usb", ATTRS{product}== "FT232R USB UART", GROUP="users", MODE="0666"
 SUBSYSTEMS="usb", ATTRS{product}== "USBtiny", GROUP="users", MODE="0666"
+SUBSYSTEMS="usb", ATTRS{product}== "QinHeng Electronics CH340 serial converter", GROUP="users", MODE="0666"
 EOF
 
     sudo udevadm trigger
