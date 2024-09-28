@@ -28,6 +28,7 @@ main() {
     configure_polybar
     configure_notification
     configure_xterm
+    configure_udev
     configure_rofi
     configure_screenshot
     configure_feh
@@ -1360,6 +1361,15 @@ XTerm*selectToClipboard: true
 XTerm*vt100*geometry: 88x24
 xterm*eightBitInput: false
 xterm*faceSize: 10
+EOF
+}
+
+
+configure_udev() {
+    cat << EOF | sudo tee /etc/udev/rules.d/50-embedded_devices.rules &> /dev/null
+SUBSYSTEMS="usb", ATTRS{product}== "Arduino Uno", GROUP="users", MODE="0666"
+SUBSYSTEMS="usb", ATTRS{product}== "FT232R USB UART", GROUP="users", MODE="0666"
+SUBSYSTEMS="usb", ATTRS{product}== "USBtiny", GROUP="users", MODE="0666"
 EOF
 }
 
