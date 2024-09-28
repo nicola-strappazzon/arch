@@ -1366,11 +1366,15 @@ EOF
 
 
 configure_udev() {
+    echo "--> Configure udev rules."
+
     cat << EOF | sudo tee /etc/udev/rules.d/50-embedded_devices.rules &> /dev/null
 SUBSYSTEMS="usb", ATTRS{product}== "Arduino Uno", GROUP="users", MODE="0666"
 SUBSYSTEMS="usb", ATTRS{product}== "FT232R USB UART", GROUP="users", MODE="0666"
 SUBSYSTEMS="usb", ATTRS{product}== "USBtiny", GROUP="users", MODE="0666"
 EOF
+
+    sudo udevadm trigger
 }
 
 configure_polybar() {
