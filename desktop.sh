@@ -260,6 +260,7 @@ yay_packages() {
         qt-heif-image-plugin `#Image format plugin for HEIF` \
         nulloy               `#Minimal music player`         \
         freetube             `#YouTube player`               \
+        tio                  `#Serial client`                \
     &> /dev/null
 
     # portmaster-stub-bin  `#Firewall`
@@ -1369,12 +1370,14 @@ configure_udev() {
     echo "--> Configure udev rules."
 
     cat << EOF | sudo tee /etc/udev/rules.d/50-embedded_devices.rules &> /dev/null
-SUBSYSTEMS="usb", ATTRS{product}== "Arduino Uno", GROUP="users", MODE="0666"
-SUBSYSTEMS="usb", ATTRS{product}== "FT232R USB UART", GROUP="users", MODE="0666"
-SUBSYSTEMS="usb", ATTRS{product}== "USBtiny", GROUP="users", MODE="0666"
-SUBSYSTEMS="usb", ATTRS{product}== "QinHeng Electronics CH340 serial converter", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "Arduino Uno", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "FT232R USB UART", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "USBtiny", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "USBtinyISP", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "QinHeng Electronics CH340 serial converter", GROUP="users", MODE="0666"
 EOF
 
+    sudo udevadm control --reload
     sudo udevadm trigger
 }
 
