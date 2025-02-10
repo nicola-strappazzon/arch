@@ -38,3 +38,5 @@ packages() {
         elisa \
     &> /dev/null
 }
+
+main "$@"
