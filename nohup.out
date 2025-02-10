@@ -1,8 +1,0 @@
-
-(nemo:107052): Nemo-WARNING **: 14:50:41.258: Current gtk theme is not known to have nemo support (Materia-dark) - checking...
-
-(nemo:107052): Nemo-WARNING **: 14:50:41.355: Action '90_new-launcher.nemo_action' is missing dependency: cinnamon-desktop-editor
-
-(nemo:107622): Nemo-WARNING **: 14:51:59.038: Current gtk theme is not known to have nemo support (Materia-dark) - checking...
-
-(nemo:107622): Nemo-WARNING **: 14:51:59.131: Action '90_new-launcher.nemo_action' is missing dependency: cinnamon-desktop-editor
