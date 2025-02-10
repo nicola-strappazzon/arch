@@ -383,9 +383,12 @@ configure_git() {
     echo "--> Configure git."
 
     git config --global init.defaultBranch main
+	git config --global commit.gpgsign true
+	git config --global tag.gpgSign true
     git config --global pull.rebase true
     git config --global user.email nicola@strappazzon.me
     git config --global user.name "Nicola Strappazzon."
+	git config --global user.signingkey 9186C4129FFD3D2500B35FA18E97CAEEEE861364
 }
 
 configure_udev() {
