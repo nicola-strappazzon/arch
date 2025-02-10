@@ -10,8 +10,6 @@ bash < <(curl -sL strappazzon.me/arch)
 bash < <(curl -sL strappazzon.me/arch) -s arg1 arg2
 ```
 
-
-
 ## Local
 
 ```bash
