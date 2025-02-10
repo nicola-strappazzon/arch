@@ -5,6 +5,7 @@ main() {
     update
     ntp
     desktop
+    packages
 }
 
 update() {
@@ -26,4 +27,14 @@ desktop() {
     &> /dev/null
 
     sudo systemctl enable sddm.service &> /dev/null
+}
+
+packages() {
+    echo "--> Install packages."
+    sudo pacman -S --noconfirm --needed \
+        alacritty \
+        firefox \
+        thunderbird \
+        elisa \
+    &> /dev/null
 }
