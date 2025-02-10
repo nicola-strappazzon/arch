@@ -24,6 +24,7 @@ main() {
     configure_grub
     packages
     services
+    drivers
     finish
 }
 
@@ -220,6 +221,11 @@ configure_grub() {
 packages() {
     echo "--> Install aditional packages."
     PACKAGES=(
+        avr-binutils
+        avr-gcc
+        avr-gdb
+        avr-libc
+        avrdude
         aws-cli
         base
         base-devel
@@ -228,12 +234,15 @@ packages() {
         btop
         ca-certificates
         curl
+        dfu-programmer
+        dosfstools
         fzf
         git
         go
         htop
         jq
         less
+        libusb
         links
         minicom
         neofetch
@@ -243,6 +252,7 @@ packages() {
         pass-otp
         percona-server-clients
         rsync
+        testdisk
         tmux
         traceroute
         unrar
@@ -264,6 +274,18 @@ services() {
 
     arch-chroot /mnt systemctl enable NetworkManager
     arch-chroot /mnt systemctl start NetworkManager
+}
+
+drivers() {
+    echo "--> Install drivers."
+    sudo pacman -S --noconfirm --needed \
+        alsa-firmware \
+        alsa-utils \
+        amd-ucode \
+        pulseaudio \
+        pulseaudio-alsa \
+        ddcutil \
+    &> /dev/null
 }
 
 finish(){
