@@ -292,7 +292,7 @@ finish(){
     echo "--> Unmount all partitions and reboot."
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
-    # reboot
+    reboot
 }
 
 main "$@"
