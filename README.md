@@ -25,7 +25,7 @@ picom para mejorar aspectos visuales, redondear esquinas, fondo transparente.
 https://ntk148v.github.io/posts/getting-started-tiling-wm-part-6-i3-rounded-corners/
 
 
-polybar
+-> polybar
 -> yay -Qu
 -> music
 
