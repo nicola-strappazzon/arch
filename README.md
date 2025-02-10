@@ -41,3 +41,4 @@ https://gideonwolfe.com/posts/workflow/xmenu/
 
 hacer script de uso comun del i3 para playerctl y moc.
 y esos pueden estar aqui /usr/local/bin/
+
