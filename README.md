@@ -1,18 +1,14 @@
 # My Arch Linux setup
 
-Esta distribución personal basada en Arch Linux está adaptado para un ordenador con las siguientes características:
+Esta distribución personal basada en Arch Linux está adaptado para un ordenador que tiene la placa base `B550I Aorus Pro AX`.
 
-- Placa base: B550I Aorus Pro AX
-- Procesador: AMD Ryzen 7 5700G
-- Volumen: 1TB
-- Memoria: 32Gib de RAM
+> [!Warning]
+> Los siguientes pasos borrará todo el disco para instalar la base del sistema operativo, asegúrese de tener un respaldo fuera del ordenador y revisar que no falte nada antes de continuar.
+> El autor de estos scripts no se hace responsable de cualquier inconveniente.
 
 ## Install
 
 Ejecute los siguientes comandos desde Arch Linux USB:
-
-> [!Warning]
-> El siguiente paso borrará todo el disco para instalar la base del sistema operativo, asegúrese de tener un respaldo fuera del ordenador y revisar que no falte nada antes de continuar.
 
 ```bash
 pacman -Sy curl
