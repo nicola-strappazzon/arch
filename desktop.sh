@@ -96,6 +96,7 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
+        aws-cli-v2     `#AWS CLI`        \
         ivpn-ui        `#VPN Client`     \
         freetube       `#YouTube player` \
         tio            `#Serial client`  \

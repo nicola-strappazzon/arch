@@ -226,7 +226,6 @@ packages() {
         avr-gdb
         avr-libc
         avrdude
-        aws-cli
         base
         base-devel
         bash-completion
