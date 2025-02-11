@@ -4,6 +4,7 @@
 main() {
     configure_profile
     configure_git
+    configure_gpg
     configure_udev
 }
 
@@ -256,6 +257,11 @@ raspberri-pi-find() {
 }
 EOF
 
+    cat > $HOME/.bashrc.d/env/gpg.sh << 'EOF'
+export GPG_TTY=$(tty)
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+EOF
+
     cat > $HOME/.bashrc.d/functions/k8.sh << 'EOF'
 k8 () {
     if [ -z "$K8_NAMESPACE" ]; then
@@ -385,12 +391,21 @@ configure_git() {
     echo "--> Configure git."
 
     git config --global init.defaultBranch main
-	git config --global commit.gpgsign true
-	git config --global tag.gpgSign true
+    git config --global commit.gpgsign true
+    git config --global tag.gpgSign true
     git config --global pull.rebase true
     git config --global user.email nicola@strappazzon.me
     git config --global user.name "Nicola Strappazzon."
-	git config --global user.signingkey 9186C4129FFD3D2500B35FA18E97CAEEEE861364
+    git config --global user.signingkey 9186C4129FFD3D2500B35FA18E97CAEEEE861364
+}
+
+configure_gpg() {
+    echo "--> Configure GPG."
+
+    echo "DA0D2EC084DA5974997B8F5D3BAB49A94D82E715" > ~/.gnupg/sshcontrol
+    export GPG_TTY=$(tty)
+    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+    gpgconf --launch gpg-agent
 }
 
 configure_udev() {

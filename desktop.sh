@@ -10,6 +10,7 @@ main() {
     yay_packages
     printing
     docker
+    finish
 }
 
 update() {
@@ -92,10 +93,11 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        ivpn         `#VPN Client`     \
-        freetube     `#YouTube player` \
-        tio          `#Serial client`  \
-        vscodium-bin `#VS Code`        \
+        ivpn          `#VPN Client`     \
+        freetube      `#YouTube player` \
+        tio           `#Serial client`  \
+        vscodium-bin  `#VS Code`        \
+        slack-desktop `#Slack`          \
     &> /dev/null
 }
 
@@ -119,6 +121,11 @@ docker() {
         sudo newgrp docker &> /dev/null
         sudo usermod -aG docker $USER &> /dev/null
     fi
+}
+
+finish(){
+    echo "--> Optional, please type: reboot"
+    echo "    To use KDE only if out of desktop environment."
 }
 
 main "$@"
