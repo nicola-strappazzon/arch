@@ -53,6 +53,7 @@ packages() {
         partitionmanager \
         spectacle \
         thunderbird \
+        wl-clipboard \
     &> /dev/null
 }
 
