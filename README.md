@@ -1,27 +1,27 @@
 # My Arch Linux setup
 
-El repositorio contiene una distribución personal basada en Arch Linux y está adaptado para un ordenador que tiene la placa base `Gigabyte B550I Aorus Pro AX`.
+The repository contains a personal distribution based on Arch Linux and is adapted for a computer with the `Gigabyte B550I Aorus Pro AX` motherboard.
 
 > [!Warning]
-> - Los siguientes pasos borrará todo el disco para instalar la base del sistema operativo, asegúrese de tener un respaldo fuera del ordenador y revisar que no falte nada antes de continuar.
-> - El autor de estos scripts no se hace responsable de cualquier inconveniente.
+> - The following steps will erase the entire disk to install the base operating system. Make sure to have a backup outside the computer and check that nothing is missing before proceeding.
+> - The author of these scripts is not responsible for any inconveniences.
 
 ## Install
 
-Ejecute los siguientes comandos desde Arch Linux USB:
+Prepare a USB flash drive with an Arch Linux image. During the computer's boot process, select the USB as the boot device (F12). Once Arch Linux Live has started, enter the following commands:
 
 ```bash
 pacman -Sy curl
 curl -sfL strappazzon.me/arch | sh -s -- install
 ```
 
-Cuando esté completado el paso anterior sin errores y haya reiniciado el ordenador, ejecute el siguiente comando para instalar KDE Plasma 6.x con todas las aplicaciones:
+Once the previous step is completed without errors and you have restarted the computer, run the following command to install KDE Plasma 6.x with all applications:
 
 ```bash
 curl -sfL strappazzon.me/arch | sh -s -- desktop
 ```
 
-Por último, queda configurar el entorno de trabajo:
+Finally, the work environment needs to be configured:
 
 ```bash
 curl -sfL strappazzon.me/arch | sh -s -- profile
