@@ -94,7 +94,7 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        ivpn           `#VPN Client`     \
+        ivpn-ui        `#VPN Client`     \
         freetube       `#YouTube player` \
         tio            `#Serial client`  \
         vscodium-bin   `#VS Code`        \
@@ -117,10 +117,9 @@ printing() {
 docker() {
     echo "--> Install docker."
     if ! type "docker" > /dev/null; then
-        sudo pacman -S docker --noconfirm --needed &> /dev/null
+        sudo pacman -S docker docker-compose --noconfirm --needed &> /dev/null
         sudo systemctl start docker.service &> /dev/null
         sudo systemctl enable docker.service &> /dev/null
-        sudo newgrp docker &> /dev/null
         sudo usermod -aG docker $USER &> /dev/null
     fi
 }
