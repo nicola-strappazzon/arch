@@ -26,6 +26,7 @@ main() {
 banner() {
     reset
     clear
+    echo "                                                                                                                                                          "
     echo "                                                                                                                                       ##                 "
     echo "                                                                                                                                      ####                "
     echo "                                                                                                                                     ######               "
@@ -92,7 +93,7 @@ run_remote_script() {
         echo ""
         curl -s -f -L "${URI}" | sh
     else
-        echo "Usage:"
+        echo " Usage:"
         echo ""
         echo "  curl -sfL strappazzon.me/arch | sh -s -- install"
         echo ""
