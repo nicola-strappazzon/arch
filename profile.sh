@@ -2,7 +2,9 @@
 # set -eu
 
 main() {
-
+    configure_profile
+    configure_git
+    configure_udev
 }
 
 configure_profile() {
