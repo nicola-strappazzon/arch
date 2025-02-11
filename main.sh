@@ -14,7 +14,7 @@ main() {
     check_valid_platform
     check_valid_platform_architecture
     check_valid_distribution
-    check_exist_curl_or_wget
+    check_exist_curl
     banner
 
     if [ "$#" -eq 1 ]; then
@@ -73,17 +73,9 @@ check_valid_platform_architecture() {
     esac
 }
 
-check_exist_curl_or_wget(){
-    if which curl >/dev/null 2>&1; then
-        curl () {
-            command curl -sfL "$@"
-        }
-    elif which wget >/dev/null 2>&1; then
-        curl () {
-        wget -O- "$@"
-        }
-    else
-        echo "Could not find; 'curl' or 'wget'"
+check_exist_curl(){
+    if ! command -v curl 2>&1 >/dev/null; then
+        echo "Could not find 'curl', please install: pacman -Sy curl"
         exit 1
     fi
 }
