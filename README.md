@@ -12,7 +12,7 @@ Prepare a USB flash drive with an Arch Linux image. During the computer's boot p
 
 ```bash
 pacman -Sy curl
-curl -sfL strappazzon.me/arch | sh -s -- install
+curl -sfL strappazzon.me/arch | sh -s -- base
 ```
 
 Once the previous step is completed without errors and you have restarted the computer, run the following command to install KDE Plasma 6.x with all applications:

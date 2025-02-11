@@ -95,7 +95,9 @@ run_remote_script() {
     else
         echo " Usage:"
         echo ""
-        echo "  curl -sfL strappazzon.me/arch | sh -s -- install"
+        echo "  curl -sfL strappazzon.me/arch | sh -s -- base"
+        echo "  curl -sfL strappazzon.me/arch | sh -s -- desktop"
+        echo "  curl -sfL strappazzon.me/arch | sh -s -- profile"
         echo ""
     fi
 }
