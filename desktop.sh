@@ -43,6 +43,8 @@ packages() {
         elisa \
         firefox \
         gwenview \
+        hunspell-en_us \
+        hunspell-es_es \
         kate \
         kcalc \
         kcolorchooser \
