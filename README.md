@@ -1,6 +1,6 @@
 # My Arch Linux setup
 
-Esta distribución personal basada en Arch Linux está adaptada para las siguientes características:
+Esta distribución personal basada en Arch Linux está adaptado para un ordenador con las siguientes características:
 
 - Placa base: B550I Aorus Pro AX
 - Procesador: AMD Ryzen 7 5700G
