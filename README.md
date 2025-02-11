@@ -1,6 +1,6 @@
 # My Arch Linux setup
 
-The repository contains a personal distribution based on Arch Linux and is adapted for a computer with the `Gigabyte B550I Aorus Pro AX` motherboard.
+The repository contains a personal distribution based on Arch Linux with KDE Plasma and is adapted for a computer with the `Gigabyte B550I Aorus Pro AX` motherboard.
 
 > [!Warning]
 > - The following steps will erase the entire disk to install the base operating system. Make sure to have a backup outside the computer and check that nothing is missing before proceeding.
