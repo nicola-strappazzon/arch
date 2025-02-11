@@ -1,6 +1,6 @@
 # My Arch Linux setup
 
-Esta distribución personal basada en Arch Linux está adaptado para un ordenador que tiene la placa base `B550I Aorus Pro AX`.
+El repositorio contiene una distribución personal basada en Arch Linux y está adaptado para un ordenador que tiene la placa base `Gigabyte B550I Aorus Pro AX`.
 
 > [!Warning]
 > Los siguientes pasos borrará todo el disco para instalar la base del sistema operativo, asegúrese de tener un respaldo fuera del ordenador y revisar que no falte nada antes de continuar.
