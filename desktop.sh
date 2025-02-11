@@ -38,6 +38,7 @@ packages() {
     sudo pacman -S --noconfirm --needed \
         alacritty \
         arduino-cli \
+        dolphin \
         elisa \
         firefox \
         gwenview \
