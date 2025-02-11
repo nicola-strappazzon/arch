@@ -3,8 +3,8 @@
 El repositorio contiene una distribución personal basada en Arch Linux y está adaptado para un ordenador que tiene la placa base `Gigabyte B550I Aorus Pro AX`.
 
 > [!Warning]
-> Los siguientes pasos borrará todo el disco para instalar la base del sistema operativo, asegúrese de tener un respaldo fuera del ordenador y revisar que no falte nada antes de continuar.
-> El autor de estos scripts no se hace responsable de cualquier inconveniente.
+> - Los siguientes pasos borrará todo el disco para instalar la base del sistema operativo, asegúrese de tener un respaldo fuera del ordenador y revisar que no falte nada antes de continuar.
+> - El autor de estos scripts no se hace responsable de cualquier inconveniente.
 
 ## Install
 
