@@ -56,6 +56,7 @@ alias p="mocp -T main Music/"
 alias o="nemo"
 alias s="subl"
 alias h="history"
+alias open="dolphin ."
 EOF
 
     cat > $HOME/.bashrc.d/alias/git.sh << 'EOF'

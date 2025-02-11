@@ -260,6 +260,7 @@ packages() {
         usbutils
         vim
         wget
+        xclip
     )
 
     for PACKAGE in "${PACKAGES[@]}"; do
