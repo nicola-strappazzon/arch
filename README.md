@@ -5,7 +5,7 @@
 Ejecute los siguientes comandos desde Arch Linux USB:
 
 > [!Warning]
-> El siguiente paso borrara todo el disco.
+> El siguiente paso borrara todo el disco para instalar la base del sistema operativo, asegurece de tener un respaldo fuera del PC y revisar que no falte nada antes de continuar.
 
 ```bash
 pacman -Sy curl
