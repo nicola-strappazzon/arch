@@ -12,20 +12,3 @@ save: ## Save changes into repository automatically.
 	@git add .
 	@git commit -m "Save changes at: $$(date +%s)"
 	@git push
-
-server: ## Run file server.
-	@python3 -m http.server 8080 -b 0.0.0.0
-
-vm-disk: ## Create virtual volumen.
-	@qemu-img create -q -f qcow2 al.qcow2 20G
-
-vm: ## Run virtual machine.
-	@qemu-system-x86_64 \
-		-enable-kvm \
-		-m 4G \
-		-smp 2 \
-		-hda al.qcow2 \
-		-bios /usr/share/ovmf/x64/OVMF_CODE.fd \
-		-cdrom /home/nsc/Downloads/archlinux-2024.08.01-x86_64.iso \
-		-nic user,hostfwd=tcp::60022-:22,hostfwd=tcp::5900-:5900 \
-		-vga qxl
