@@ -8,7 +8,7 @@ The repository contains a personal distribution based on Arch Linux with KDE Pla
 
 ## Install
 
-Prepare a USB flash drive with an Arch Linux image. During the computer's boot process, select the USB as the boot device (F12). Once Arch Linux Live has started, enter the following commands:
+Prepare a USB flash drive with an [Arch Linux image](https://archlinux.org/download). During the computer's boot process, select the USB as the boot device (F12). Once Arch Linux Live has started, enter the following commands:
 
 ```bash
 pacman -Sy curl
