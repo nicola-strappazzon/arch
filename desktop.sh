@@ -37,6 +37,7 @@ desktop() {
 packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
+        ark \
         alacritty \
         arduino-cli \
         dolphin \
