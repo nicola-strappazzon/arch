@@ -93,11 +93,12 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        ivpn          `#VPN Client`     \
-        freetube      `#YouTube player` \
-        tio           `#Serial client`  \
-        vscodium-bin  `#VS Code`        \
-        slack-desktop `#Slack`          \
+        ivpn           `#VPN Client`     \
+        freetube       `#YouTube player` \
+        tio            `#Serial client`  \
+        vscodium-bin   `#VS Code`        \
+        slack-desktop  `#Slack`          \
+        google-chrome  `#Google Chrome`  \
     &> /dev/null
 }
 
