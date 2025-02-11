@@ -42,6 +42,7 @@ packages() {
         firefox \
         gwenview \
         kate \
+        kcalc \
         kcolorchooser \
         kicad \
         ktorrent \
