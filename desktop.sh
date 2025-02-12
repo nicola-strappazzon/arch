@@ -47,15 +47,18 @@ packages() {
         hunspell-en_us \
         hunspell-es_es \
         kate \
+        kbackup \
         kcalc \
         kcolorchooser \
         kicad \
         ktorrent \
         nicotine+ \
+        openvpn \
         okular \
         partitionmanager \
         spectacle \
         thunderbird \
+        virtualbox \
         wl-clipboard \
     &> /dev/null
 }
@@ -97,21 +100,22 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        aws-cli-v2     `#AWS CLI`        \
-        ivpn-ui        `#VPN Client`     \
-        freetube       `#YouTube player` \
-        tio            `#Serial client`  \
-        vscodium-bin   `#VS Code`        \
-        slack-desktop  `#Slack`          \
-        google-chrome  `#Google Chrome`  \
+        aws-cli-v2                 `#AWS CLI`            \
+        aws-session-manager-plugin `#AWS CLI SSM Plugin` \
+        ivpn-ui                    `#VPN Client`         \
+        freetube                   `#YouTube player`     \
+        tio                        `#Serial client`      \
+        vscodium-bin               `#VS Code`            \
+        slack-desktop              `#Slack`              \
+        google-chrome              `#Google Chrome`      \
     &> /dev/null
 }
 
 printing() {
     echo "--> Install printing system."
     sudo pacman -S --noconfirm --needed \
-        cups                  `#Printing system`         \
-        system-config-printer `#Print settings`          \
+        cups                  `#Printing system` \
+        system-config-printer `#Print settings`  \
     &> /dev/null
 
     sudo systemctl start cups.service &> /dev/null
