@@ -101,7 +101,7 @@ aws-ec2-list() {
         return
     fi
 
-    aws ec2 describe-instances --profile $1 --filters "Name=tag:Name,Values=${2}" | jq -c '.Reservations[].Instances[] | [.InstanceId,.InstanceType,.PrivateIpAddress,.PublicIp]'
+    aws ec2 describe-instances --profile $1 --filters "Name=tag:Name,Values=${2}" | jq -c '.Reservations[].Instances[] | [.State.Name,.InstanceId,.InstanceType,.PrivateIpAddress,.PublicIp]'
 }
 
 aws-ec2-ssm-connect() {
@@ -114,7 +114,6 @@ aws-ec2-ssm-connect() {
     aws ssm start-session \
         --profile=$1 \
         --target=$2
-    reset
 }
 
 aws-databases-list () {
