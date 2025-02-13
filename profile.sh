@@ -82,8 +82,39 @@ export TERM=xterm
 EOF
 
     cat > $HOME/.bashrc.d/functions/aws.sh << 'EOF'
-aws-instances () {
-    aws ec2 describe-instances | jq -c '.Reservations[].Instances[] | { instanceid:.InstanceId, name:(.Tags[]? | select(.Key=="Name") | .Value), type:.InstanceType, private_ip:.PrivateIpAddress, public_ip: .PublicIp}'
+
+aws-ssm-login() {
+    if [ -z "$1" ]; then
+        echo "No argument supplied."
+        echo "Usage: aws-ssm-login profile-stg"
+        return
+    fi
+
+    aws sso login --profile $1 --no-browser
+    eval "$(aws configure export-credentials --profile $1 --format env)"
+}
+
+aws-ec2-list() {
+    if [ $# -lt 2 ]; then
+        echo "No argument supplied."
+        echo "Usage: aws-ec2-list profile-stg bastion"
+        return
+    fi
+
+    aws ec2 describe-instances --profile $1 --filters "Name=tag:Name,Values=${2}" | jq -c '.Reservations[].Instances[] | [.InstanceId,.InstanceType,.PrivateIpAddress,.PublicIp]'
+}
+
+aws-ec2-ssm-connect() {
+    if [ $# -lt 2 ]; then
+        echo "No argument supplied."
+        echo "Usage: aws-ec2-ssm-connect profile-stg bastion"
+        return
+    fi
+
+    aws ssm start-session \
+        --profile=$1 \
+        --target=$2
+    reset
 }
 
 aws-databases-list () {
@@ -108,7 +139,7 @@ aws-database-logs-list () {
     jq -r '.[][] | [.LastWritten,.Size,.LogFileName] | @tsv'
 }
 
-aws-database-logs-download() {
+aws-database-logs-download-all() {
     aws rds describe-db-log-files \
         --db-instance-identifier=$1 | \
     jq -r '.[][] | [.LogFileName] | @tsv' | \
@@ -117,7 +148,15 @@ aws-database-logs-download() {
         --db-instance-identifier=$1 \
         --starting-token 0 \
         --output text \
-        --log-file-name {} >> /tmp/$1.log
+        --log-file-name {} > $1.log
+}
+
+aws-database-logs-download() {
+    aws rds download-db-log-file-portion \
+        --db-instance-identifier=$1 \
+        --starting-token 0 \
+        --output text \
+        --log-file-name $2 > "${1}_${2/\//_}.log"
 }
 
 aws-database-parameter-group-list () {

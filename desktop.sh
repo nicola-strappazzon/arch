@@ -56,6 +56,7 @@ packages() {
         openvpn \
         okular \
         partitionmanager \
+        percona-toolkit \
         spectacle \
         thunderbird \
         virtualbox \
