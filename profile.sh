@@ -116,6 +116,21 @@ aws-ec2-ssm-connect() {
         --target=$2
 }
 
+aws-ec2-ssm-port-forward() {
+    if [ $# -lt 3 ]; then
+        echo "No argument supplied."
+        echo "Usage: aws-ec2-ssm-connect profile-stg bastion 3000"
+        return
+    fi
+
+    aws ssm start-session \
+        --profile=$1 \
+        --target=$2 \
+        --document-name AWS-StartPortForwardingSession \
+        --parameters "{\"portNumber\":[\"$3\"],\"localPortNumber\":[\"$3\"]}"
+
+}
+
 aws-databases-list () {
     aws rds describe-db-instances --query 'DBInstances[].DBInstanceIdentifier[]'
 }

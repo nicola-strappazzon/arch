@@ -37,13 +37,14 @@ desktop() {
 packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
-        ark \
         alacritty \
         arduino-cli \
+        ark \
         dolphin \
         elisa \
         firefox \
         gwenview \
+        helm \
         hunspell-en_us \
         hunspell-es_es \
         kate \
@@ -52,9 +53,10 @@ packages() {
         kcolorchooser \
         kicad \
         ktorrent \
+        minikube \
         nicotine+ \
-        openvpn \
         okular \
+        openvpn \
         partitionmanager \
         percona-toolkit \
         spectacle \
