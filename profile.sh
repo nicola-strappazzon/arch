@@ -6,6 +6,7 @@ main() {
     configure_git
     configure_gpg
     configure_udev
+    configure_kde
 }
 
 configure_profile() {
@@ -482,6 +483,16 @@ EOF
 
     sudo udevadm control --reload
     sudo udevadm trigger
+}
+
+configure_kde() {
+    kwriteconfig6 --file ~/.config/kdedefaults/ksplashrc --group KSplash --key Theme org.kde.breezedark.desktop
+    kwriteconfig6 --file ~/.config/kdeglobals --group General --key ColorSchemeHash babca25f3a5cf7ece26a85de212ab43d0a141257
+    kwriteconfig6 --file ~/.config/kdeglobals --group KDE --key LookAndFeelPackage org.kde.breezedark.desktop
+    kwriteconfig6 --file ~/.config/kdeglobals --group KDE --key widgetStyle Fusion
+    kwriteconfig6 --file ~/.config/kdeglobals --group Sounds --key Enable false
+    kwriteconfig6 --file ~/.config/plasma-localerc --group Formats --key LANG en_US.UTF-8
+    kwriteconfig6 --file ~/.config/plasmanotifyrc --group DoNotDisturb --key NotificationSoundsMuted true
 }
 
 main "$@"

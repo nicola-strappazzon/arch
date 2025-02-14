@@ -97,34 +97,58 @@ pamac clean --keep 3
 ## AUR
 
 Search for package
-user $ pamac search -a [PackageName]
+
+```bash
+pamac search -a [PackageName]
+```
 
 Build the package
-user $ pamac build [PackageName]
+
+```bash
+pamac build [PackageName]
+```
 
 ## Access rights
 
 Execute command as root
-user $ sudo [command]
+
+```bash
+sudo [command]
+```
 
 Empty password cache
-user $ sudo -k
+
+```bash
+sudo -k
+```
 
 Change user password
-user $ passwd username
+
+```bash
+passwd username
+```
 
 Change owner and group of file
-user $ chown [owner]:[group] -c [file]
+
+```bash
+chown [owner]:[group] -c [file]
+```
 
 Change file permissions
-user $ chmod [permissions] -c [file]
+
+```bash
+chmod [permissions] -c [file]
+```
 
 Set permissions in octal mode: 4(read) 2(write) 1(execute)
 
 Example: 755 read-write-execute for owner and read-execute for group and others
 
 Display files and permissions [of directory]
-user $ ls -lh [dir]
+
+```bash
+ls -lh [dir]
+```
 
 ## Files and Directories
 

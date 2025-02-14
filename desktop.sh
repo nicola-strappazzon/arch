@@ -110,6 +110,7 @@ yay_packages() {
         tio                        `#Serial client`      \
         vscodium-bin               `#VS Code`            \
         slack-desktop              `#Slack`              \
+        sql-workbench              `#SQL Client`         \
         google-chrome              `#Google Chrome`      \
     &> /dev/null
 }
