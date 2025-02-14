@@ -107,7 +107,7 @@ aws-ec2-list() {
 aws-ec2-ssm-connect() {
     if [ $# -lt 2 ]; then
         echo "No argument supplied."
-        echo "Usage: aws-ec2-ssm-connect profile-stg bastion"
+        echo "Usage: aws-ec2-ssm-connect profile-stg instance_id"
         return
     fi
 
@@ -119,7 +119,7 @@ aws-ec2-ssm-connect() {
 aws-ec2-ssm-port-forward() {
     if [ $# -lt 3 ]; then
         echo "No argument supplied."
-        echo "Usage: aws-ec2-ssm-connect profile-stg bastion 3000"
+        echo "Usage: aws-ec2-ssm-connect profile-stg instance_id 3000"
         return
     fi
 
