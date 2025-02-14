@@ -97,7 +97,7 @@ aws-ssm-login() {
 aws-ec2-list() {
     if [ $# -lt 2 ]; then
         echo "No argument supplied."
-        echo "Usage: aws-ec2-list profile-stg bastion"
+        echo "Usage: aws-ec2-list profile-stg instance_name"
         return
     fi
 
@@ -112,14 +112,16 @@ aws-ec2-ssm-connect() {
     fi
 
     aws ssm start-session \
+        --document-name AWS-StartInteractiveCommand \
         --profile=$1 \
-        --target=$2
+        --target=$2 \
+        --parameters command="bash -l"
 }
 
 aws-ec2-ssm-port-forward() {
     if [ $# -lt 3 ]; then
         echo "No argument supplied."
-        echo "Usage: aws-ec2-ssm-connect profile-stg instance_id 3000"
+        echo "Usage: aws-ec2-ssm-port-forward profile-stg instance_id 3000"
         return
     fi
 
@@ -132,7 +134,15 @@ aws-ec2-ssm-port-forward() {
 }
 
 aws-databases-list () {
-    aws rds describe-db-instances --query 'DBInstances[].DBInstanceIdentifier[]'
+    if [ -z "$1" ]; then
+        echo "No argument supplied."
+        echo "Usage: aws-databases-list  profile-stg"
+        return
+    fi
+
+    aws rds describe-db-instances \
+        --profile=$1 \
+        --query 'DBInstances[].DBInstanceIdentifier[]'
 }
 
 aws-database-describe () {
