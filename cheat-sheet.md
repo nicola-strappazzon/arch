@@ -153,67 +153,127 @@ ls -lh [dir]
 ## Files and Directories
 
 Change the working directory
-user $ cd [dir]
+
+
+```bash
+cd [dir]
+```
 
 Change to parent directory
-user $ cd ..
+
+```bash
+cd ..
+```
 
 List directory contents
-user $ ls -l
+
+```bash
+ls -l
+```
 
 List also hidden files
-user $ ls -la
+
+```bash
+ls -la
+```
 
 Copy file
-user $ cp [file] [target]
+```bash
+cp [file] [target]
+```
 
 Copy directory recursively
-user $ cp -r [directory] [target]
+
+```bash
+cp -r [directory] [target]
+```
 
 Move or rename file/directory
-user $ mv [source] [target]
+
+```bash
+mv [source] [target]
+```
 
 Remove directory recursively
-user $ rm -r [dir]
+
+```bash
+rm -r [dir]
+```
 
 Create symbolic link
-user $ ln -s [target] [link]
+
+```bash
+ln -s [target] [link]
+```
 
 Mount filesystem
-user $ mount -t [type] [/dev/sdx9] [mountpoint]
+
+```bash
+mount -t [type] [/dev/sdx9] [mountpoint]
+```
 
 Mount ISO image
-user $ mount -o loop [iso] [mountpoint]
+
+```bash
+mount -o loop [iso] [mountpoint]
+```
 
 Home directory of user
-user $ cd /home/$USER
-user $ cd ~
+
+```bash
+cd /home/$USER
+cd ~
+```
 
 Directory with global configurations
-user $ cd /etc
+
+```bash
+cd /etc
+```
 
 ## Network
 
 Display network information
-user $ nmcli
+
+```bash
+nmcli
+```
 
 List wireless access points
-user $ nmcli c
+
+```bash
+nmcli c
+```
 
 Enable firewall [package Community: ufw]
-user $ ufw enable
+
+```bash
+ufw enable
+```
 
 Allow/deny all incoming traffic
-user $ ufw default [allow/deny]
+
+```bash
+ufw default [allow/deny]
+```
 
 Displays firewall status and rules
-user $ ufw status
+
+```bash
+ufw status
+```
 
 Allows/deny incoming traffic on the specified port
-user $ ufw [allow/deny] [port]
+
+```bash
+ufw [allow/deny] [port]
+```
 
 Allows/deny incoming traffic from specified IP address
-user $ ufw [allow/deny] from [ip]
+
+```bash
+ufw [allow/deny] from [ip]
+```
 
 ## System and Screen
 
@@ -241,12 +301,14 @@ user $ pstree
 
 Switch to tty
 
+```console
     Ctrl+Alt+F1
     Ctrl+Alt+F2
     Ctrl+Alt+F3
     Ctrl+Alt+F4
     Ctrl+Alt+F5
     Ctrl+Alt+F6
+```
 
 Switch to the X session
 

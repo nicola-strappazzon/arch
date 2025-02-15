@@ -52,7 +52,7 @@ alias d="diff --color=auto"
 alias g="grep -n --color"
 alias l="ls -lahS"
 alias ll="ls -laS"
-alias r="source ~/.bashrc.d/*.sh"
+alias r="source ~/.bashrc"
 alias f="fzf -i --print0 | xclip -selection clipboard"
 alias h="history"
 alias o="dolphin ."
@@ -247,6 +247,15 @@ aws-get-secret() {
 EOF
 
     cat > $HOME/.bashrc.d/functions/general.sh << 'EOF'
+append_path () {
+    case ":$PATH:" in
+        *:"$1":*)
+            ;;
+        *)
+            PATH="${PATH:+$PATH:}$1"
+    esac
+}
+
 extract () {
     if [ -f $1 ] ; then
         case $1 in
@@ -486,13 +495,14 @@ EOF
 }
 
 configure_kde() {
-    kwriteconfig6 --file ~/.config/kdedefaults/ksplashrc --group KSplash --key Theme org.kde.breezedark.desktop
-    kwriteconfig6 --file ~/.config/kdeglobals --group General --key ColorSchemeHash babca25f3a5cf7ece26a85de212ab43d0a141257
-    kwriteconfig6 --file ~/.config/kdeglobals --group KDE --key LookAndFeelPackage org.kde.breezedark.desktop
-    kwriteconfig6 --file ~/.config/kdeglobals --group KDE --key widgetStyle Fusion
-    kwriteconfig6 --file ~/.config/kdeglobals --group Sounds --key Enable false
-    kwriteconfig6 --file ~/.config/plasma-localerc --group Formats --key LANG en_US.UTF-8
-    kwriteconfig6 --file ~/.config/plasmanotifyrc --group DoNotDisturb --key NotificationSoundsMuted true
+    echo "--> Configure KDE."
+#     kwriteconfig6 --file ~/.config/kdedefaults/ksplashrc --group KSplash --key Theme org.kde.breezedark.desktop
+#     kwriteconfig6 --file ~/.config/kdeglobals --group General --key ColorSchemeHash babca25f3a5cf7ece26a85de212ab43d0a141257
+#     kwriteconfig6 --file ~/.config/kdeglobals --group KDE --key LookAndFeelPackage org.kde.breezedark.desktop
+#     kwriteconfig6 --file ~/.config/kdeglobals --group KDE --key widgetStyle Fusion
+#     kwriteconfig6 --file ~/.config/kdeglobals --group Sounds --key Enable false
+#     kwriteconfig6 --file ~/.config/plasma-localerc --group Formats --key LANG en_US.UTF-8
+#     kwriteconfig6 --file ~/.config/plasmanotifyrc --group DoNotDisturb --key NotificationSoundsMuted true
 }
 
 main "$@"
