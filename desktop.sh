@@ -5,6 +5,7 @@ main() {
     update
     ntp
     wakeup
+    hibernation
     desktop
     packages
     yay_install
@@ -57,6 +58,17 @@ EOF
     sudo chmod +x /usr/local/bin/wakeup-disable.sh
     sudo systemctl enable wakeup-disable.service &> /dev/null
     sudo systemctl start wakeup-disable.service &> /dev/null
+}
+
+hibernation() {
+    echo "--> Configure hibernation ."
+
+    cat << EOF | sudo tee /etc/systemd/sleep.conf &> /dev/null
+[Sleep]
+AllowHibernation=no
+AllowSuspendThenHibernate=no
+AllowHybridSleep=no
+EOF
 }
 
 desktop() {
