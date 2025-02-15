@@ -5,7 +5,7 @@ The repository contains a personal distribution based on Arch Linux with KDE Pla
 > [!Warning]
 > - The following steps will erase the entire disk to install the base operating system. Make sure to have a backup outside the computer and check that nothing is missing before proceeding.
 > - The author of these scripts is not responsible for any inconveniences.
-> - By default, the host and username are set to my name.
+> - By default, the hostname and username are set to my name.
 
 ## Install
 
