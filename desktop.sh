@@ -106,6 +106,7 @@ packages() {
         openvpn \
         partitionmanager \
         percona-toolkit \
+        rssguard \
         shellcheck \
         spectacle \
         thunderbird \
