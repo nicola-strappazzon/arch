@@ -26,3 +26,5 @@ Finally, the work environment needs to be configured:
 ```bash
 curl -sfL strappazzon.me/arch | sh -s -- profile
 ```
+
+Enjoy!
