@@ -51,9 +51,9 @@ keyboard() {
 user_password() {
     echo "--> Define password for root and user."
     while true; do
-        IFS="" read -s -p "    Enter your password: " PASSWORD </dev/tty
+        IFS="" read -r -s -p "    Enter your password: " PASSWORD </dev/tty
         echo
-        IFS="" read -s -p "    Confirm your password: " password_confirm </dev/tty
+        IFS="" read -r -s -p "    Confirm your password: " password_confirm </dev/tty
         echo
         [ "${PASSWORD}" = "${password_confirm}" ] && break
         echo "--> Passwords do not match. Please try again."
@@ -191,14 +191,14 @@ EOF
 
 configure_user() {
     echo "--> Create user."
-    arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password=$PASSWORD --comment="Nicola Strappazzon C." nicola
+    arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD" --comment="Nicola Strappazzon C." nicola
 
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     cp /mnt/etc/skel/.bashrc /mnt/root/.bashrc
     chmod 0600 /mnt/root/.bashrc
     arch-chroot /mnt usermod --shell /bin/bash root
-    printf "root:${PASSWORD}" | arch-chroot /mnt chpasswd --encrypted
+    printf "root:%s" "$PASSWORD" | arch-chroot /mnt chpasswd --encrypted
 }
 
 configure_grub() {
