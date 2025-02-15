@@ -1,11 +1,8 @@
 #!/usr/bin/env sh
 set -eu
 
-declare -G TMP;
-declare -A osPMS;
-declare platform;
-declare arch;
-declare pms;
+platform=""
+arch=""
 
 main() {
     platform="$(uname -s)"
@@ -18,7 +15,7 @@ main() {
     banner
 
     if [ "$#" -eq 1 ]; then
-        run_remote_script $1
+        run_remote_script "$1"
         exit 0
     fi
 }
@@ -26,6 +23,7 @@ main() {
 banner() {
     reset
     clear
+
     echo "                                                                                                                                                          "
     echo "                                                                                                                                       ##                 "
     echo "                                                                                                                                      ####                "
@@ -49,7 +47,7 @@ banner() {
 }
 
 check_valid_distribution() {
-    if [[ ! -f /etc/arch-release ]]; then
+    if [ ! -f /etc/arch-release ]; then
         echo "Unsupported linux distribution."
         exit 1
     fi
@@ -66,10 +64,7 @@ check_valid_platform() {
 
 check_valid_platform_architecture() {
     case "$platform-$arch" in
-        macos-arm64* | linux-arm64* | linux-armhf | linux-aarch64)
-            arch="aarch64"
-            ;;
-        macos-x86* | linux-x86* | linux-i686*)
+        linux-x86* | linux-i686*)
             arch="x86_64"
             ;;
         *)
@@ -79,8 +74,8 @@ check_valid_platform_architecture() {
     esac
 }
 
-check_exist_curl(){
-    if ! command -v curl 2>&1 >/dev/null; then
+check_exist_curl() {
+    if { ! command -v curl; }  2>&1; then
         echo "Could not find 'curl', please install: pacman -Sy curl"
         exit 1
     fi
