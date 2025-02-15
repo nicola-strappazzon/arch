@@ -106,6 +106,7 @@ packages() {
         openvpn \
         partitionmanager \
         percona-toolkit \
+        shellcheck \
         spectacle \
         thunderbird \
         virtualbox \

@@ -1,12 +1,12 @@
 #!/usr/bin/env sh
 set -eu
 
-platform=""
-arch=""
+PLATFORM=""
+ARCH=""
 
 main() {
-    platform="$(uname -s)"
-    arch="$(uname -m)"
+    PLATFORM="$(uname -s)"
+    ARCH="$(uname -m)"
 
     check_valid_platform
     check_valid_platform_architecture
@@ -54,18 +54,18 @@ check_valid_distribution() {
 }
 
 check_valid_platform() {
-    if [ "$platform" = "Linux" ]; then
-        platform="linux"
+    if [ "$PLATFORM" = "Linux" ]; then
+        PLATFORM="linux"
     else
-        echo "Unsupported platform $platform"
+        echo "Unsupported platform $PLATFORM"
         exit 1
     fi
 }
 
 check_valid_platform_architecture() {
-    case "$platform-$arch" in
+    case "$PLATFORM-$ARCH" in
         linux-x86* | linux-i686*)
-            arch="x86_64"
+            ARCH="x86_64"
             ;;
         *)
             echo "Unsupported platform or architecture"
