@@ -337,3 +337,11 @@ user $ poweroff
 
 Restart the system
 user $ reboot
+
+## Configure accents
+
+Go to: System Settings \ Keyboard \ Key Bindings
+
+Enable checkbox on `Configure keyboard options`.
+
+Select and expand on the list: Position of Compose key: `Right Ctrl`, and click to Apply button.
