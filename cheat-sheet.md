@@ -344,4 +344,6 @@ Go to: System Settings \ Keyboard \ Key Bindings
 
 Enable checkbox on `Configure keyboard options`.
 
-Select and expand on the list: Position of Compose key: `Right Ctrl`, and click to Apply button.
+Select and expand on the list: Position of Compose key: `Right Alt`, and click to Apply button.
+
+For example, to type `canción`, `canci` and press `Right Alt` + `'` and then `ón`
