@@ -97,6 +97,7 @@ packages() {
         kate \
         kbackup \
         kcalc \
+        kcharselect \
         kcolorchooser \
         kicad \
         ktorrent \
