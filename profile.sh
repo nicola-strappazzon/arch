@@ -7,6 +7,7 @@ main() {
     configure_gpg
     configure_udev
     configure_kde
+    configure_alacritty
 }
 
 configure_profile() {
@@ -503,6 +504,30 @@ configure_kde() {
 #     kwriteconfig6 --file ~/.config/kdeglobals --group Sounds --key Enable false
 #     kwriteconfig6 --file ~/.config/plasma-localerc --group Formats --key LANG en_US.UTF-8
 #     kwriteconfig6 --file ~/.config/plasmanotifyrc --group DoNotDisturb --key NotificationSoundsMuted true
+}
+
+configure_alacritty() {
+    echo "--> Configure Alacritty."
+
+    mkdir -p $HOME/.config/alacritty/
+    cat > $HOME/.config/alacritty/alacritty.toml << 'EOF'
+[bell]
+duration = 0
+
+[cursor.style]
+blinking = "Always"
+shape = "Underline"
+
+[selection]
+save_to_clipboard = true
+
+[mouse]
+bindings = [{mouse = "Right", action = "Paste"}]
+
+[window]
+opacity = 1.0
+startup_mode = "Maximized"
+EOF
 }
 
 main "$@"
