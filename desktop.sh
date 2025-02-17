@@ -84,16 +84,17 @@ desktop() {
 packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
-        alacritty \
-        arduino-cli \
-        ark \
-        dolphin \
-        elisa \
-        firefox \
+        alacritty   `#Terminal client` \
+        arduino-cli `#Arduino cli`     \
+        ark         `#Archiving Tool`  \
+        dolphin     `#File manager`    \
+        elisa       `#Music player`    \
+        firefox     `#Web browser`     \
         gwenview \
         helm \
         hunspell-en_us \
         hunspell-es_es \
+        kamoso \
         kate \
         kbackup \
         kcalc \
@@ -153,15 +154,16 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        aws-cli-v2                 `#AWS CLI`            \
-        aws-session-manager-plugin `#AWS CLI SSM Plugin` \
-        ivpn-ui                    `#VPN Client`         \
-        freetube                   `#YouTube player`     \
-        tio                        `#Serial client`      \
-        vscodium-bin               `#VS Code`            \
-        slack-desktop              `#Slack`              \
-        sql-workbench              `#SQL Client`         \
-        google-chrome              `#Google Chrome`      \
+        aws-cli-v2                 `#AWS CLI`             \
+        aws-session-manager-plugin `#AWS CLI SSM Plugin`  \
+        freetube                   `#YouTube player`      \
+        google-chrome              `#Google Chrome`       \
+        ivpn-ui                    `#VPN Client`          \
+        slack-desktop              `#Slack`               \
+        sql-workbench              `#SQL Client`          \
+        tio                        `#Serial client`       \
+        vscodium-bin               `#VS Code`             \
+        zoom                       `#Zoom meeting client` \
     &> /dev/null
 }
 
