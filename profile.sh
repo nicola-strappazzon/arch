@@ -8,18 +8,19 @@ main() {
     configure_udev
     configure_kde
     configure_alacritty
+    finish
 }
 
 configure_profile() {
     echo "--> Configure profile."
 
-    mkdir -p $HOME/.bashrc.d/
-    mkdir -p $HOME/.bashrc.d/alias/
-    mkdir -p $HOME/.bashrc.d/env/
-    mkdir -p $HOME/.bashrc.d/functions/
-    chmod -R 0700 $HOME/.bashrc.d
+    mkdir -p "$HOME"/.bashrc.d/
+    mkdir -p "$HOME"/.bashrc.d/alias/
+    mkdir -p "$HOME"/.bashrc.d/env/
+    mkdir -p "$HOME"/.bashrc.d/functions/
+    chmod -R 0700 "$HOME"/.bashrc.d
 
-    cat > $HOME/.bashrc.d/alias.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/alias.sh << 'EOF'
 if [ -x ~/.bashrc.d/alias/ ]; then
   for i in $(find ~/.bashrc.d/alias/ -type f ); do
     source "$i"
@@ -27,7 +28,7 @@ if [ -x ~/.bashrc.d/alias/ ]; then
 fi
 EOF
 
-    cat > $HOME/.bashrc.d/env.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/env.sh << 'EOF'
 if [ -x ~/.bashrc.d/env/ ]; then
   for i in $(find ~/.bashrc.d/env/ -type f ); do
     source "$i"
@@ -35,7 +36,7 @@ if [ -x ~/.bashrc.d/env/ ]; then
 fi
 EOF
 
-    cat > $HOME/.bashrc.d/functions.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/functions.sh << 'EOF'
 if [ -x ~/.bashrc.d/functions/ ]; then
   for i in $(find ~/.bashrc.d/functions/ -type f ); do
     source "$i"
@@ -43,11 +44,11 @@ if [ -x ~/.bashrc.d/functions/ ]; then
 fi
 EOF
 
-    cat > $HOME/.bashrc.d/alias/docker.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/alias/docker.sh << 'EOF'
 alias dps="sudo docker ps --format 'table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}'"
 EOF
 
-    cat > $HOME/.bashrc.d/alias/general.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/alias/general.sh << 'EOF'
 alias c="reset;clear"
 alias d="diff --color=auto"
 alias g="grep -n --color"
@@ -59,7 +60,7 @@ alias h="history"
 alias o="dolphin ."
 EOF
 
-    cat > $HOME/.bashrc.d/alias/git.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/alias/git.sh << 'EOF'
 alias ga="git add ."
 alias gcane="git commit --amend --no-edit"
 alias gpf="git push -f"
@@ -68,11 +69,11 @@ alias gw="git whatchanged"
 alias gd="git diff"
 EOF
 
-    cat > $HOME/.bashrc.d/alias/golang.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/alias/golang.sh << 'EOF'
 alias gf="gofmt -w ."
 EOF
 
-    cat > $HOME/.bashrc.d/env/general.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/env/general.sh << 'EOF'
 export BROWSER=firefox
 export CLICOLOR=1
 export EDITOR=vim
@@ -83,7 +84,7 @@ export PS1="\[\033[32m\]\W\[\033[31m\]\[\033[32m\]$\[\e[0m\] "
 export TERM=xterm
 EOF
 
-    cat > $HOME/.bashrc.d/functions/aws.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/functions/aws.sh << 'EOF'
 
 aws-ssm-login() {
     if [ -z "$1" ]; then
@@ -247,7 +248,7 @@ aws-get-secret() {
 }
 EOF
 
-    cat > $HOME/.bashrc.d/functions/general.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/functions/general.sh << 'EOF'
 append_path () {
     case ":$PATH:" in
         *:"$1":*)
@@ -329,12 +330,12 @@ raspberri-pi-find() {
 }
 EOF
 
-    cat > $HOME/.bashrc.d/env/gpg.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/env/gpg.sh << 'EOF'
 export GPG_TTY=$(tty)
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 EOF
 
-    cat > $HOME/.bashrc.d/functions/k8.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/functions/k8.sh << 'EOF'
 k8 () {
     if [ -z "$K8_NAMESPACE" ]; then
         echo "First, set environment executing: [loc|stg|prd]-<app>"
@@ -413,7 +414,7 @@ k8-help() {
 }
 EOF
 
-    cat > $HOME/.bashrc.d/functions/mysql.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/functions/mysql.sh << 'EOF'
 m () {
     if [ -z "$1" ]; then
         echo "No argument supplied."
@@ -431,7 +432,7 @@ m () {
 }
 EOF
 
-    cat > $HOME/.bashrc.d/functions/redpanda.sh << 'EOF'
+    cat > "$HOME"/.bashrc.d/functions/redpanda.sh << 'EOF'
 redpanda(){
     if [ -z "$REDPANDA_CONFIG" ]; then
         echo "First, set environment executing: [loc|stg|prd]-redpanda"
@@ -475,9 +476,6 @@ configure_gpg() {
     echo "--> Configure GPG."
 
     echo "DA0D2EC084DA5974997B8F5D3BAB49A94D82E715" > ~/.gnupg/sshcontrol
-    export GPG_TTY=$(tty)
-    export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
-    gpgconf --launch gpg-agent
 }
 
 configure_udev() {
@@ -509,8 +507,8 @@ configure_kde() {
 configure_alacritty() {
     echo "--> Configure Alacritty."
 
-    mkdir -p $HOME/.config/alacritty/
-    cat > $HOME/.config/alacritty/alacritty.toml << 'EOF'
+    mkdir -p "$HOME"/.config/alacritty/
+    cat > "$HOME"/.config/alacritty/alacritty.toml << 'EOF'
 [bell]
 duration = 0
 
@@ -528,6 +526,11 @@ bindings = [{mouse = "Right", action = "Paste"}]
 opacity = 1.0
 startup_mode = "Maximized"
 EOF
+}
+
+finish(){
+    echo "--> To apply the changes:"
+    echo "    Close and reopen the terminal."
 }
 
 main "$@"
