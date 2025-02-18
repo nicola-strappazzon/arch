@@ -157,16 +157,17 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        aws-cli-v2                 `#AWS CLI`             \
-        aws-session-manager-plugin `#AWS CLI SSM Plugin`  \
-        freetube                   `#YouTube player`      \
-        google-chrome              `#Google Chrome`       \
-        ivpn-ui                    `#VPN Client`          \
-        slack-desktop              `#Slack`               \
-        sql-workbench              `#SQL Client`          \
-        tio                        `#Serial client`       \
-        vscodium-bin               `#VS Code`             \
-        zoom                       `#Zoom meeting client` \
+        aws-cli-v2                 `#AWS CLI`                   \
+        aws-session-manager-plugin `#AWS CLI SSM Plugin`        \
+        freetube                   `#YouTube player`            \
+        google-chrome              `#Google Chrome`             \
+        ivpn-ui                    `#VPN Client`                \
+        slack-desktop              `#Slack`                     \
+        sql-workbench              `#SQL Client`                \
+        tio                        `#Serial client`             \
+        vscodium-bin               `#VS Code`                   \
+        virtualbox-ext-oracle      `#VirtualBox Extension Pack` \
+        zoom                       `#Zoom meeting client`       \
     &> /dev/null
 }
 
