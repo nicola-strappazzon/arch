@@ -84,29 +84,32 @@ desktop() {
 packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
-        alacritty   `#Terminal client` \
-        arduino-cli `#Arduino cli`     \
-        ark         `#Archiving Tool`  \
-        dolphin     `#File manager`    \
-        elisa       `#Music player`    \
-        firefox     `#Web browser`     \
-        gwenview \
-        helm \
-        hunspell-en_us \
-        hunspell-es_es \
-        kamoso \
-        kate \
-        kbackup \
-        kcalc \
-        kcharselect \
-        kcolorchooser \
-        kicad \
-        ktorrent \
-        minikube \
-        nicotine+ \
+        alacritty        `#Terminal client`           \
+        arduino-cli      `#Arduino cli`               \
+        ark              `#Archiving Tool`            \
+        dolphin          `#File manager`              \
+        elisa            `#Music player`              \
+        firefox          `#Web browser`               \
+        gwenview         `#Image viewer`              \
+        helm             `#Tool for Kubernetes`       \
+        hunspell-en_us   `#Spell dictionary EN`       \
+        hunspell-es_es   `#Spell dictionary ES`       \
+        kamoso           `#Camera tool`               \
+        kate             `#Code editor`               \
+        kbackup          `#Backup tool`               \
+        kcalc            `#Calculator`                \
+        kcharselect      `#select special characters` \
+        kcolorchooser    `#color palette tool`        \
+        kicad            `#Electronics design`        \
+        kid3             `#Audio tag editor`          \
+        ktorrent         `#Torrent client`            \
+        kubectl          `#Kubernetes client`         \
+        minikube         `#Local Kubernetes`          \
+        nicotine+        `#Soulseek client`           \
+        okteta           `#Hex editor`                \
         okular \
         openvpn \
-        partitionmanager \
+        partitionmanager `#Partition Manager` \
         percona-toolkit \
         rssguard \
         shellcheck \
