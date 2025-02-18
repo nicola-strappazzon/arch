@@ -137,16 +137,16 @@ yay_install() {
     if ! type "yay" &> /dev/null; then
         tmp="$(mktemp -d)"
 
-        mkdir -p $tmp
+        mkdir -p "$tmp"
 
         if [[ ! "${tmp}" || ! -d "${tmp}" ]]; then
             echo "Could not find ${tmp} dir"
             exit 1
         fi
 
-        cd $tmp
+        cd "$tmp" || return
         git clone https://aur.archlinux.org/yay.git &> /dev/null
-        cd yay
+        cd yay || return
         makepkg -sif --noconfirm &> /dev/null
     fi
 }
@@ -184,7 +184,7 @@ docker() {
         sudo pacman -S docker docker-compose --noconfirm --needed &> /dev/null
         sudo systemctl start docker.service &> /dev/null
         sudo systemctl enable docker.service &> /dev/null
-        sudo usermod -aG docker $USER &> /dev/null
+        sudo usermod -aG docker "$USER" &> /dev/null
     fi
 }
 
