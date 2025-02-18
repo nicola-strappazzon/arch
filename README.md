@@ -19,7 +19,7 @@ curl -sfL strappazzon.me/arch | sh -s -- base
 Once the previous step is completed without errors and you have restarted the computer, run the following command to install KDE Plasma 6.x with all applications:
 
 ```bash
-curl -sfL strappazzon.me/arch | sh -s -- desktop
+curl -sfL strappazzon.me/arch | sh -s -- kde
 ```
 
 Finally, the work environment needs to be configured:
