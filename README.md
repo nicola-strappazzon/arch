@@ -1,7 +1,5 @@
 # My Arch Linux setup
 
-Make independence tecnologic great again!.
-
 The repository contains a personal distribution based on Arch Linux with KDE Plasma and is adapted for a computer with the `Gigabyte B550I Aorus Pro AX` motherboard.
 
 > [!Warning]
@@ -31,3 +29,7 @@ curl -sfL strappazzon.me/arch | sh -s -- profile
 ```
 
 Enjoy!
+
+---
+
+Make independence tecnologic great again!
