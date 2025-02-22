@@ -100,23 +100,25 @@ packages() {
         kcalc            `#Calculator`                \
         kcharselect      `#select special characters` \
         kcolorchooser    `#color palette tool`        \
+        kfind            `#Find files`                \
         kicad            `#Electronics design`        \
         kid3             `#Audio tag editor`          \
+        ksystemlog       `#show all logs`             \
         ktorrent         `#Torrent client`            \
         kubectl          `#Kubernetes client`         \
         minikube         `#Local Kubernetes`          \
         nicotine+        `#Soulseek client`           \
         okteta           `#Hex editor`                \
-        okular \
-        openvpn \
-        partitionmanager `#Partition Manager` \
-        percona-toolkit \
-        rssguard \
-        shellcheck \
-        spectacle \
-        thunderbird \
-        virtualbox \
-        wl-clipboard \
+        okular           `#Document viewer`           \
+        openvpn          `#VPN Client`                \
+        partitionmanager `#Partition Manager`         \
+        percona-toolkit  `#Percona Toolkit`           \
+        rssguard         `#RSS Client`                \
+        shellcheck       `#Shell linter`              \
+        spectacle        `#Screenshots`               \
+        thunderbird      `#Email client`              \
+        virtualbox       `#Virtual Machine`           \
+        wl-clipboard     `#Terminal clipboard`        \
     &> /dev/null
 }
 
