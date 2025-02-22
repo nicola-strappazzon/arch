@@ -317,7 +317,7 @@ backup-usb() {
 }
 
 backup-synology() {
-    /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Music/ nicola@192.168.1.100:/volume1/music/
+    /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Music/ nicola@192.168.1.100:/var/services/homes/nicola/Music/
     /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Pictures/ nicola@192.168.1.100:/var/services/homes/nicola/Photos/
 }
 
