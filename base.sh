@@ -106,17 +106,18 @@ base() {
     pacstrap /mnt \
         base \
         base-devel \
-        linux \
-        linux-headers \
-        linux-firmware \
-        mkinitcpio \
         dhcpcd \
-        networkmanager \
-        iwd \
-        grub \
         efibootmgr \
-        vim \
+        grub \
+        iwd \
+        linux \
+        linux-firmware \
+        linux-headers \
+        man-db \
+        mkinitcpio \
+        networkmanager \
         openssh \
+        vim \
     &> /dev/null
 }
 
