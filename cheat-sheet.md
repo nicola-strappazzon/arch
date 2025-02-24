@@ -285,6 +285,7 @@ Display kernel version
 
 ```bash
 uname -r
+```
 
 Display long kernel version
 
