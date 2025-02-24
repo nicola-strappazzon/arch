@@ -1,5 +1,9 @@
 # CheatSheet
 
+---
+
+
+
 ## Pacman
 
 Install packages:
@@ -346,4 +350,7 @@ Enable checkbox on `Configure keyboard options`.
 
 Select and expand on the list: Position of Compose key: `Right Alt`, and click to Apply button.
 
-For example, to type `canción`, `canci` and press `Right Alt` + `'` and then `ón`
+For example:
+
+1. To type `canción`, `canci` and press `Right Alt` + `'` and then leter `o` and you have `ó`, continue `ón`
+2. To type `compañero`, `compa` and press `Right Alt` + `Shift` + `~` and then letter `n` and you have `ñ`, continue `ñero`.
