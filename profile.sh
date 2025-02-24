@@ -213,12 +213,16 @@ aws-database-parameter-group-set () {
 }
 
 aws-set-keys() {
-    aws-rotate-iam-keys > /dev/null
-}
+    if [ -z "$1" ]; then
+        echo "No argument supplied."
+        echo "Usage: aws-set-keys profile-stg"
+        return
+    fi
 
-aws-reload-keys() {
-    export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | grep aws_access_key_id | awk '{print $3}' | head -n 1)
-    export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials | grep aws_secret_access_key | awk '{print $3}' | head -n 1)
+    export AWS_ACCESS_KEY_ID=$(aws --profile thn configure get aws_access_key_id)
+    export AWS_DEFAULT_REGION=$(aws --profile thn configure get region)
+    export AWS_REGION=$(aws --profile thn configure get region)
+    export AWS_SECRET_ACCESS_KEY=$(aws --profile thn configure get aws_secret_access_key)
 }
 
 aws-get-secret() {
