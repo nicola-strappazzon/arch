@@ -282,26 +282,41 @@ ufw [allow/deny] from [ip]
 ## System and Screen
 
 Display kernel version
-user $ uname -r
+
+```bash
+uname -r
 
 Display long kernel version
-user $ uname -a
+
+```bash
+uname -a
+```
 
 Report file system disk space usage
-user $ df [/] [/home]
 
-user $ sudo btrfs filesystem usage -h [/]
+```bash
+df [/] [/home]
+sudo btrfs filesystem usage -h [/]
+```
 
 Display system tasks
-user $ top
 
-user $ htop
+```bash
+top
+htop
+```
 
 Display system information
-user $ inxi --admin --verbosity=7 --filter --width
+
+```bash
+inxi --admin --verbosity=7 --filter --width
+```
 
 Display a tree of processes
-user $ pstree
+
+```bash
+pstree
+```
 
 Switch to tty
 
