@@ -2,10 +2,6 @@
 # set -eu
 
 main() {
-    packages
-}
-
-packages() {
     echo "--> Install packages for electronics."
     sudo pacman -S --noconfirm --needed \
         arduino-cli \
@@ -24,4 +20,4 @@ packages() {
     &> /dev/null
 }
 
-main "$@"
+main

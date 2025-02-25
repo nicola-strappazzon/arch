@@ -2,10 +2,6 @@
 # set -eu
 
 main() {
-    packages
-}
-
-packages() {
     echo "--> Install packages for devops."
     sudo pacman -S --noconfirm --needed \
         helm \
@@ -28,4 +24,4 @@ packages() {
     &> /dev/null
 }
 
-main "$@"
+main
