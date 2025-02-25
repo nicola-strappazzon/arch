@@ -233,10 +233,7 @@ packages() {
         fzf
         git
         go
-        helm
         htop
-        jq
-        kubectl
         less
         libusb
         links
@@ -247,8 +244,6 @@ packages() {
         openvpn
         pass
         pass-otp
-        percona-server-clients
-        percona-toolkit
         rsync
         testdisk
         tmux

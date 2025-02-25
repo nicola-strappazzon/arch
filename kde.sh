@@ -102,7 +102,6 @@ packages() {
         kid3             `#Audio tag editor`          \
         ksystemlog       `#show all logs`             \
         ktorrent         `#Torrent client`            \
-        minikube         `#Local Kubernetes`          \
         nicotine+        `#Soulseek client`           \
         okteta           `#Hex editor`                \
         okular           `#Document viewer`           \
@@ -111,7 +110,6 @@ packages() {
         shellcheck       `#Shell linter`              \
         spectacle        `#Screenshots`               \
         thunderbird      `#Email client`              \
-        virtualbox       `#Virtual Machine`           \
     &> /dev/null
 }
 
@@ -152,16 +150,9 @@ yay_install() {
 yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        aws-cli-v2                 `#AWS CLI`                   \
-        aws-session-manager-plugin `#AWS CLI SSM Plugin`        \
-        freetube                   `#YouTube player`            \
-        google-chrome              `#Google Chrome`             \
-        ivpn-ui                    `#VPN Client`                \
-        slack-desktop              `#Slack`                     \
-        sql-workbench              `#SQL Client`                \
-        vscodium-bin               `#VS Code`                   \
-        virtualbox-ext-oracle      `#VirtualBox Extension Pack` \
-        zoom                       `#Zoom meeting client`       \
+        freetube       `#YouTube player` \
+        google-chrome  `#Google Chrome`  \
+        ivpn-ui        `#VPN Client`     \
     &> /dev/null
 }
 

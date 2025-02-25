@@ -6,7 +6,7 @@ main() {
 }
 
 packages() {
-    echo "--> Install electronics packages."
+    echo "--> Install packages for electronics."
     sudo pacman -S --noconfirm --needed \
         arduino-cli \
         avr-binutils \
