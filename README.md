@@ -22,7 +22,7 @@ Once the previous step is completed without errors and you have restarted the co
 curl -sfL strappazzon.me/arch | sh -s -- kde
 ```
 
-Install aditional packages:
+Install aditional applications and tools independently of the desktop:
 
 ```bash
 curl -sfL strappazzon.me/arch | sh -s -- packages
