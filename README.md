@@ -22,10 +22,10 @@ Once the previous step is completed without errors and you have restarted the co
 curl -sfL strappazzon.me/arch | sh -s -- kde
 ```
 
-Install aditional packages, for example devops and/or electronics tools:
+Install aditional packages:
 
 ```bash
-curl -sfL strappazzon.me/arch | sh -s -- [ devops | electronics ]
+curl -sfL strappazzon.me/arch | sh -s -- packages
 ```
 
 Finally, the work environment needs to be configured:

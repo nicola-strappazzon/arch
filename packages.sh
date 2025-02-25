@@ -2,6 +2,11 @@
 # set -eu
 
 main() {
+    devops
+    electronics
+}
+
+devops() {
     echo "--> Install packages for devops."
     sudo pacman -S --noconfirm --needed \
         helm \
@@ -24,4 +29,23 @@ main() {
     &> /dev/null
 }
 
-main
+electronics() {
+    echo "--> Install packages for electronics."
+    sudo pacman -S --noconfirm --needed \
+        arduino-cli \
+        avr-binutils \
+        avr-gcc \
+        avr-gdb \
+        avr-libc \
+        avrdude \
+        dfu-programmer \
+        minicom \
+        kicad \
+    &> /dev/null
+
+    yay -Sy --noconfirm --needed \
+        tio \
+    &> /dev/null
+}
+
+main "$@"
