@@ -84,32 +84,33 @@ desktop() {
 packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
-        alacritty        `#Terminal client`           \
-        ark              `#Archiving Tool`            \
-        dolphin          `#File manager`              \
-        elisa            `#Music player`              \
-        firefox          `#Web browser`               \
-        gwenview         `#Image viewer`              \
-        hunspell-en_us   `#Spell dictionary EN`       \
-        hunspell-es_es   `#Spell dictionary ES`       \
-        kamoso           `#Camera tool`               \
-        kate             `#Code editor`               \
-        kbackup          `#Backup tool`               \
-        kcalc            `#Calculator`                \
-        kcharselect      `#select special characters` \
-        kcolorchooser    `#color palette tool`        \
-        kfind            `#Find files`                \
-        kid3             `#Audio tag editor`          \
-        ksystemlog       `#show all logs`             \
-        ktorrent         `#Torrent client`            \
-        nicotine+        `#Soulseek client`           \
-        okteta           `#Hex editor`                \
-        okular           `#Document viewer`           \
-        partitionmanager `#Partition Manager`         \
-        rssguard         `#RSS Client`                \
-        shellcheck       `#Shell linter`              \
-        spectacle        `#Screenshots`               \
-        thunderbird      `#Email client`              \
+        alacritty        `#Terminal client`            \
+        ark              `#Archiving Tool`             \
+        dolphin          `#File manager`               \
+        elisa            `#Music player`               \
+        firefox          `#Web browser`                \
+        gwenview         `#Image viewer`               \
+        hunspell-en_us   `#Spell dictionary EN`        \
+        hunspell-es_es   `#Spell dictionary ES`        \
+        kamoso           `#Camera tool`                \
+        kate             `#Code editor`                \
+        kbackup          `#Backup tool`                \
+        kcalc            `#Calculator`                 \
+        kcharselect      `#select special characters`  \
+        kcolorchooser    `#color palette tool`         \
+        kfind            `#Find files`                 \
+        kid3             `#Audio tag editor`           \
+        ksystemlog       `#show all logs`              \
+        ktorrent         `#Torrent client`             \
+        nicotine+        `#Soulseek client`            \
+        okteta           `#Hex editor`                 \
+        okular           `#Document viewer`            \
+        partitionmanager `#Partition Manager`          \
+        powerdevil       `#Power consumption settings` \
+        rssguard         `#RSS Client`                 \
+        shellcheck       `#Shell linter`               \
+        spectacle        `#Screenshots`                \
+        thunderbird      `#Email client`               \
     &> /dev/null
 }
 
