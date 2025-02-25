@@ -116,9 +116,7 @@ base() {
         man-db \
         mkinitcpio \
         networkmanager \
-        networkmanager-openvpn \
         openssh \
-        openvpn \
         vim \
     &> /dev/null
 }
@@ -224,11 +222,6 @@ configure_grub() {
 packages() {
     echo "--> Install aditional packages."
     PACKAGES=(
-        avr-binutils
-        avr-gcc
-        avr-gdb
-        avr-libc
-        avrdude
         base
         base-devel
         bash-completion
@@ -236,32 +229,37 @@ packages() {
         btop
         ca-certificates
         curl
-        dfu-programmer
         dosfstools
         fzf
         git
         go
+        helm
         htop
         jq
+        kubectl
         less
         libusb
         links
-        minicom
         neofetch
         net-tools
+        networkmanager-openvpn
         nmap
+        openvpn
         pass
         pass-otp
         percona-server-clients
+        percona-toolkit
         rsync
         testdisk
         tmux
         traceroute
+        ufw
         unrar
         unzip
         usbutils
         vim
         wget
+        wl-clipboard
         xclip
     )
 

@@ -85,13 +85,11 @@ packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
         alacritty        `#Terminal client`           \
-        arduino-cli      `#Arduino cli`               \
         ark              `#Archiving Tool`            \
         dolphin          `#File manager`              \
         elisa            `#Music player`              \
         firefox          `#Web browser`               \
         gwenview         `#Image viewer`              \
-        helm             `#Tool for Kubernetes`       \
         hunspell-en_us   `#Spell dictionary EN`       \
         hunspell-es_es   `#Spell dictionary ES`       \
         kamoso           `#Camera tool`               \
@@ -101,23 +99,19 @@ packages() {
         kcharselect      `#select special characters` \
         kcolorchooser    `#color palette tool`        \
         kfind            `#Find files`                \
-        kicad            `#Electronics design`        \
         kid3             `#Audio tag editor`          \
         ksystemlog       `#show all logs`             \
         ktorrent         `#Torrent client`            \
-        kubectl          `#Kubernetes client`         \
         minikube         `#Local Kubernetes`          \
         nicotine+        `#Soulseek client`           \
         okteta           `#Hex editor`                \
         okular           `#Document viewer`           \
         partitionmanager `#Partition Manager`         \
-        percona-toolkit  `#Percona Toolkit`           \
         rssguard         `#RSS Client`                \
         shellcheck       `#Shell linter`              \
         spectacle        `#Screenshots`               \
         thunderbird      `#Email client`              \
         virtualbox       `#Virtual Machine`           \
-        wl-clipboard     `#Terminal clipboard`        \
     &> /dev/null
 }
 
@@ -165,7 +159,6 @@ yay_packages() {
         ivpn-ui                    `#VPN Client`                \
         slack-desktop              `#Slack`                     \
         sql-workbench              `#SQL Client`                \
-        tio                        `#Serial client`             \
         vscodium-bin               `#VS Code`                   \
         virtualbox-ext-oracle      `#VirtualBox Extension Pack` \
         zoom                       `#Zoom meeting client`       \
