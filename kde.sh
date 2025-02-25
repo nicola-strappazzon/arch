@@ -110,7 +110,6 @@ packages() {
         nicotine+        `#Soulseek client`           \
         okteta           `#Hex editor`                \
         okular           `#Document viewer`           \
-        openvpn          `#VPN Client`                \
         partitionmanager `#Partition Manager`         \
         percona-toolkit  `#Percona Toolkit`           \
         rssguard         `#RSS Client`                \

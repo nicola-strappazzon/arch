@@ -116,7 +116,9 @@ base() {
         man-db \
         mkinitcpio \
         networkmanager \
+        networkmanager-openvpn \
         openssh \
+        openvpn \
         vim \
     &> /dev/null
 }
