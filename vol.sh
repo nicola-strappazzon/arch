@@ -2,34 +2,27 @@
 # set -eu
 
 declare VOLUMEN;
+declare VOLUMEN_ID;
 
 function main() {
     partitioning
 }
 
 function partitioning() {
-    readarray -t VOLUMES < <(lsblk --list --nvme --nodeps --ascii --noheadings --output=NAME | sort)
+    readarray -t VOLUMES_LIST < <(lsblk --list --nvme --nodeps --ascii --noheadings --output=NAME | sort)
+    VOLUMENS_COUNT=$(( ${#VOLUMES_LIST[@]} - 1 ))
 
     echo "--> Available volumes:"
-    for VOLUMEN in "${!VOLUMES[@]}"; do
-        echo "  1. ${VOLUMEN}"
+    for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
+        echo "  ${VOLUMEN_INDEX}. ${VOLUMES_LIST[$VOLUMEN_INDEX]}"
     done
-    IFS="" read -r -p "  > Choice volume to install: " VOLUMEN </dev/tty
-    if [[ -z $VOLUMEN ]]; then
-        echo "    Invalid choice, try again."
-    fi
 
+    until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
+        read -p "  > Choice volume number: " VOLUMEN_ID
+    done
 
-#     select VOLUMEN in "${VOLUMES[@]}"; do
-#         if [[ -z $VOLUMEN ]]; then
-#             echo "    Invalid choice, try again."
-#         else
-#             echo "  > Has chosen this volume: $VOLUMEN"
-#             VOLUMEN="/dev/${VOLUMEN}"
-#             break
-#         fi
-#     done
-
+    VOLUMEN="/dev/${VOLUMENS_LIST[$VOLUMEN_ID]}"
+    echo "  > Has chosen this volume: $VOLUMEN"
     echo "--> Umount partitions."
 }
 
