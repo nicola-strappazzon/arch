@@ -82,8 +82,8 @@ function check_exist_curl() {
 }
 
 function run_remote_script() {
-    URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/$1.sh"
-    if curl --output /dev/null --silent --head --fail "${URI}?token=$(date +%s)"; then
+    URI="https://raw.githubusercontent.com/nicola-strappazzon/arch/main/$1.sh?t=$(date +%s)"
+    if curl --output /dev/null --silent --head --fail "${URI}"; then
         echo "Run script: ${URI}"
         echo ""
         curl -s -f -L "${URI}" | sh
