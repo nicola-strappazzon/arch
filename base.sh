@@ -6,7 +6,6 @@ declare HOSTNAME;
 declare PASSWORD;
 
 main() {
-    VOLUMEN="/dev/nvme0n1"
     HOSTNAME="strappazzon"
 
     ntp
@@ -62,21 +61,35 @@ user_password() {
 }
 
 partitioning() {
+    echo "--> Available volumes:"
+    readarray -t VOLUMES < <(lsblk --list --nodeps --ascii --noheadings --output=NAME | sort)
+
+    PS3="  > Choice volume to install: "
+    select VOLUMEN in "${VOLUMES[@]}"; do
+        if [[ -z "$VOLUMEN" ]]; then
+            echo "    Invalid choice, try again."
+        else
+            echo "  > Has chosen this volume: $VOLUMEN"
+            VOLUMEN="/dev/${VOLUMEN}"
+            break
+        fi
+    done
+
     echo "--> Umount partitions."
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
     echo "--> Delete old partitions."
-    (parted --script $VOLUMEN rm 1 &> /dev/null) || true
-    (parted --script $VOLUMEN rm 2 &> /dev/null) || true
-    (parted --script $VOLUMEN rm 3 &> /dev/null) || true
+    (parted --script "$VOLUMEN" rm 1 &> /dev/null) || true
+    (parted --script "$VOLUMEN" rm 2 &> /dev/null) || true
+    (parted --script "$VOLUMEN" rm 3 &> /dev/null) || true
 
     echo "--> Create new partitions."
-    parted --script $VOLUMEN mklabel gpt
-    parted --script $VOLUMEN mkpart efi fat32 1MiB 1024MiB
-    parted --script $VOLUMEN set 1 esp on
-    parted --script $VOLUMEN mkpart swap linux-swap 1GiB 32GiB
-    parted --script $VOLUMEN mkpart root ext4 32GiB 100%
+    parted --script "$VOLUMEN" mklabel gpt
+    parted --script "$VOLUMEN" mkpart efi fat32 1MiB 1024MiB
+    parted --script "$VOLUMEN" set 1 esp on
+    parted --script "$VOLUMEN" mkpart swap linux-swap 1GiB 32GiB
+    parted --script "$VOLUMEN" mkpart root ext4 32GiB 100%
 
     echo "--> Format partitions."
     mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
@@ -84,7 +97,7 @@ partitioning() {
     mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
 
     echo "--> Verify partitions."
-    partprobe $VOLUMEN
+    partprobe "$VOLUMEN"
 
     echo "--> Mount: swap, root and boot"
     swapon "${VOLUMEN}p2"
