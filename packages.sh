@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # set -eu
 
-main() {
+function main() {
     devops
     electronics
 }
 
-devops() {
+function devops() {
     echo "--> Install packages for devops."
     sudo pacman -S --noconfirm --needed \
         helm \
@@ -29,7 +29,7 @@ devops() {
     &> /dev/null
 }
 
-electronics() {
+function electronics() {
     echo "--> Install packages for electronics."
     sudo pacman -S --noconfirm --needed \
         arduino-cli \

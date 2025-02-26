@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # set -eu
 
-main() {
+function main() {
     configure_profile
     configure_git
     configure_gpg
@@ -11,7 +11,7 @@ main() {
     finish
 }
 
-configure_profile() {
+function configure_profile() {
     echo "--> Configure profile."
 
     mkdir -p "$HOME"/.bashrc.d/
@@ -464,7 +464,7 @@ redpanda-help() {
 EOF
 }
 
-configure_git() {
+function configure_git() {
     echo "--> Configure git."
 
     git config --global init.defaultBranch main
@@ -476,13 +476,13 @@ configure_git() {
     git config --global user.signingkey 9186C4129FFD3D2500B35FA18E97CAEEEE861364
 }
 
-configure_gpg() {
+function configure_gpg() {
     echo "--> Configure GPG."
 
     echo "DA0D2EC084DA5974997B8F5D3BAB49A94D82E715" > ~/.gnupg/sshcontrol
 }
 
-configure_udev() {
+function configure_udev() {
     echo "--> Configure udev rules."
 
     cat << EOF | sudo tee /etc/udev/rules.d/50-embedded_devices.rules &> /dev/null
@@ -497,7 +497,7 @@ EOF
     sudo udevadm trigger
 }
 
-configure_kde() {
+function configure_kde() {
     echo "--> Configure KDE."
 #     kwriteconfig6 --file ~/.config/kdedefaults/ksplashrc --group KSplash --key Theme org.kde.breezedark.desktop
 #     kwriteconfig6 --file ~/.config/kdeglobals --group General --key ColorSchemeHash babca25f3a5cf7ece26a85de212ab43d0a141257
@@ -508,7 +508,7 @@ configure_kde() {
 #     kwriteconfig6 --file ~/.config/plasmanotifyrc --group DoNotDisturb --key NotificationSoundsMuted true
 }
 
-configure_alacritty() {
+function configure_alacritty() {
     echo "--> Configure Alacritty."
 
     mkdir -p "$HOME"/.config/alacritty/
@@ -532,7 +532,7 @@ startup_mode = "Maximized"
 EOF
 }
 
-finish(){
+function finish() {
     echo "--> To apply the changes:"
     echo "    Close and reopen the terminal."
 }

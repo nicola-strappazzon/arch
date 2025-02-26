@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # set -eu
 
-main() {
+function main() {
     update
     ntp
     wakeup
@@ -15,18 +15,18 @@ main() {
     finish
 }
 
-update() {
+function update() {
     sudo pacman -Sy &> /dev/null
 }
 
-ntp() {
+function ntp() {
     echo "--> Configure time zone and NTP."
     sudo timedatectl set-timezone Europe/Madrid
     sudo timedatectl set-ntp true
     sudo hwclock --systohc
 }
 
-wakeup() {
+function wakeup() {
     echo "--> Configure wakeup."
 
     cat << EOF | sudo tee /usr/local/bin/wakeup-disable.sh &> /dev/null
@@ -60,7 +60,7 @@ EOF
     sudo systemctl start wakeup-disable.service &> /dev/null
 }
 
-hibernation() {
+function hibernation() {
     echo "--> Configure hibernation ."
 
     cat << EOF | sudo tee /etc/systemd/sleep.conf &> /dev/null
@@ -71,7 +71,7 @@ AllowHybridSleep=no
 EOF
 }
 
-desktop() {
+function desktop() {
     echo "--> Install desktop."
     sudo pacman -S --noconfirm --needed \
         plasma-meta \
@@ -81,7 +81,7 @@ desktop() {
     sudo systemctl enable sddm.service &> /dev/null
 }
 
-packages() {
+function packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
         alacritty        `#Terminal client`            \
@@ -114,7 +114,7 @@ packages() {
     &> /dev/null
 }
 
-yay_install() {
+function yay_install() {
     echo "--> Install yay tool."
     if ! type "git" > /dev/null; then
         echo "Could not find: git"
@@ -148,7 +148,7 @@ yay_install() {
     fi
 }
 
-yay_packages() {
+function yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
         freetube       `#YouTube player` \
@@ -157,7 +157,7 @@ yay_packages() {
     &> /dev/null
 }
 
-printing() {
+function printing() {
     echo "--> Install printing system."
     sudo pacman -S --noconfirm --needed \
         cups                  `#Printing system` \
@@ -168,7 +168,7 @@ printing() {
     sudo systemctl enable cups.service &> /dev/null
 }
 
-docker() {
+function docker() {
     echo "--> Install docker."
     if ! type "docker" > /dev/null; then
         sudo pacman -S docker docker-compose --noconfirm --needed &> /dev/null
@@ -178,7 +178,7 @@ docker() {
     fi
 }
 
-finish(){
+function finish() {
     echo "--> Optional, please type: reboot"
     echo "    To use KDE only if out of desktop environment."
 }

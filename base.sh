@@ -5,7 +5,8 @@ declare VOLUMEN;
 declare HOSTNAME;
 declare PASSWORD;
 
-main() {
+function main() {
+    VOLUMEN="/dev/nvme0n1"
     HOSTNAME="strappazzon"
 
     ntp
@@ -27,14 +28,14 @@ main() {
     finish
 }
 
-ntp() {
+function ntp() {
     echo "--> Configure time zone and NTP."
     timedatectl set-timezone Europe/Madrid
     timedatectl set-ntp true
     hwclock --systohc
 }
 
-mirror() {
+function mirror() {
     echo "--> Configure mirrorlist."
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
     reflector -a 48 -c ES -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
@@ -42,12 +43,12 @@ mirror() {
     pacman -Sy &> /dev/null
 }
 
-keyboard() {
+function keyboard() {
     echo "--> Configure keyboard layaout."
     loadkeys us
 }
 
-user_password() {
+function user_password() {
     echo "--> Define password for root and user."
     while true; do
         IFS="" read -r -s -p "    Enter your password: " PASSWORD </dev/tty
@@ -60,38 +61,22 @@ user_password() {
     PASSWORD=$(openssl passwd -6 "$password_confirm")
 }
 
-partitioning() {
-    echo "--> Available volumes:"
-    readarray -t VOLUMES < <(lsblk --list --nvme --nodeps --ascii --noheadings --output=NAME | sort)
-
-    PS3="  > Choice volume to install: "
-    select VOLUMEN in "${VOLUMES[@]}"; do
-        if [[ -z $VOLUMEN ]]; then
-            echo "    Invalid choice, try again."
-        else
-            echo "  > Has chosen this volume: $VOLUMEN"
-            VOLUMEN="/dev/${VOLUMEN}"
-            break
-        fi
-    done
-
-    sleep 10
-
+function partitioning() {
     echo "--> Umount partitions."
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
     echo "--> Delete old partitions."
-    (parted --script "$VOLUMEN" rm 1 &> /dev/null) || true
-    (parted --script "$VOLUMEN" rm 2 &> /dev/null) || true
-    (parted --script "$VOLUMEN" rm 3 &> /dev/null) || true
+    (parted --script $VOLUMEN rm 1 &> /dev/null) || true
+    (parted --script $VOLUMEN rm 2 &> /dev/null) || true
+    (parted --script $VOLUMEN rm 3 &> /dev/null) || true
 
     echo "--> Create new partitions."
-    parted --script "$VOLUMEN" mklabel gpt
-    parted --script "$VOLUMEN" mkpart efi fat32 1MiB 1024MiB
-    parted --script "$VOLUMEN" set 1 esp on
-    parted --script "$VOLUMEN" mkpart swap linux-swap 1GiB 32GiB
-    parted --script "$VOLUMEN" mkpart root ext4 32GiB 100%
+    parted --script $VOLUMEN mklabel gpt
+    parted --script $VOLUMEN mkpart efi fat32 1MiB 1024MiB
+    parted --script $VOLUMEN set 1 esp on
+    parted --script $VOLUMEN mkpart swap linux-swap 1GiB 32GiB
+    parted --script $VOLUMEN mkpart root ext4 32GiB 100%
 
     echo "--> Format partitions."
     mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
@@ -99,7 +84,7 @@ partitioning() {
     mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
 
     echo "--> Verify partitions."
-    partprobe "$VOLUMEN"
+    partprobe $VOLUMEN
 
     echo "--> Mount: swap, root and boot"
     swapon "${VOLUMEN}p2"
@@ -116,7 +101,7 @@ partitioning() {
     genfstab -pU /mnt >> /mnt/etc/fstab
 }
 
-base() {
+function base() {
     echo "--> Installing essential packages."
     pacstrap /mnt \
         base \
@@ -136,11 +121,11 @@ base() {
     &> /dev/null
 }
 
-configure_input() {
+function configure_input() {
     sed -i 's/#set bell-style none/set bell-style none/g' /mnt/etc/inputrc
 }
 
-configure_locale() {
+function configure_locale() {
     echo "en_US.UTF-8 UTF-8" > /mnt/etc/locale.gen
     echo "LANG=en_US.UTF-8" > /mnt/etc/locale.conf
     echo "LANGUAGE=en_US" >> /mnt/etc/locale.conf
@@ -148,7 +133,7 @@ configure_locale() {
     arch-chroot /mnt locale-gen &> /dev/null
 }
 
-configure_environment() {
+function configure_environment() {
     cat > /mnt/etc/environment << 'EOF'
 EDITOR=vim
 TERM=xterm
@@ -156,7 +141,7 @@ TERMINAL=xterm
 EOF
 }
 
-configure_profile() {
+function configure_profile() {
     cat > /mnt/etc/skel/.bashrc << 'EOF'
 [[ $- != *i* ]] && return
 
@@ -194,7 +179,7 @@ EOF
     rm -f /mnt/etc/profile.d/perlbin.*
 }
 
-configure_network() {
+function configure_network() {
     echo "--> Network configuration."
     echo $HOSTNAME > /mnt/etc/hostname
 
@@ -205,7 +190,7 @@ configure_network() {
 EOF
 }
 
-configure_user() {
+function configure_user() {
     echo "--> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD" --comment="Nicola Strappazzon C." nicola
 
@@ -217,7 +202,7 @@ configure_user() {
     printf "root:%s" "$PASSWORD" | arch-chroot /mnt chpasswd --encrypted
 }
 
-configure_grub() {
+function configure_grub() {
     echo "--> Install & configure bootloader."
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
@@ -234,7 +219,7 @@ configure_grub() {
     sed -i "s/loglevel=3 quiet/quiet loglevel=0 rd.systemd.show_status=auto rd.udev.log_level=3/" /mnt/boot/grub/grub.cfg
 }
 
-packages() {
+function packages() {
     echo "--> Install aditional packages."
     PACKAGES=(
         base
@@ -278,7 +263,7 @@ packages() {
     done
 }
 
-services() {
+function services() {
     echo "--> Enable services."
     arch-chroot /mnt systemctl enable sshd
     arch-chroot /mnt systemctl start sshd
@@ -287,7 +272,7 @@ services() {
     arch-chroot /mnt systemctl start NetworkManager
 }
 
-drivers() {
+function drivers() {
     echo "--> Install drivers."
     sudo pacman -S --noconfirm --needed \
         alsa-firmware \
@@ -299,7 +284,7 @@ drivers() {
     &> /dev/null
 }
 
-finish(){
+function finish() {
     echo "--> Unmount all partitions and reboot."
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true

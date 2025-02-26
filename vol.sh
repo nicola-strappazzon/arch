@@ -12,6 +12,7 @@ function partitioning() {
 
     echo "--> Available volumes:"
     echo "  > Choice volume to install: "
+    IFS="" read -r -s -p "    Enter your password: " VOLUMEN </dev/tty
 
     select VOLUMEN in "${VOLUMES[@]}"; do
         if [[ -z $VOLUMEN ]]; then

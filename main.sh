@@ -1,10 +1,10 @@
-#!/usr/bin/env sh
-set -eu
+#!/usr/bin/env bash
+# set -eu
 
-PLATFORM=""
-ARCH=""
+declare PLATFORM
+declare ARCH
 
-main() {
+function main() {
     PLATFORM="$(uname -s)"
     ARCH="$(uname -m)"
 
@@ -20,7 +20,7 @@ main() {
     fi
 }
 
-banner() {
+function banner() {
     reset
     clear
 
@@ -46,14 +46,14 @@ banner() {
     echo ""
 }
 
-check_valid_distribution() {
+function check_valid_distribution() {
     if [ ! -f /etc/arch-release ]; then
         echo "Unsupported linux distribution."
         exit 1
     fi
 }
 
-check_valid_platform() {
+function check_valid_platform() {
     if [ "$PLATFORM" = "Linux" ]; then
         PLATFORM="linux"
     else
@@ -62,7 +62,7 @@ check_valid_platform() {
     fi
 }
 
-check_valid_platform_architecture() {
+function check_valid_platform_architecture() {
     case "$PLATFORM-$ARCH" in
         linux-x86* | linux-i686*)
             ARCH="x86_64"
@@ -74,14 +74,14 @@ check_valid_platform_architecture() {
     esac
 }
 
-check_exist_curl() {
+function check_exist_curl() {
     if { ! command -v curl; }  2>&1; then
         echo "Could not find 'curl', please install: pacman -Sy curl"
         exit 1
     fi
 }
 
-run_remote_script() {
+function run_remote_script() {
     URI="https://raw.githubusercontent.com/nstrappazzonc/get/main/$1.sh"
     if curl --output /dev/null --silent --head --fail "${URI}"; then
         echo "Run script: ${URI}"
