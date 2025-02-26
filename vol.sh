@@ -18,7 +18,7 @@ function partitioning() {
     done
 
     until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
-        read -r -p "  > Choice volume number: " VOLUMEN_ID
+        IFS="" read -r -p "  > Choice volume number: " VOLUMEN_ID </dev/tty
     done
 
     VOLUMEN="/dev/${VOLUMES_LIST[$VOLUMEN_ID]}"
