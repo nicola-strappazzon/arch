@@ -302,7 +302,8 @@ function drivers() {
 
 function finish() {
     echo "--> Unmount all partitions and reboot."
-    read -n 1 -s -r -p "\nPress any key to continue" </dev/tty
+    echo
+    read -n 1 -s -r -p "Press any key to continue" </dev/tty
 
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
