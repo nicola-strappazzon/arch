@@ -92,6 +92,7 @@ function run_remote_script() {
         echo ""
         echo "  curl -sfL strappazzon.me/arch | sh -s -- base"
         echo "  curl -sfL strappazzon.me/arch | sh -s -- kde"
+        echo "  curl -sfL strappazzon.me/arch | sh -s -- packages"
         echo "  curl -sfL strappazzon.me/arch | sh -s -- profile"
         echo ""
     fi
