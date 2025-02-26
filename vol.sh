@@ -3,15 +3,16 @@
 
 declare VOLUMEN;
 
-main() {
+function main() {
     partitioning
 }
 
-partitioning() {
-    echo "--> Available volumes:"
-    readarray -t VOLUMES < <(lsblk --list --nodeps --ascii --noheadings --output=NAME | sort)
+function partitioning() {
+    readarray -t VOLUMES < <(lsblk --list --nvme --nodeps --ascii --noheadings --output=NAME | sort)
 
-    PS3="  > Choice volume to install: "
+    echo "--> Available volumes:"
+    echo "  > Choice volume to install: "
+
     select VOLUMEN in "${VOLUMES[@]}"; do
         if [[ -z $VOLUMEN ]]; then
             echo "    Invalid choice, try again."

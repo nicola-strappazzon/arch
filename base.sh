@@ -62,7 +62,7 @@ user_password() {
 
 partitioning() {
     echo "--> Available volumes:"
-    readarray -t VOLUMES < <(lsblk --list --nodeps --ascii --noheadings --output=NAME | sort)
+    readarray -t VOLUMES < <(lsblk --list --nvme --nodeps --ascii --noheadings --output=NAME | sort)
 
     PS3="  > Choice volume to install: "
     select VOLUMEN in "${VOLUMES[@]}"; do
