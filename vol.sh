@@ -18,10 +18,10 @@ function partitioning() {
     done
 
     until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
-        read -p "  > Choice volume number: " VOLUMEN_ID
+        read -r -p "  > Choice volume number: " VOLUMEN_ID
     done
 
-    VOLUMEN="/dev/${VOLUMENS_LIST[$VOLUMEN_ID]}"
+    VOLUMEN="/dev/${VOLUMES_LIST[$VOLUMEN_ID]}"
     echo "  > Has chosen this volume: $VOLUMEN"
     echo "--> Umount partitions."
 }
