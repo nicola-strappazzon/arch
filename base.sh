@@ -66,7 +66,7 @@ partitioning() {
 
     PS3="  > Choice volume to install: "
     select VOLUMEN in "${VOLUMES[@]}"; do
-        if [[ -z "$VOLUMEN" ]]; then
+        if [[ -z $VOLUMEN ]]; then
             echo "    Invalid choice, try again."
         else
             echo "  > Has chosen this volume: $VOLUMEN"
@@ -74,6 +74,8 @@ partitioning() {
             break
         fi
     done
+
+    sleep 10
 
     echo "--> Umount partitions."
     (umount --all-targets --quiet --recursive /mnt/) || true
