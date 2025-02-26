@@ -14,7 +14,7 @@ function partitioning() {
 
     echo "--> Available volumes:"
     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
-        echo "  ${VOLUMEN_INDEX}. ${VOLUMES_LIST[$VOLUMEN_INDEX]}"
+        echo "    ${VOLUMEN_INDEX}. ${VOLUMES_LIST[$VOLUMEN_INDEX]}"
     done
 
     until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
