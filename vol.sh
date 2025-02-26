@@ -14,7 +14,7 @@ function partitioning() {
     for VOLUMEN in "${VOLUMES[@]}"; do
         echo "  - ${VOLUMEN}"
     done
-    IFS="" read -r -s -p "  > Choice volume to install: " VOLUMEN </dev/tty
+    IFS="" read -r -p "  > Choice volume to install: " VOLUMEN </dev/tty
 
 #     select VOLUMEN in "${VOLUMES[@]}"; do
 #         if [[ -z $VOLUMEN ]]; then
