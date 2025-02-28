@@ -21,10 +21,11 @@ function devops() {
     yay -Sy --noconfirm --needed \
         aws-cli-v2                 `#AWS CLI`                   \
         aws-session-manager-plugin `#AWS CLI SSM Plugin`        \
+        mongosh-bin                `#MongoDB client`            \
         slack-desktop              `#Slack`                     \
         sql-workbench              `#SQL Client`                \
-        vscodium-bin               `#VS Code`                   \
         virtualbox-ext-oracle      `#VirtualBox Extension Pack` \
+        vscodium-bin               `#VS Code`                   \
         zoom                       `#Zoom meeting client`       \
     &> /dev/null
 }
