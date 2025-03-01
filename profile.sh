@@ -51,13 +51,14 @@ EOF
     cat > "$HOME"/.bashrc.d/alias/general.sh << 'EOF'
 alias c="reset;clear"
 alias d="diff --color=auto"
-alias g="grep -n --color"
-alias l="ls -lahS --color=auto"
-alias ll="ls -laS --color=auto"
-alias r="source ~/.bashrc"
+alias e="yazi"
 alias f="fzf -i --print0 | xclip -selection clipboard"
+alias g="grep -n --color"
 alias h="history"
+alias l="lsd -lahS --color=auto"
+alias ll="lsd -laS --color=auto"
 alias o="dolphin ."
+alias r="source ~/.bashrc"
 EOF
 
     cat > "$HOME"/.bashrc.d/alias/git.sh << 'EOF'

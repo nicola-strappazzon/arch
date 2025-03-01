@@ -16,6 +16,16 @@ function devops() {
         percona-server-clients \
         percona-toolkit \
         virtualbox \
+        lsd \
+        yazi \
+        ffmpeg \
+        p7zip \
+        poppler \
+        fd \
+        ripgrep \
+        zoxide \
+        imagemagick \
+        ttf-nerd-fonts-symbols \
     &> /dev/null
 
     yay -Sy --noconfirm --needed \
