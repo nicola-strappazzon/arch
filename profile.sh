@@ -5,9 +5,10 @@ function main() {
     configure_profile
     configure_git
     configure_gpg
-    configure_udev
     configure_kde
     configure_alacritty
+    configure_vim
+    configure_udev
     finish
 }
 
@@ -532,6 +533,44 @@ bindings = [{mouse = "Right", action = "Paste"}]
 [window]
 opacity = 1.0
 startup_mode = "Maximized"
+EOF
+}
+
+function configure_vim() {
+    echo "--> Configure vim."
+
+    cat > "$HOME"/.vimrc << 'EOF'
+" Global settings
+set hidden                                                  " Don't unload buffer when switching away.
+set modeline                                                " Allow per-file settings via modeline.
+set modelines=3                                             "
+set exrc                                                    " Enable per-directory .vimrc files.
+set secure                                                  " Disable unsafe commands in local .vimrc files.
+set encoding=utf-8 fileencoding=utf-8 termencoding=utf-8    " Saving and encoding.
+set nobackup nowritebackup noswapfile autoread              " No backup or swap.
+set hlsearch incsearch ignorecase smartcase                 " Search.
+set wildmenu                                                " Completion.
+set backspace=indent,eol,start                              " Sane backspace.
+set clipboard=unnamed                                       " Use the system clipboard for yank/put/delete.
+set mouse=a                                                 " Enable mouse for all modes settings.
+set nomousehide                                             " Don't hide the mouse cursor while typing.
+set mousemodel=popup                                        " Right-click pops up context menu.
+set ruler                                                   " Show cursor position in status bar.
+"set relativenumber                                         " Show relative line numbers.
+set number                                                  " Show absolute line number of the current line.
+"set nofoldenable                                           " I fucking hate code folding.
+"set scrolloff=10                                           " Scroll the window so we can always see 10 lines around the cursor.
+set textwidth=80                                            " Show a vertical line at the 79th character.
+"set cursorline                                             " Highlight the current line.
+set printoptions=paper:letter                               " Use letter as the print output format.
+set laststatus=2                                            " Always show status bar.
+set nocompatible                                            " Stops vim from behaving in a strongly vi.
+set nowrap                                                  " No wrap line.
+"set visualbell                                             " Don't beep.
+set noerrorbells                                            " Don't beep.
+set nosmartindent                                           " Reacts to the syntax/style of the code you are editing.
+set noautoindent                                            " Disable auto ident.
+set filetype=on                                             " Detect the type of file that is edited.
 EOF
 }
 
