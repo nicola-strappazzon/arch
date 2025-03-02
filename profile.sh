@@ -560,7 +560,7 @@ set filetype=on                                             " Detect the type of
 EOF
 }
 
-function configure_vim() {
+function configure_tmux() {
     echo "--> Configure tmux."
 
     cat > "$HOME"/.tmux.conf << 'EOF'
