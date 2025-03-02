@@ -8,6 +8,7 @@ function main() {
     configure_kde
     configure_alacritty
     configure_vim
+    configure_tmux
     configure_udev
     finish
 }
@@ -486,21 +487,6 @@ function configure_gpg() {
     echo "DA0D2EC084DA5974997B8F5D3BAB49A94D82E715" > ~/.gnupg/sshcontrol
 }
 
-function configure_udev() {
-    echo "--> Configure udev rules."
-
-    cat << EOF | sudo tee /etc/udev/rules.d/50-embedded_devices.rules &> /dev/null
-SUBSYSTEMS=="usb", ATTRS{product}== "Arduino Uno", GROUP="users", MODE="0666"
-SUBSYSTEMS=="usb", ATTRS{product}== "FT232R USB UART", GROUP="users", MODE="0666"
-SUBSYSTEMS=="usb", ATTRS{product}== "USBtiny", GROUP="users", MODE="0666"
-SUBSYSTEMS=="usb", ATTRS{product}== "USBtinyISP", GROUP="users", MODE="0666"
-SUBSYSTEMS=="usb", ATTRS{product}== "QinHeng Electronics CH340 serial converter", GROUP="users", MODE="0666"
-EOF
-
-    sudo udevadm control --reload
-    sudo udevadm trigger
-}
-
 function configure_kde() {
     echo "--> Configure KDE."
 #     kwriteconfig6 --file ~/.config/kdedefaults/ksplashrc --group KSplash --key Theme org.kde.breezedark.desktop
@@ -572,6 +558,35 @@ set nosmartindent                                           " Reacts to the synt
 set noautoindent                                            " Disable auto ident.
 set filetype=on                                             " Detect the type of file that is edited.
 EOF
+}
+
+function configure_vim() {
+    echo "--> Configure tmux."
+
+    cat > "$HOME"/.tmux.conf << 'EOF'
+unbind r
+bind r source-file ~/.tmux.conf
+
+set -g prefix M-s
+set -g mouse on
+
+set-option -g default-terminal screen-256color
+EOF
+}
+
+function configure_udev() {
+    echo "--> Configure udev rules."
+
+    cat << EOF | sudo tee /etc/udev/rules.d/50-embedded_devices.rules &> /dev/null
+SUBSYSTEMS=="usb", ATTRS{product}== "Arduino Uno", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "FT232R USB UART", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "USBtiny", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "USBtinyISP", GROUP="users", MODE="0666"
+SUBSYSTEMS=="usb", ATTRS{product}== "QinHeng Electronics CH340 serial converter", GROUP="users", MODE="0666"
+EOF
+
+    sudo udevadm control --reload
+    sudo udevadm trigger
 }
 
 function finish() {
