@@ -320,16 +320,15 @@ jq-help() {
     echo "To CSV: jq -r '(map(keys_unsorted) | add | unique) as \$cols | \$cols, map(. as \$row | \$cols | map(\$row[.]))[] | @csv'"
 }
 
-backup-usb() {
-    rsync -CPavzt ~/ /run/media/nicola/BACKUP/
+backup-music-usb() {
+    rsync -CPavzt /home/nicola/Music/ /run/media/nicola/Music/
 }
 
-backup-synology() {
+backup-music-synology() {
     /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Music/ nicola@192.168.1.100:/var/services/homes/nicola/Music/
-    /usr/bin/rsync -CPavzt --rsync-path=/bin/rsync -e ssh /home/nicola/Pictures/ nicola@192.168.1.100:/var/services/homes/nicola/Photos/
 }
 
-backup-icloud() {
+backup-icloud-local() {
     icloudpd --username nicola@strappazzon.me --directory /home/nicola/Pictures/iCloud/
 }
 

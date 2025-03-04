@@ -9,6 +9,7 @@ function main() {
 function devops() {
     echo "--> Install packages for devops."
     sudo pacman -S --noconfirm --needed \
+        bat \
         helm \
         jq \
         kubectl \

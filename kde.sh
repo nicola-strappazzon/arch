@@ -160,8 +160,9 @@ function yay_packages() {
 function printing() {
     echo "--> Install printing system."
     sudo pacman -S --noconfirm --needed \
-        cups                  `#Printing system` \
-        system-config-printer `#Print settings`  \
+        cups                  `#Printing system`               \
+        system-config-printer `#Print settings`                \
+        hplip                 `#hp linux imaging and printing` \
     &> /dev/null
 
     sudo systemctl start cups.service &> /dev/null
