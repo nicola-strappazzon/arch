@@ -78,41 +78,42 @@ function partitioning() {
     VOLUMEN="/dev/${VOLUMES_LIST[$VOLUMEN_ID]}"
     echo "  > Has chosen this volume: $VOLUMEN"
 
-    echo "--> Umount partitions."
+    echo "--> Partitioning and format volume."
+    # Umount partitions:
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
-    echo "--> Delete old partitions."
+    # Delete old partitions:
     (parted --script "${VOLUMEN}" rm 1 &> /dev/null) || true
     (parted --script "${VOLUMEN}" rm 2 &> /dev/null) || true
     (parted --script "${VOLUMEN}" rm 3 &> /dev/null) || true
 
-    echo "--> Create new partitions."
+    # Create new partitions:
     parted --script "${VOLUMEN}" mklabel gpt
     parted --script "${VOLUMEN}" mkpart efi fat32 1MiB 1024MiB
     parted --script "${VOLUMEN}" set 1 esp on
     parted --script "${VOLUMEN}" mkpart swap linux-swap 1GiB 32GiB
     parted --script "${VOLUMEN}" mkpart root ext4 32GiB 100%
 
-    echo "--> Format partitions."
+    # Format partitions:
     mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
     mkswap -L SWAP "${VOLUMEN}p2" &> /dev/null
     mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
 
-    echo "--> Verify partitions."
+    # Verify partitions:
     partprobe "${VOLUMEN}"
 
-    echo "--> Mount: swap, root and boot"
+    # Mount: swap, root and boot:
     swapon "${VOLUMEN}p2"
     mount "${VOLUMEN}p3" /mnt
     mkdir -p /mnt/boot/efi/
     mount "${VOLUMEN}p1" /mnt/boot/efi/
 
-    echo "--> Remove default directories lost+found."
+    # Remove default directories lost+found:
     rm -rf /mnt/boot/efi/lost+found
     rm -rf /mnt/lost+found
 
-    echo "--> Generate fstab."
+    # Generate fstab:
     mkdir /mnt/etc/
     genfstab -pU /mnt >> /mnt/etc/fstab
 }
@@ -201,16 +202,14 @@ function configure_network() {
     echo $HOSTNAME > /mnt/etc/hostname
 
     cat << EOF > /mnt/etc/hosts
-127.0.0.1   localhost
 ::1         localhost
-127.0.1.1   ${HOSTNAME}.localdomain $HOSTNAME
+127.0.1.1   localhost ${HOSTNAME}.local ${HOSTNAME}.localdomain $HOSTNAME
 EOF
 }
 
 function configure_user() {
     echo "--> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD" --comment="Nicola Strappazzon C." nicola
-
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     cp /mnt/etc/skel/.bashrc /mnt/root/.bashrc
@@ -220,7 +219,7 @@ function configure_user() {
 }
 
 function configure_grub() {
-    echo "--> Install & configure bootloader."
+    echo "--> Install and configure bootloader."
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
 
@@ -284,7 +283,6 @@ function services() {
     echo "--> Enable services."
     arch-chroot /mnt systemctl enable sshd
     arch-chroot /mnt systemctl start sshd
-
     arch-chroot /mnt systemctl enable NetworkManager
     arch-chroot /mnt systemctl start NetworkManager
 }
