@@ -120,6 +120,7 @@ function partitioning() {
 function base() {
     echo "--> Installing essential packages."
     pacstrap /mnt \
+        amd-ucode \
         base \
         base-devel \
         dhcpcd \
