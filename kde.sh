@@ -84,7 +84,6 @@ function desktop() {
 function packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
-        alacritty        `#Terminal client`            \
         ark              `#Archiving Tool`             \
         dolphin          `#File manager`               \
         elisa            `#Music player`               \
@@ -100,6 +99,7 @@ function packages() {
         kcolorchooser    `#color palette tool`         \
         kfind            `#Find files`                 \
         kid3             `#Audio tag editor`           \
+        konsole          `#Terminal client`            \
         ksystemlog       `#show all logs`              \
         ktorrent         `#Torrent client`             \
         nicotine+        `#Soulseek client`            \
