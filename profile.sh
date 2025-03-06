@@ -234,7 +234,7 @@ aws-database-parameter-group-list () {
         --db-parameter-group-name=$1 | \
     jq 'del(.[][].Description)' | \
     jq -r '.[][] | [.ParameterName,.ParameterValue] | @tsv' | \
-    awk -v FS="\t" '{printf "%s=%s%s",$1,$2,ORS}'
+    awk -v FS="\t" '{if ($2) printf "%s=%s%s",$1,$2,ORS}'
 }
 
 aws-database-parameter-group-set () {
@@ -256,10 +256,21 @@ aws-set-keys() {
         return
     fi
 
-    export AWS_ACCESS_KEY_ID=$(aws --profile thn configure get aws_access_key_id)
-    export AWS_DEFAULT_REGION=$(aws --profile thn configure get region)
-    export AWS_REGION=$(aws --profile thn configure get region)
-    export AWS_SECRET_ACCESS_KEY=$(aws --profile thn configure get aws_secret_access_key)
+    aws-uset
+
+    export AWS_ACCESS_KEY_ID=$(aws --profile $1 configure get aws_access_key_id)
+    export AWS_DEFAULT_REGION=$(aws --profile $1 configure get region)
+    export AWS_REGION=$(aws --profile $1 configure get region)
+    export AWS_SECRET_ACCESS_KEY=$(aws --profile $1 configure get aws_secret_access_key)
+    export AWS_PROFILE="$1"
+}
+
+aws-uset() {
+    unset AWS_ACCESS_KEY_ID
+    unset AWS_DEFAULT_REGION
+    unset AWS_REGION
+    unset AWS_SECRET_ACCESS_KEY
+    unset AWS_PROFILE
 }
 
 aws-get-secret() {
@@ -271,6 +282,7 @@ aws-get-secret() {
 
     KEYS=$(
         aws secretsmanager get-secret-value \
+            --profile=$AWS_PROFILE \
             --secret-id $1 \
             --query SecretString \
             --output text | \
