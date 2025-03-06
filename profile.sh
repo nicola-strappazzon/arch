@@ -99,60 +99,80 @@ aws-ssm-login() {
 
     aws sso login --profile $1 --no-browser
     eval "$(aws configure export-credentials --profile $1 --format env)"
+    export AWS_PROFILE="$1"
 }
 
 aws-ec2-list() {
-    if [ $# -lt 2 ]; then
-        echo "No argument supplied."
-        echo "Usage: aws-ec2-list profile-stg instance_name"
+    if [[ -z "${AWS_PROFILE}" ]]; then
+        echo "Environment variable AWS_PROFILE undefined."
         return
     fi
 
-    aws ec2 describe-instances --profile $1 --filters "Name=tag:Name,Values=${2}" | jq -c '.Reservations[].Instances[] | [.State.Name,.InstanceId,.InstanceType,.PrivateIpAddress,.PublicIp]'
+    if [ -z "$1" ]; then
+        echo "No argument supplied."
+        echo "Usage: aws-ec2-list instance_name"
+        return
+    fi
+
+    aws ec2 describe-instances --profile $AWS_PROFILE --filters "Name=tag:Name,Values=${1}" | jq -r '(["Instance ID", "State", "Type", "Private IP", "Public IP"] | (., map(length*"-"))), (.Reservations[].Instances[] | [.InstanceId,.State.Name,.InstanceType,.PrivateIpAddress,.PublicIp]) | @tsv' | column -t -s $'\t'
 }
 
 aws-ec2-ssm-connect() {
-    if [ $# -lt 2 ]; then
+    if [[ -z "${AWS_PROFILE}" ]]; then
+        echo "Environment variable AWS_PROFILE undefined."
+        return
+    fi
+
+    if [ -z "$1" ]; then
         echo "No argument supplied."
-        echo "Usage: aws-ec2-ssm-connect profile-stg instance_id"
+        echo "Usage: aws-ec2-ssm-connect instance_id"
         return
     fi
 
     aws ssm start-session \
         --document-name AWS-StartInteractiveCommand \
-        --profile=$1 \
-        --target=$2 \
+        --profile=$AWS_PROFILE \
+        --target=$1 \
         --parameters command="bash -l"
 }
 
 aws-ec2-ssm-port-forward() {
-    if [ $# -lt 3 ]; then
+    if [[ -z "${AWS_PROFILE}" ]]; then
+        echo "Environment variable AWS_PROFILE undefined."
+        return
+    fi
+
+    if [ $# -lt 2 ]; then
         echo "No argument supplied."
-        echo "Usage: aws-ec2-ssm-port-forward profile-stg instance_id 3000"
+        echo "Usage: aws-ec2-ssm-port-forward instance_id 3000"
         return
     fi
 
     aws ssm start-session \
-        --profile=$1 \
-        --target=$2 \
+        --profile=$AWS_PROFILE \
+        --target=$1 \
         --document-name AWS-StartPortForwardingSession \
         --parameters "{\"portNumber\":[\"$3\"],\"localPortNumber\":[\"$3\"]}"
 
 }
 
 aws-databases-list () {
-    if [ -z "$1" ]; then
-        echo "No argument supplied."
-        echo "Usage: aws-databases-list  profile-stg"
+    if [[ -z "${AWS_PROFILE}" ]]; then
+        echo "Environment variable AWS_PROFILE undefined."
         return
     fi
 
     aws rds describe-db-instances \
-        --profile=$1 \
-        --query 'DBInstances[].DBInstanceIdentifier[]'
+        --profile=$AWS_PROFILE \
+        --query 'DBInstances[]' | jq -r '(["Instance Identifier","Class","Engine", "MultiAZ", "AZ", "StorageType", "Delete", "Status"] | (., map(length*"-"))), (.[] | [.DBInstanceIdentifier, .DBInstanceClass, .Engine, .MultiAZ, .AvailabilityZone, .StorageType, .DeletionProtection, .OptionGroupMemberships[].Status]) | @tsv' | column -t -s $'\t'
 }
 
 aws-database-describe () {
+    if [[ -z "${AWS_PROFILE}" ]]; then
+        echo "Environment variable AWS_PROFILE undefined."
+        return
+    fi
+
     if [ -z "$1" ]; then
         echo "No argument supplied."
         echo "Usage: aws-database-describe xxx-yyy-mysql-zzz-node01"
@@ -160,12 +180,25 @@ aws-database-describe () {
     fi
 
     aws rds describe-db-instances \
+        --profile=$AWS_PROFILE \
         --db-instance-identifier=$1 \
         --output table
 }
 
 aws-database-logs-list () {
+    if [[ -z "${AWS_PROFILE}" ]]; then
+        echo "Environment variable AWS_PROFILE undefined."
+        return
+    fi
+
+    if [ -z "$1" ]; then
+        echo "No argument supplied."
+        echo "Usage: aws-database-logs-list xxx-yyy-mysql-zzz-node01"
+        return
+    fi
+
     aws rds describe-db-log-files \
+        --profile=$AWS_PROFILE \
         --db-instance-identifier=$1 | \
     jq -r '.[][] | [.LastWritten,.Size,.LogFileName] | @tsv'
 }
@@ -193,7 +226,7 @@ aws-database-logs-download() {
 aws-database-parameter-group-list () {
     if [ -z "$1" ]; then
         echo "No argument supplied."
-        echo "Usage: aws-database-parameter-group-list xxx-yyy-mysql-zzz-nodes"
+        echo "Usage: aws-database-parameter-group-list pg-xxx-yyy-mysql-zzz-nodes"
         return
     fi
 
@@ -207,7 +240,7 @@ aws-database-parameter-group-list () {
 aws-database-parameter-group-set () {
     if [ -z "$1" ] && [ -z "$2" ] && [ -z "$3" ]; then
         echo "No argument supplied."
-        echo "Usage: aws-database-parameter-group-set xxx-yyy-mysql-zzz-nodes parameter value"
+        echo "Usage: aws-database-parameter-group-set pg-xxx-yyy-mysql-zzz-nodes parameter value"
         return
     fi
 
