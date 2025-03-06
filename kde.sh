@@ -107,6 +107,7 @@ function packages() {
         okular           `#Document viewer`            \
         partitionmanager `#Partition Manager`          \
         powerdevil       `#Power consumption settings` \
+        qtpass           `#GUI for pass`               \
         rssguard         `#RSS Client`                 \
         shellcheck       `#Shell linter`               \
         spectacle        `#Screenshots`                \
