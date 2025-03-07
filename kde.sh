@@ -99,6 +99,7 @@ function packages() {
         kcolorchooser    `#color palette tool`         \
         kfind            `#Find files`                 \
         kid3             `#Audio tag editor`           \
+        kmix             `#Sound channel mixer`        \
         konsole          `#Terminal client`            \
         ksystemlog       `#show all logs`              \
         ktorrent         `#Torrent client`             \
