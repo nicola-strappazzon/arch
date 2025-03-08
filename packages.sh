@@ -87,6 +87,8 @@ function yay_packages() {
         vscodium-bin               `#VS Code`                   \
         zoom                       `#Zoom meeting client`       \
     &> /dev/null
+
+    VBoxManage setextradata global GUI/SuppressMessages all &> /dev/null
 }
 
 function electronics() {
