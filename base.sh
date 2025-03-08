@@ -23,9 +23,11 @@ function main() {
     configure_network
     configure_user
     configure_grub
+    configure_ntp
+    configure_wakeup
     packages
-    services
     drivers
+    services
     finish
 }
 
@@ -235,11 +237,61 @@ function configure_grub() {
     sed -i "s/loglevel=3 quiet/quiet loglevel=0 rd.systemd.show_status=auto rd.udev.log_level=3/" /mnt/boot/grub/grub.cfg
 }
 
+function configure_ntp() {
+    echo "--> Configure time zone and NTP."
+    arch-chroot /mnt timedatectl set-timezone Europe/Madrid
+    arch-chroot /mnt timedatectl set-ntp true
+    arch-chroot /mnt hwclock --systohc
+}
+
+function configure_wakeup() {
+    echo "--> Configure wakeup."
+
+    cat << EOF | sudo tee /mnt/usr/local/bin/wakeup-disable.sh &> /dev/null
+#!/usr/bin/env sh
+# set -eu
+
+/bin/echo XHC0 > /proc/acpi/wakeup
+/bin/echo XHC1 > /proc/acpi/wakeup
+/bin/echo GPP0 > /proc/acpi/wakeup
+EOF
+
+    cat << EOF | sudo tee /mnt/etc/systemd/system/wakeup-disable.service &> /dev/null
+[Unit]
+Description=Fix suspend by disabling XHC0, XHC1 and GPP0 sleepstate thingie
+After=systemd-user-sessions.service plymouth-quit-wait.service
+After=rc-local.service
+Before=getty.target
+IgnoreOnIsolate=yes
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/wakeup-disable.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=basic.target
+EOF
+
+    arch-chroot /mnt chmod +x /usr/local/bin/wakeup-disable.sh
+    arch-chroot /mnt systemctl enable wakeup-disable.service &> /dev/null
+    arch-chroot /mnt systemctl start wakeup-disable.service &> /dev/null
+}
+
+function configure_hibernation() {
+    echo "--> Configure hibernation ."
+
+    cat << EOF | sudo tee /mnt/etc/systemd/sleep.conf &> /dev/null
+[Sleep]
+AllowHibernation=no
+AllowSuspendThenHibernate=no
+AllowHybridSleep=no
+EOF
+}
+
 function packages() {
     echo "--> Install aditional packages."
     PACKAGES=(
-        base
-        base-devel
         bash-completion
         bind-tools
         btop
@@ -275,8 +327,20 @@ function packages() {
     )
 
     for PACKAGE in "${PACKAGES[@]}"; do
-        arch-chroot /mnt pacman -S "${PACKAGE}" --noconfirm --needed &> /dev/null
+        arch-chroot /mnt pacman --sync --noconfirm --needed "${PACKAGE}" &> /dev/null
     done
+}
+
+function drivers() {
+    echo "--> Install drivers."
+    arch-chroot /mnt pacman --sync --noconfirm --needed \
+        alsa-firmware \
+        alsa-utils \
+        amd-ucode \
+        pulseaudio \
+        pulseaudio-alsa \
+        ddcutil \
+    &> /dev/null
 }
 
 function services() {
@@ -285,18 +349,6 @@ function services() {
     arch-chroot /mnt systemctl start sshd
     arch-chroot /mnt systemctl enable NetworkManager
     arch-chroot /mnt systemctl start NetworkManager
-}
-
-function drivers() {
-    echo "--> Install drivers."
-    sudo pacman -S --noconfirm --needed \
-        alsa-firmware \
-        alsa-utils \
-        amd-ucode \
-        pulseaudio \
-        pulseaudio-alsa \
-        ddcutil \
-    &> /dev/null
 }
 
 function finish() {
