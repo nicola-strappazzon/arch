@@ -1,8 +1,6 @@
-# CheatSheet
+# Cheat Sheet
 
-Basic survival guide
-
----
+Basic survival guide.
 
 ## Pacman
 
