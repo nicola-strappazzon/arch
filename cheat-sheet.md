@@ -1,8 +1,8 @@
 # CheatSheet
 
+Basic survival guide
+
 ---
-
-
 
 ## Pacman
 
@@ -335,28 +335,53 @@ Switch to the X session
     Ctrl+Alt+F7
 
 Start a unit
-user $ systemctl start unit
+
+```bash
+systemctl start unit
+```
 
 Stop a unit
-user $ systemctl stop unit
+
+```bash
+systemctl stop unit
+```
 
 Check status of a unit
-user $ systemctl status unit
+
+```bash
+systemctl status unit
+```
 
 Enable a unit
-user $ systemctl enable unit
+
+```bash
+systemctl enable unit
+```
 
 Disable a unit
-user $ systemctl disable unit
+
+```bash
+systemctl disable unit
+```
 
 Restart a unit
-user $ systemctl restart unit
+
+```bash
+systemctl restart unit
+```
 
 Shut down the system
-user $ poweroff
+
+```bash
+poweroff
+```
+
 
 Restart the system
-user $ reboot
+
+```bash
+reboot
+```
 
 ## Configure accents
 
@@ -370,3 +395,33 @@ For example:
 
 1. To type `canción`, `canci` and press `Right Alt` + `'` and then leter `o` and you have `ó`, continue `ón`
 2. To type `compañero`, `compa` and press `Right Alt` + `Shift` + `~` and then letter `n` and you have `ñ`, continue `ñero`.
+
+## Test
+
+To test this repository, use VirtualBox.
+
+Create and start VM:
+
+```bash
+VBoxManage setextradata global GUI/SuppressMessages all
+VBoxManage createvm --name ArchLinux --ostype="ArchLinux_64" --register --basefolder=/home/nicola/VirtualBox\ VMs/
+VBoxManage modifyvm ArchLinux --ioapic on
+VBoxManage modifyvm ArchLinux --memory 1024 --vram 128
+VBoxManage modifyvm ArchLinux --nic1 nat
+VBoxManage modifyvm ArchLinux --chipset ich9
+VBoxManage modifyvm ArchLinux --firmware efi
+VBoxManage createhd --filename=/home/nicola/VirtualBox\ VMs/ArchLinux/ArchLinux.vdi --size 1000000 --format VDI
+VBoxManage storagectl ArchLinux --name "NVMe Controller" --add pcie --controller NVMe --portcount 1 --bootable on
+VBoxManage storageattach ArchLinux --storagectl "NVMe Controller" --device 0 --port 0 --type hdd --medium=/home/nicola/VirtualBox\ VMs/ArchLinux/ArchLinux.vdi
+VBoxManage storagectl ArchLinux --name "IDE Controller" --add ide --controller PIIX4
+VBoxManage storageattach ArchLinux --storagectl "IDE Controller" --port=1 --device=0 --type=dvddrive --medium=/home/nicola/Downloads/archlinux-2025.02.01-x86_64.iso
+VBoxManage startvm ArchLinux --type gui
+```
+
+Delete VM:
+
+```bash
+VBoxManage storagectl ArchLinux --name "NVMe Controller" --remove
+VBoxManage closemedium disk "/home/nicola/VirtualBox VMs/ArchLinux/ArchLinux.vdi" --delete
+VBoxManage unregistervm ArchLinux --delete
+```
