@@ -354,7 +354,7 @@ function services() {
 function finish() {
     echo "--> Unmount all partitions and reboot."
     echo
-    read -n 1 -s -r -p "Press any key to continue" </dev/tty
+    read -n 1 -s -r -p "Press any key to continue or press Ctrl+C to cancel" </dev/tty
 
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
