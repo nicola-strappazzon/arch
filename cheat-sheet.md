@@ -401,7 +401,6 @@ To test this repository, use VirtualBox.
 Create and start VM:
 
 ```bash
-VBoxManage setextradata global GUI/SuppressMessages all
 VBoxManage createvm --name ArchLinux --ostype="ArchLinux_64" --register --basefolder=/home/nicola/VirtualBox\ VMs/
 VBoxManage modifyvm ArchLinux --ioapic on
 VBoxManage modifyvm ArchLinux --memory 1024 --vram 128
