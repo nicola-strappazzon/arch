@@ -27,6 +27,7 @@ function packages() {
     echo "--> Install packages."
     sudo pacman -S --noconfirm --needed \
         ark              `#Archiving Tool`             \
+        digikam          `#Digital photo management`   \
         dolphin          `#File manager`               \
         elisa            `#Music player`               \
         firefox          `#Web browser`                \
