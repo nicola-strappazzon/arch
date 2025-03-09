@@ -19,7 +19,7 @@ sudo pacman -Rns [PackageName]
 Search for a package:
 
 ```bash
-pacman -Ss [PackageName]
+sudo pacman -Ss [PackageName]
 ```
 
 Query package info:
@@ -43,6 +43,18 @@ Clean cache:
 
 ```bash
 sudo pacman -Scc
+```
+
+Check for orphaned packages:
+
+```bash
+pacman -Qdtq
+```
+
+Remove all orphans:
+
+```bash
+pacman -Qdtq | pacman -Rns -
 ```
 
 ## Maintenance
@@ -76,24 +88,6 @@ Remove but recent entries by size or time:
 ```bash
 journalctl --vacuum-size=50M
 journalctl --vacuum-time=2weeks
-```
-
-Check for orphaned packages:
-
-```bash
-pamac list -o
-```
-
-Remove all orphans:
-
-```bash
-pamac remove -o
-```
-
-Remove all packages except the latest 3 versions:
-
-```bash
-pamac clean --keep 3
 ```
 
 ## AUR
