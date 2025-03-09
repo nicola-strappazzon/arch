@@ -90,20 +90,6 @@ journalctl --vacuum-size=50M
 journalctl --vacuum-time=2weeks
 ```
 
-## AUR
-
-Search for package
-
-```bash
-pamac search -a [PackageName]
-```
-
-Build the package
-
-```bash
-pamac build [PackageName]
-```
-
 ## Access rights
 
 Execute command as root
