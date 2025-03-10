@@ -5,6 +5,7 @@ function main() {
     update
     desktop
     packages
+    configure
     finish
 }
 
@@ -54,6 +55,17 @@ function packages() {
         system-config-printer `#Print settings`             \
         thunderbird           `#Email client`               \
     &> /dev/null
+}
+
+function configure() {
+    kwriteconfig6 --file $HOME/.config/kdeglobals --group "Sounds" --key "Enable" "false"
+
+    kwriteconfig6 --file $HOME/.config/ksplashrc --group "KSplash" --key "Engine" "None"
+    kwriteconfig6 --file $HOME/.config/ksplashrc --group "KSplash" --key "Theme" "None"
+
+    kwriteconfig6 --file $HOME/.config/kwalletrc --group "Wallet" --key "Enabled" "false"
+
+    kscreen-doctor output.HDMI-A-1.scale.1
 }
 
 function finish() {
