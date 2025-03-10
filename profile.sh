@@ -8,6 +8,7 @@ function main() {
     configure_kde
     configure_vim
     configure_tmux
+    configure_vscode
     configure_udev
     finish
 }
@@ -590,6 +591,43 @@ set -g prefix M-s
 set -g mouse on
 
 set-option -g default-terminal screen-256color
+EOF
+}
+
+function configure_vscode() {
+    echo "--> Configure vscode."
+
+    mkdir -p "$HOME"/.config/VSCodium/User/
+
+    cat > "$HOME"/.config/VSCodium/User/settings.json << 'EOF'
+{
+  "editor.fontSize": 14,
+  "editor.minimap.enabled": false,
+  "editor.occurrencesHighlight": "off",
+  "editor.selectionHighlight": false,
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "editor.quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
+  "explorer.confirmDelete": false,
+  "extensions.ignoreRecommendations": true,
+  "files.trimTrailingWhitespace": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.ignoreMissingGitWarning": true,
+  "git.openRepositoryInParentFolders": "always",
+  "security.workspace.trust.untrustedFiles": "open",
+  "window.menuBarVisibility": "compact",
+  "window.titleBarStyle": "custom",
+  "workbench.activityBar.location": "hidden",
+  "workbench.colorTheme": "Tokyo Night",
+  "workbench.iconTheme": "vs-minimal",
+  "workbench.startupEditor": "none"
+}
 EOF
 }
 
