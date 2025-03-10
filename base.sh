@@ -296,11 +296,13 @@ function packages() {
         bind-tools
         btop
         ca-certificates
+        cups
         curl
         dosfstools
         fzf
         git
         go
+        hplip
         htop
         less
         libusb
@@ -345,10 +347,12 @@ function drivers() {
 
 function services() {
     echo "--> Enable services."
-    arch-chroot /mnt systemctl enable sshd
-    arch-chroot /mnt systemctl start sshd
-    arch-chroot /mnt systemctl enable NetworkManager
-    arch-chroot /mnt systemctl start NetworkManager
+    arch-chroot /mnt systemctl enable cups.service &> /dev/null
+    arch-chroot /mnt systemctl enable NetworkManager &> /dev/null
+    arch-chroot /mnt systemctl enable sshd &> /dev/null
+    arch-chroot /mnt systemctl start cups.service &> /dev/null
+    arch-chroot /mnt systemctl start NetworkManager &> /dev/null
+    arch-chroot /mnt systemctl start sshd &> /dev/null
 }
 
 function finish() {
