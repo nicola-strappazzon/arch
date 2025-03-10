@@ -151,7 +151,7 @@ aws-ec2-ssm-port-forward() {
         --profile=$AWS_PROFILE \
         --target=$1 \
         --document-name AWS-StartPortForwardingSession \
-        --parameters "{\"portNumber\":[\"$3\"],\"localPortNumber\":[\"$3\"]}"
+        --parameters "{\"portNumber\":[\"$2\"],\"localPortNumber\":[\"$2\"]}"
 
 }
 
