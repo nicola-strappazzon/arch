@@ -58,10 +58,17 @@ function packages() {
 }
 
 function configure() {
+    kwriteconfig6 --file "$HOME"/.config/kdeglobals --group "KDE" --key "LookAndFeelPackage" "org.kde.breezedark.desktop"
+    kwriteconfig6 --file "$HOME"/.config/kdeglobals --group "KDE" --key "widgetStyle" "Fusion"
     kwriteconfig6 --file "$HOME"/.config/kdeglobals --group "Sounds" --key "Enable" "false"
     kwriteconfig6 --file "$HOME"/.config/ksplashrc --group "KSplash" --key "Engine" "None"
     kwriteconfig6 --file "$HOME"/.config/ksplashrc --group "KSplash" --key "Theme" "None"
     kwriteconfig6 --file "$HOME"/.config/kwalletrc --group "Wallet" --key "Enabled" "false"
+
+    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "HighlightWindows" "false"
+    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "LayoutName" "compact"
+    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBoxAlternative" --key "HighlightWindows" "false"
+    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBoxAlternative" --key "LayoutName" "compact"
 
     kscreen-doctor output.HDMI-A-1.scale.1
 }
