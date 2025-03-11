@@ -64,7 +64,6 @@ function configure() {
     kwriteconfig6 --file "$HOME"/.config/ksplashrc --group "KSplash" --key "Engine" "None"
     kwriteconfig6 --file "$HOME"/.config/ksplashrc --group "KSplash" --key "Theme" "None"
     kwriteconfig6 --file "$HOME"/.config/kwalletrc --group "Wallet" --key "Enabled" "false"
-
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "HighlightWindows" "false"
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "LayoutName" "compact"
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBoxAlternative" --key "HighlightWindows" "false"
