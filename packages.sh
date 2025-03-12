@@ -52,6 +52,7 @@ function devops() {
         helm \
         imagemagick \
         jq \
+        kitty \
         kubectl \
         lsd \
         minikube \
@@ -71,22 +72,22 @@ function devops() {
 function yay_packages() {
     echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
-        freetube       `#YouTube player` \
-        google-chrome  `#Google Chrome`  \
-        ivpn-ui        `#VPN Client`     \
-        rpk-bin        `#Redpanda CLI`   \
+        freetube       `# YouTube player` \
+        google-chrome  `# Google Chrome`  \
+        ivpn-ui        `# VPN Client`     \
     &> /dev/null
 }
 
     yay -Sy --noconfirm --needed \
-        aws-cli-v2                 `#AWS CLI`                   \
-        aws-session-manager-plugin `#AWS CLI SSM Plugin`        \
-        mongosh-bin                `#MongoDB client`            \
-        slack-desktop              `#Slack`                     \
-        sql-workbench              `#SQL Client`                \
-        virtualbox-ext-oracle      `#VirtualBox Extension Pack` \
-        vscodium-bin               `#VS Code`                   \
-        zoom                       `#Zoom meeting client`       \
+        aws-cli-v2                 `# AWS CLI`                   \
+        aws-session-manager-plugin `# AWS CLI SSM Plugin`        \
+        mongosh-bin                `# MongoDB client`            \
+        rpk-bin                    `# Redpanda CLI`              \
+        slack-desktop              `# Slack`                     \
+        sql-workbench              `# SQL Client`                \
+        virtualbox-ext-oracle      `# VirtualBox Extension Pack` \
+        vscodium-bin               `# VS Code`                   \
+        zoom                       `# Zoom meeting client`       \
     &> /dev/null
 
     VBoxManage setextradata global GUI/SuppressMessages all &> /dev/null
