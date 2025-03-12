@@ -74,6 +74,7 @@ function yay_packages() {
         freetube       `#YouTube player` \
         google-chrome  `#Google Chrome`  \
         ivpn-ui        `#VPN Client`     \
+        rpk-bin        `#Redpanda CLI`   \
     &> /dev/null
 }
 
