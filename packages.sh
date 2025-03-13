@@ -46,13 +46,13 @@ function yay_install() {
 function devops() {
     echo "--> Install packages for devops."
     sudo pacman -S --noconfirm --needed \
+        alacritty \
         bat \
         fd \
         ffmpeg \
         helm \
         imagemagick \
         jq \
-        kitty \
         kubectl \
         lsd \
         minikube \
@@ -66,6 +66,7 @@ function devops() {
         ttf-nerd-fonts-symbols \
         virtualbox \
         yazi \
+        zellij \
         zoxide \
     &> /dev/null
 

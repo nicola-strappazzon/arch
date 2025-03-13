@@ -2,15 +2,44 @@
 # set -eu
 
 function main() {
-    configure_profile
+    configure_alacritty
     configure_git
     configure_gpg
     configure_kde
-    configure_vim
+    configure_profile
     configure_tmux
-    configure_vscode
     configure_udev
+    configure_vim
+    configure_vscode
+    configure_zellij
     finish
+}
+
+configure_alacritty() {
+    echo "--> Configure Alacritty."
+
+    mkdir -p "$HOME"/.config/alacritty/
+    cat > "$HOME"/.config/alacritty/alacritty.toml << 'EOF'
+[terminal]
+shell = { program = "/bin/bash", args = ["-l", "-c", "zellij"] }
+
+[bell]
+duration = 0
+
+[cursor.style]
+blinking = "Always"
+shape = "Underline"
+
+[selection]
+save_to_clipboard = true
+
+[mouse]
+bindings = [{mouse = "Right", action = "Paste"}]
+
+[window]
+opacity = 1.0
+startup_mode = "Maximized"
+EOF
 }
 
 function configure_profile() {
@@ -273,6 +302,37 @@ aws-uset() {
     unset AWS_PROFILE
 }
 
+aws-get-secrets() {
+    aws secretsmanager list-secrets --profile=$AWS_PROFILE | jq -r '.SecretList[] | .Name'
+}
+
+aws-get-secrets-values() {
+    SECRETS=$(
+        aws secretsmanager list-secrets --profile=$AWS_PROFILE | jq -r '.SecretList[] | .Name'
+    )
+
+    for SECRET in $SECRETS; do
+        KEYS=$(
+            aws secretsmanager get-secret-value \
+                --profile=$AWS_PROFILE \
+                --secret-id "${SECRET}" \
+                --query SecretString \
+                --output text | \
+            tr -d '\n\t\r ' | \
+            jq \
+                --compact-output \
+                --raw-output \
+                --monochrome-output \
+                "to_entries|map(\"\(.key)=\(.value|tostring)\") | .[]" \
+            2> /dev/null
+        )
+
+        for KEY in $KEYS; do
+            echo "${SECRET} ${KEY}"
+        done
+    done
+}
+
 aws-get-secret() {
     if [ -z "$1" ]; then
         echo "No argument supplied."
@@ -291,7 +351,8 @@ aws-get-secret() {
             --compact-output \
             --raw-output \
             --monochrome-output \
-             "to_entries|map(\"\(.key)=\(.value|tostring)\") | .[]"
+             "to_entries|map(\"\(.key)=\(.value|tostring)\") | .[]" \
+        2> /dev/null
     )
 
     for KEY in $KEYS; do
@@ -302,15 +363,6 @@ aws-get-secret() {
 EOF
 
     cat > "$HOME"/.bashrc.d/functions/general.sh << 'EOF'
-append_path () {
-    case ":$PATH:" in
-        *:"$1":*)
-            ;;
-        *)
-            PATH="${PATH:+$PATH:}$1"
-    esac
-}
-
 extract () {
     if [ -f $1 ] ; then
         case $1 in
@@ -510,6 +562,17 @@ redpanda-help() {
     echo "rp topic consume <topic_name> -v -o end -n 1 -g TEST_<user_name>"
 }
 EOF
+
+    cat << EOF | sudo tee /etc/profile.d/common.sh &> /dev/null
+append_path () {
+    case ":$PATH:" in
+        *:"$1":*)
+            ;;
+        *)
+            PATH="${PATH:+$PATH:}$1"
+    esac
+}
+EOF
 }
 
 function configure_git() {
@@ -629,6 +692,12 @@ function configure_vscode() {
   "workbench.startupEditor": "none"
 }
 EOF
+}
+
+function configure_zellij() {
+    echo "--> Configure zellij."
+
+
 }
 
 function configure_udev() {
