@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # set -eu
 
+# shellcheck disable=SC2119,SC2120
 function main() {
     configure_alacritty
     configure_git
     configure_gpg
     configure_helix
-    configure_kde
     configure_profile
     configure_tmux
     configure_udev
@@ -16,7 +16,7 @@ function main() {
     finish
 }
 
-configure_alacritty() {
+function configure_alacritty() {
     echo "--> Configure Alacritty."
 
     mkdir -p "$HOME"/.config/alacritty/
@@ -566,12 +566,12 @@ redpanda-help() {
 EOF
 
     cat << EOF | sudo tee /etc/profile.d/common.sh &> /dev/null
-append_path () {
+function append_path() {
     case ":$PATH:" in
         *:"$1":*)
             ;;
         *)
-            PATH="${PATH:+$PATH:}$1"
+        PATH="${PATH:+$PATH:}$1"
     esac
 }
 EOF
@@ -599,20 +599,10 @@ function configure_gpg() {
 function configure_helix() {
     echo "--> Configure Helix"
 
+    mkdir -p "$HOME"/.config/helix/
     cat > "$HOME"/.config/helix/config.toml << 'EOF'
 theme = "adwaita-dark"
 EOF
-}
-
-function configure_kde() {
-    echo "--> Configure KDE."
-#     kwriteconfig6 --file ~/.config/kdedefaults/ksplashrc --group KSplash --key Theme org.kde.breezedark.desktop
-#     kwriteconfig6 --file ~/.config/kdeglobals --group General --key ColorSchemeHash babca25f3a5cf7ece26a85de212ab43d0a141257
-#     kwriteconfig6 --file ~/.config/kdeglobals --group KDE --key LookAndFeelPackage org.kde.breezedark.desktop
-#     kwriteconfig6 --file ~/.config/kdeglobals --group KDE --key widgetStyle Fusion
-#     kwriteconfig6 --file ~/.config/kdeglobals --group Sounds --key Enable false
-#     kwriteconfig6 --file ~/.config/plasma-localerc --group Formats --key LANG en_US.UTF-8
-#     kwriteconfig6 --file ~/.config/plasmanotifyrc --group DoNotDisturb --key NotificationSoundsMuted true
 }
 
 function configure_vim() {
@@ -706,8 +696,6 @@ EOF
 
 function configure_zellij() {
     echo "--> Configure zellij."
-
-
 }
 
 function configure_udev() {
