@@ -50,6 +50,7 @@ function devops() {
         bat \
         fd \
         ffmpeg \
+        helix \
         helm \
         imagemagick \
         jq \
