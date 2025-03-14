@@ -5,6 +5,7 @@ function main() {
     configure_alacritty
     configure_git
     configure_gpg
+    configure_helix
     configure_kde
     configure_profile
     configure_tmux
@@ -86,6 +87,7 @@ alias e="yazi"
 alias f="fzf -i --print0 | xclip -selection clipboard"
 alias g="grep -n --color"
 alias h="history"
+alias hx="helix"
 alias l="lsd -lahS --color=auto"
 alias ll="lsd -laS --color=auto"
 alias o="dolphin ."
@@ -592,6 +594,14 @@ function configure_gpg() {
     echo "--> Configure GPG."
 
     echo "DA0D2EC084DA5974997B8F5D3BAB49A94D82E715" > ~/.gnupg/sshcontrol
+}
+
+function configure_helix() {
+    echo "--> Configure Helix"
+
+    cat > "$HOME"/.config/helix/config.toml << 'EOF'
+theme = "adwaita-dark"
+EOF
 }
 
 function configure_kde() {

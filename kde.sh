@@ -58,16 +58,20 @@ function packages() {
 }
 
 function configure() {
+    echo "--> Configure KDE."
+    kwriteconfig6 --file "$HOME"/.config/kdeglobals --group "General" --key "ColorSchemeHash" "babca25f3a5cf7ece26a85de212ab43d0a141257"
     kwriteconfig6 --file "$HOME"/.config/kdeglobals --group "KDE" --key "LookAndFeelPackage" "org.kde.breezedark.desktop"
     kwriteconfig6 --file "$HOME"/.config/kdeglobals --group "KDE" --key "widgetStyle" "Fusion"
     kwriteconfig6 --file "$HOME"/.config/kdeglobals --group "Sounds" --key "Enable" "false"
     kwriteconfig6 --file "$HOME"/.config/ksplashrc --group "KSplash" --key "Engine" "None"
     kwriteconfig6 --file "$HOME"/.config/ksplashrc --group "KSplash" --key "Theme" "None"
     kwriteconfig6 --file "$HOME"/.config/kwalletrc --group "Wallet" --key "Enabled" "false"
-    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "HighlightWindows" "false"
-    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "LayoutName" "compact"
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBoxAlternative" --key "HighlightWindows" "false"
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBoxAlternative" --key "LayoutName" "compact"
+    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "HighlightWindows" "false"
+    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "LayoutName" "compact"
+    kwriteconfig6 --file "$HOME"/.config/plasma-localerc --group "Formats" --key "LANG" "en_US.UTF-8"
+    kwriteconfig6 --file "$HOME"/.config/plasmanotifyrc --group "DoNotDisturb" --key "NotificationSoundsMuted" "true"
 
     kscreen-doctor output.HDMI-A-1.scale.1
 }
