@@ -3,10 +3,10 @@
 
 function main() {
     yay_install
-    yay_packages
     devops
     docker
     electronics
+    latex
 }
 
 function yay_install() {
@@ -122,6 +122,22 @@ function docker() {
         sudo systemctl enable docker.service &> /dev/null
         sudo usermod -aG docker "$USER" &> /dev/null
     fi
+}
+
+function latex() {
+    echo "--> Install packages for latex."
+    sudo pacman -S --noconfirm --needed \
+      texmaker \
+      texlive-latexextra \
+      texlive-fontsextra \
+      texlive-bibtexextra \
+      texlive-humanities \
+      texlive-langspanish \
+      texlive-latexextra \
+      texlive-mathscience \
+      texlive-pictures \
+      texlive-publishers \
+    &> /dev/null
 }
 
 main "$@"
