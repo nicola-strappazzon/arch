@@ -90,7 +90,7 @@ alias h="history"
 alias hx="helix"
 alias l="lsd -lahS --color=auto"
 alias ll="lsd -laS --color=auto"
-alias o="dolphin ."
+alias o="dolphin . &> /dev/null &"
 alias r="source ~/.bashrc"
 EOF
 
