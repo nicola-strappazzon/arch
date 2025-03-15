@@ -602,6 +602,10 @@ function configure_helix() {
     mkdir -p "$HOME"/.config/helix/
     cat > "$HOME"/.config/helix/config.toml << 'EOF'
 theme = "adwaita-dark"
+
+[keys.normal]
+y = "yank_joined_to_clipboard"
+
 EOF
 }
 
