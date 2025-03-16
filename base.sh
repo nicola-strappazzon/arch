@@ -297,8 +297,12 @@ function packages() {
         btop
         ca-certificates
         cups
+        cups-filters
+        cups-pdf
         curl
         dosfstools
+        foomatic-db
+        foomatic-db-ppds
         fzf
         git
         go
@@ -358,7 +362,7 @@ function services() {
 function finish() {
     echo "--> Unmount all partitions and reboot."
     echo
-    read -n 1 -s -r -p "Press any key to continue or press Ctrl+C to cancel" </dev/tty
+    read -n 1 -s -r -p "Press any KEY to continue or press Ctrl+C to cancel" </dev/tty
 
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
