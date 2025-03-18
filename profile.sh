@@ -3,6 +3,8 @@
 
 # shellcheck disable=SC2119,SC2120
 function main() {
+    sudo -v
+    
     configure_alacritty
     configure_git
     configure_gpg
@@ -721,6 +723,7 @@ EOF
 function finish() {
     echo "--> To apply the changes:"
     echo "    Close and reopen the terminal."
+    sudo -k
 }
 
 main "$@"
