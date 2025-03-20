@@ -85,16 +85,17 @@ EOF
     cat > "$HOME"/.bashrc.d/alias/general.sh << 'EOF'
 alias c="reset;clear"
 alias d="diff --color=auto"
-alias e="yazi"
+alias x="yazi"
 alias f="fzf -i --print0 | xclip -selection clipboard"
 alias g="grep --color"
 alias h="history"
-alias hx="helix"
+alias e="helix"
 alias ll="lsd -laS --color=auto"
 alias l="lsd -lahS --color=auto"
 alias md="glow --line-numbers --pager"
 alias o="dolphin . &> /dev/null &"
 alias r="source ~/.bashrc"
+alias p="btop"
 EOF
 
     cat > "$HOME"/.bashrc.d/alias/git.sh << 'EOF'
@@ -113,7 +114,7 @@ EOF
     cat > "$HOME"/.bashrc.d/env/general.sh << 'EOF'
 export BROWSER=firefox
 export CLICOLOR=1
-export EDITOR=vim
+export EDITOR=helix
 export GOPATH=$HOME/go
 export LS_COLORS="di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31"
 export PATH=$PATH:$(go env GOPATH)/bin
@@ -608,6 +609,28 @@ theme = "adwaita-dark"
 
 [keys.normal]
 y = "yank_joined_to_clipboard"
+p = "paste_clipboard_before"
+C-up = [ # scroll selections up one line
+    "ensure_selections_forward",
+    "extend_to_line_bounds",
+    "extend_char_right",
+    "extend_char_left",
+    "delete_selection",
+    "move_line_up",
+    "add_newline_above",
+    "move_line_up",
+    "replace_with_yanked"
+]
+C-down = [ # scroll selections down one line
+    "ensure_selections_forward",
+    "extend_to_line_bounds",
+    "extend_char_right",
+    "extend_char_left",
+    "delete_selection",
+    "add_newline_below",
+    "move_line_down",
+    "replace_with_yanked"
+]
 
 EOF
 }
