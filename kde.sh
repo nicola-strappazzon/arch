@@ -74,6 +74,7 @@ function configure() {
     kwriteconfig6 --file "$HOME"/.config/plasmanotifyrc --group "DoNotDisturb" --key "NotificationSoundsMuted" "true"
 
     kscreen-doctor output.HDMI-A-1.scale.1
+    kscreen-doctor output.HDMI-A-1.mode.2560x1440@60
 }
 
 function finish() {
