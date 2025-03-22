@@ -14,7 +14,6 @@ function main() {
     configure_udev
     configure_vim
     configure_vscode
-    configure_zellij
     finish
 }
 
@@ -722,10 +721,6 @@ function configure_vscode() {
   "workbench.startupEditor": "none"
 }
 EOF
-}
-
-function configure_zellij() {
-    echo "--> Configure zellij."
 }
 
 function configure_udev() {
