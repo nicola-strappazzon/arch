@@ -114,6 +114,7 @@ EOF
 export BROWSER=firefox
 export CLICOLOR=1
 export EDITOR=helix
+export SUDO_EDITOR=$(which helix)
 export GOPATH=$HOME/go
 export LS_COLORS="di=1:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31"
 export PATH=$PATH:$(go env GOPATH)/bin
