@@ -72,9 +72,9 @@ function configure() {
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "LayoutName" "compact"
     kwriteconfig6 --file "$HOME"/.config/plasma-localerc --group "Formats" --key "LANG" "en_US.UTF-8"
     kwriteconfig6 --file "$HOME"/.config/plasmanotifyrc --group "DoNotDisturb" --key "NotificationSoundsMuted" "true"
-
-    kscreen-doctor output.HDMI-A-1.scale.1
-    kscreen-doctor output.HDMI-A-1.mode.2560x1440@60
+    kwriteconfig6 --file "$HOME"/.config/kglobalshortcutsrc --group "services" --group "org.kde.spectacle.desktop" --key "RectangularRegionScreenShot" "Print"
+    kscreen-doctor output.HDMI-A-1.scale.1 &> /dev/null
+    kscreen-doctor output.HDMI-A-1.mode.2560x1440@60 &> /dev/null
 }
 
 function finish() {
