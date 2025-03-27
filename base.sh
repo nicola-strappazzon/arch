@@ -302,10 +302,13 @@ function packages() {
         curl
         dosfstools
         foomatic-db
+        foomatic-db-engine
         foomatic-db-ppds
         fzf
+        ghostscript
         git
         go
+        gsfonts
         hplip
         htop
         less
