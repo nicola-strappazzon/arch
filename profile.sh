@@ -632,6 +632,11 @@ C-down = [ # scroll selections down one line
     "replace_with_yanked"
 ]
 
+[editor.whitespace.render]
+space = "all"
+tab = "all"
+newline = "none"
+
 EOF
 }
 
