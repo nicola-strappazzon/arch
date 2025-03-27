@@ -598,6 +598,14 @@ function configure_gpg() {
     echo "--> Configure GPG."
 
     echo "DA0D2EC084DA5974997B8F5D3BAB49A94D82E715" > ~/.gnupg/sshcontrol
+
+    cat > "$HOME"/.gnupg/gpg-agent.conf << 'EOF'
+enable-ssh-support
+default-cache-ttl 43200
+max-cache-ttl 43200
+EOF
+
+    gpgconf --kill gpg-agent
 }
 
 function configure_helix() {
