@@ -95,6 +95,7 @@ alias md="glow --line-numbers --pager"
 alias o="dolphin . &> /dev/null &"
 alias r="source ~/.bashrc"
 alias p="btop"
+alias copy='xclip -sel clip'
 EOF
 
     cat > "$HOME"/.bashrc.d/alias/git.sh << 'EOF'
