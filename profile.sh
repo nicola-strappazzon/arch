@@ -22,7 +22,7 @@ function configure_ntp() {
     echo "--> Configure time zone and NTP."
     timedatectl set-timezone Europe/Madrid
     timedatectl set-ntp true
-    hwclock --systohc
+    sudo hwclock --systohc
 }
 
 function configure_alacritty() {
