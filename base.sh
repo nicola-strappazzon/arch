@@ -366,7 +366,6 @@ function finish() {
     echo "--> Install process is finished."
     echo
     read -n 1 -s -r -p "Please remove the installation medium and press any KEY to reboot or press Ctrl+C to cancel" </dev/tty
-    echo "--> Unmount all partitions and reboot."
 
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true

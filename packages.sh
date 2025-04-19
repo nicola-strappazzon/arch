@@ -46,7 +46,7 @@ function yay_install() {
 }
 
 function install_devops() {
-    echo "--> Install packages for devops."
+    echo "--> Install aditional packages."
     sudo pacman -S --noconfirm --needed \
         alacritty \
         bat \
@@ -91,11 +91,6 @@ function install_devops() {
         zoom                       `# Zoom meeting client`       \
     &> /dev/null
 
-    VBoxManage setextradata global GUI/SuppressMessages all &> /dev/null
-}
-
-function install_electronics() {
-    echo "--> Install packages for electronics."
     sudo pacman -S --noconfirm --needed \
         arduino-cli \
         avr-binutils \
@@ -111,11 +106,13 @@ function install_electronics() {
     yay -Sy --noconfirm --needed \
         tio \
     &> /dev/null
+
+    VBoxManage setextradata global GUI/SuppressMessages all &> /dev/null
 }
 
 function install_docker() {
     echo "--> Install docker."
-    if ! type "docker" > /dev/null; then
+    if ! command -v "docker" >/dev/null; then
         sudo pacman -S docker docker-compose --noconfirm --needed &> /dev/null
         sudo systemctl start docker.service &> /dev/null
         sudo systemctl enable docker.service &> /dev/null
