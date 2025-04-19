@@ -83,9 +83,10 @@ function partitioning() {
     (swapoff --all) || true
 
     # Delete old partitions:
-    (parted --script "${VOLUMEN}" rm 1 &> /dev/null) || true
-    (parted --script "${VOLUMEN}" rm 2 &> /dev/null) || true
-    (parted --script "${VOLUMEN}" rm 3 &> /dev/null) || true
+    wipefs --all --force --quiet "${VOLUMEN}"
+#     (parted --script "${VOLUMEN}" rm 1 &> /dev/null) || true
+#     (parted --script "${VOLUMEN}" rm 2 &> /dev/null) || true
+#     (parted --script "${VOLUMEN}" rm 3 &> /dev/null) || true
 
     # Create new partitions:
     parted --script "${VOLUMEN}" mklabel gpt
