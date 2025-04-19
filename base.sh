@@ -10,12 +10,10 @@ function main() {
     VOLUMEN="/dev/nvme0n1"
     HOSTNAME="strappazzon"
 
-    ntp
-    mirror
-    keyboard
+    configure_basic
     user_password
     partitioning
-    base
+    install_base
     configure_input
     configure_locale
     configure_environment
@@ -31,23 +29,22 @@ function main() {
     finish
 }
 
-function ntp() {
-    echo "--> Configure time zone and NTP."
+function configure_basic() {
+    echo "--> Basic configure before install."
+
+    # Configure time zone and NTP:
     timedatectl set-timezone Europe/Madrid
     timedatectl set-ntp true
     hwclock --systohc
-}
 
-function mirror() {
-    echo "--> Configure mirrorlist."
+    # Configure mirrorlist:
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
     reflector -a 48 -c ES -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
-    echo "--> Synchronize database..."
-    pacman -Sy &> /dev/null
-}
 
-function keyboard() {
-    echo "--> Configure keyboard layaout."
+    # Synchronize database:
+    pacman -Sy &> /dev/null
+
+    # Configure keyboard layaout:
     loadkeys us
 }
 
@@ -120,7 +117,7 @@ function partitioning() {
     genfstab -pU /mnt >> /mnt/etc/fstab
 }
 
-function base() {
+function install_base() {
     echo "--> Installing essential packages."
     pacstrap /mnt \
         amd-ucode \
@@ -363,9 +360,10 @@ function services() {
 }
 
 function finish() {
-    echo "--> Unmount all partitions and reboot."
+    echo "--> Install process is finished."
     echo
-    read -n 1 -s -r -p "Press any KEY to continue or press Ctrl+C to cancel" </dev/tty
+    read -n 1 -s -r -p "Please remove the installation medium and press any KEY to reboot or press Ctrl+C to cancel" </dev/tty
+    echo "--> Unmount all partitions and reboot."
 
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
