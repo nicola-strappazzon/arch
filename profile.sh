@@ -447,6 +447,11 @@ backup-icloud-local() {
 raspberri-pi-find() {
     sudo nmap -sP 192.168.1.0/24 | awk '/^Nmap/{ip=$NF}/B8:27:EB/{print ip}'
 }
+
+update-os() {
+    sudo pacman -Syu --noconfirm --needed
+    yay -Syu --noconfirm --needed
+}
 EOF
 
     cat > "$HOME"/.bashrc.d/env/gpg.sh << 'EOF'
