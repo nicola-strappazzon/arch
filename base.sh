@@ -8,6 +8,8 @@ declare PASSWORD;
 
 function main() {
     VOLUMEN="/dev/nvme0n1"
+    USERCOMMENT="Nicola Strappazzon C."
+    USERNAME="nicola"
     HOSTNAME="strappazzon"
 
     configure_basic
@@ -209,7 +211,7 @@ EOF
 
 function configure_user() {
     echo "--> Create user."
-    arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD" --comment="Nicola Strappazzon C." nicola
+    arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD" --comment="$USERCOMMENT" "$USERNAME"
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     cp /mnt/etc/skel/.bashrc /mnt/root/.bashrc
