@@ -69,12 +69,36 @@ function configure() {
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBoxAlternative" --key "HighlightWindows" "false"
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBoxAlternative" --key "LayoutName" "compact"
     kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "HighlightWindows" "false"
-    kwriteconfig6 --file "$HOME"/.config/kwinrc --group "TabBox" --key "LayoutName" "compact"
     kwriteconfig6 --file "$HOME"/.config/plasma-localerc --group "Formats" --key "LANG" "en_US.UTF-8"
     kwriteconfig6 --file "$HOME"/.config/plasmanotifyrc --group "DoNotDisturb" --key "NotificationSoundsMuted" "true"
     kwriteconfig6 --file "$HOME"/.config/kglobalshortcutsrc --group "services" --group "org.kde.spectacle.desktop" --key "RectangularRegionScreenShot" "Print"
     kscreen-doctor output.HDMI-A-1.scale.1 &> /dev/null
     kscreen-doctor output.HDMI-A-1.mode.2560x1440@60 &> /dev/null
+
+    cat << EOF | sudo tee /etc/sddm.conf.d/kde_settings.conf &> /dev/null
+[Autologin]
+Relogin=false
+Session=
+User=
+
+[General]
+HaltCommand=/usr/bin/systemctl poweroff
+RebootCommand=/usr/bin/systemctl reboot
+
+[Theme]
+Current=breeze
+
+[Users]
+MaximumUid=60513
+MinimumUid=1000
+EOF
+
+    cat << EOF | sudo tee /usr/share/sddm/themes/breeze/theme.conf.user &> /dev/null
+[General]
+background=/usr/share/wallpapers/Mountain/contents/images_dark/5120x2880.png
+showClock=true
+type=image
+EOF
 }
 
 function finish() {
