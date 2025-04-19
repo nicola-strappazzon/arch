@@ -7,7 +7,6 @@ function main() {
     yay_install
     install_devops
     install_docker
-    install_electronics
     install_latex
 }
 
