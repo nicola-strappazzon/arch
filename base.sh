@@ -84,8 +84,8 @@ function partitioning() {
     (umount --all-targets --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
-    # Delete old partitions:
-    wipefs --all --force --quiet "${VOLUMEN}"
+    # Delete all partitions:
+    (wipefs --all --force --quiet "${VOLUMEN}") || true
 #     (parted --script "${VOLUMEN}" rm 1 &> /dev/null) || true
 #     (parted --script "${VOLUMEN}" rm 2 &> /dev/null) || true
 #     (parted --script "${VOLUMEN}" rm 3 &> /dev/null) || true
