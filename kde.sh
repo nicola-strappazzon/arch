@@ -43,6 +43,7 @@ function packages() {
         kfind                 `# Find files`                 \
         kid3                  `# Audio tag editor`           \
         kmix                  `# Sound channel mixer`        \
+        koko                  `# Image gallery`              \
         konsole               `# Terminal client`            \
         ksystemlog            `# Show all logs`              \
         ktorrent              `# Torrent client`             \

@@ -5,6 +5,7 @@
 function main() {
     sudo -v
     
+    configure_ntp
     configure_alacritty
     configure_git
     configure_gpg
@@ -15,6 +16,13 @@ function main() {
     configure_vim
     configure_vscode
     finish
+}
+
+function configure_ntp() {
+    echo "--> Configure time zone and NTP."
+    timedatectl set-timezone Europe/Madrid
+    timedatectl set-ntp true
+    hwclock --systohc
 }
 
 function configure_alacritty() {
