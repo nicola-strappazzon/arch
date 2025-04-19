@@ -2,11 +2,13 @@
 # set -eu
 
 function main() {
+    sudo -v
+
     yay_install
-    devops
-    docker
-    electronics
-    latex
+    install_devops
+    install_docker
+    install_electronics
+    install_latex
 }
 
 function yay_install() {
@@ -43,7 +45,7 @@ function yay_install() {
     fi
 }
 
-function devops() {
+function install_devops() {
     echo "--> Install packages for devops."
     sudo pacman -S --noconfirm --needed \
         alacritty \
@@ -71,14 +73,11 @@ function devops() {
         zoxide \
     &> /dev/null
 
-function yay_packages() {
-    echo "--> Install yay packages."
     yay -Sy --noconfirm --needed \
         freetube       `# YouTube player` \
         google-chrome  `# Google Chrome`  \
         ivpn-ui        `# VPN Client`     \
     &> /dev/null
-}
 
     yay -Sy --noconfirm --needed \
         aws-cli-v2                 `# AWS CLI`                   \
@@ -95,7 +94,7 @@ function yay_packages() {
     VBoxManage setextradata global GUI/SuppressMessages all &> /dev/null
 }
 
-function electronics() {
+function install_electronics() {
     echo "--> Install packages for electronics."
     sudo pacman -S --noconfirm --needed \
         arduino-cli \
@@ -114,7 +113,7 @@ function electronics() {
     &> /dev/null
 }
 
-function docker() {
+function install_docker() {
     echo "--> Install docker."
     if ! type "docker" > /dev/null; then
         sudo pacman -S docker docker-compose --noconfirm --needed &> /dev/null
@@ -124,7 +123,7 @@ function docker() {
     fi
 }
 
-function latex() {
+function install_latex() {
     echo "--> Install packages for latex."
     sudo pacman -S --noconfirm --needed \
       texmaker \
