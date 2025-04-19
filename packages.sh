@@ -129,6 +129,7 @@ function install_electronics() {
         tio \
     &> /dev/null
 
+    # Install Arduino IDE 1.x:
     tmp="$(mktemp -d)"
 
     mkdir -p "$tmp"
@@ -144,6 +145,8 @@ function install_electronics() {
     tar -xf arduino-1.8.19-linux64.tar.xz > /dev/null 2>&1
     cd arduino-1.8.19/ || return
     sudo ./install.sh > /dev/null 2>&1
+
+    rm "$HOME"/Desktop/arduino-arduinoide.desktop
 }
 
 function install_latex() {
