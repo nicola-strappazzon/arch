@@ -348,6 +348,8 @@ function drivers() {
         amd-ucode \
         pulseaudio \
         pulseaudio-alsa \
+        pipewire \
+        pipewire-alsa \
         ddcutil \
     &> /dev/null
 }
