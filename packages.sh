@@ -77,6 +77,7 @@ function install_packages() {
         aws-session-manager-plugin `# AWS CLI SSM Plugin`        \
         freetube                   `# YouTube player`            \
         google-chrome              `# Google Chrome`             \
+        google-cloud-cli           `# Google Cloud Platform CLI` \
         ivpn-ui                    `# VPN Client`                \
         mongosh-bin                `# MongoDB client`            \
         rpk-bin                    `# Redpanda CLI`              \
