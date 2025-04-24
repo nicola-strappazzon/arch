@@ -102,7 +102,8 @@ alias l="lsd -lahS --color=auto"
 alias md="glow --line-numbers --pager"
 alias o="dolphin . &> /dev/null &"
 alias r="source ~/.bashrc"
-alias p="btop"
+alias t="btop"
+alias p="pass"
 alias copy='xclip -sel clip'
 EOF
 
