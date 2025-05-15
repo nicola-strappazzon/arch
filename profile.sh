@@ -339,7 +339,7 @@ aws-get-secrets-values() {
                 --compact-output \
                 --raw-output \
                 --monochrome-output \
-                "to_entries|map(\"\(.key)=\(.value|tostring)\") | .[]" \
+                "to_entries|map(\"\(.key)=\(.value|tostring|@sh)\") | .[]" \
             2> /dev/null
         )
 
@@ -367,7 +367,7 @@ aws-get-secret() {
             --compact-output \
             --raw-output \
             --monochrome-output \
-             "to_entries|map(\"\(.key)=\(.value|tostring)\") | .[]" \
+             "to_entries|map(\"\(.key)=\(.value|tostring|@sh)\") | .[]" \
         2> /dev/null
     )
 
