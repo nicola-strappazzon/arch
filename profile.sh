@@ -376,6 +376,28 @@ aws-get-secret() {
         eval "export ${KEY}"
     done
 }
+
+aws-k8-set() {
+    if [[ -z "${AWS_PROFILE}" ]]; then
+        echo "Environment variable AWS_PROFILE undefined."
+        return
+    fi
+
+    if [[ -z "${ENV}" ]]; then
+        echo "Environment variable ENV undefined."
+        return
+    fi
+
+    if [[ -z "${NAMESPACE}" ]]; then
+        echo "Environment variable NAMESPACE undefined."
+        return
+    fi
+
+    echo "Set ${AWS_PROFILE}-${ENV}-${NAMESPACE}"
+
+    kubectl config use-context $ENV
+    kubectl config set-context --current --namespace=$NAMESPACE
+}
 EOF
 
     cat > "$HOME"/.bashrc.d/functions/general.sh << 'EOF'
@@ -458,6 +480,11 @@ EOF
     cat > "$HOME"/.bashrc.d/env/gpg.sh << 'EOF'
 export GPG_TTY=$(tty)
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+yubikey () {
+    gpgconf --launch gpg-agent > /dev/null
+    gpg-connect-agent updatestartuptty /bye > /dev/null
+}
 EOF
 
     cat > "$HOME"/.bashrc.d/functions/k8.sh << 'EOF'
@@ -585,6 +612,10 @@ redpanda-help() {
 EOF
 
     cat << EOF | sudo tee /etc/profile.d/common.sh &> /dev/null
+# Set cursor visible:
+tput cvvis
+
+# Fix function:
 function append_path() {
     case ":$PATH:" in
         *:"$1":*)
