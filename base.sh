@@ -41,7 +41,12 @@ function configure_basic() {
 
     # Configure mirrorlist:
     cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    reflector -a 48 -c ES -f 5 -l 20 --sort rate --save /etc/pacman.d/mirrorlist
+    reflector \
+      --protocol https \
+      --latest 20 \
+      --number 10 \
+      --sort rate \
+      --save /etc/pacman.d/mirrorlist
 
     # Synchronize database:
     pacman -Sy &> /dev/null
