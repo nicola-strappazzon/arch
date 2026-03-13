@@ -103,19 +103,23 @@ function partitioning() {
     parted --script "${VOLUMEN}" mkpart swap linux-swap 1GiB 32GiB
     parted --script "${VOLUMEN}" mkpart root ext4 32GiB 100%
 
+    UEFI=$(lsblk --ascii --noheadings --output=PATH --filter 'PARTLABEL=="efi"')
+    SWAP=$(lsblk --ascii --noheadings --output=PATH --filter 'PARTLABEL=="swap"')
+    ROOT=$(lsblk --ascii --noheadings --output=PATH --filter 'PARTLABEL=="root"')
+
     # Format partitions:
-    mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
-    mkswap -L SWAP "${VOLUMEN}p2" &> /dev/null
-    mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
+    mkfs.fat -F32 -n UEFI "${UEFI}" &> /dev/null
+    mkswap -L SWAP "${SWAP}" &> /dev/null
+    mkfs.ext4 -L ROOT "${ROOT}" &> /dev/null
 
     # Verify partitions:
     partprobe "${VOLUMEN}"
 
     # Mount: swap, root and boot:
-    swapon "${VOLUMEN}p2"
-    mount "${VOLUMEN}p3" /mnt
+    swapon "${SWAP}"
+    mount "${ROOT}" /mnt
     mkdir -p /mnt/boot/efi/
-    mount "${VOLUMEN}p1" /mnt/boot/efi/
+    mount "${UEFI}" /mnt/boot/efi/
 
     # Remove default directories lost+found:
     rm -rf /mnt/boot/efi/lost+found
