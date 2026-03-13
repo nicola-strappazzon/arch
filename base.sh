@@ -74,8 +74,9 @@ function partitioning() {
     echo "--> Available volumes:"
     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
         name="${VOLUMES_LIST[$VOLUMEN_INDEX]}"
-        info=$(lsblk -dn -o SIZE,MODEL "/dev/$name")
-        printf "  %d) %s %s\n" "$((VOLUMEN_INDEX+1))" "$name" "$info"
+        size=$(lsblk --nodeps --noheadings --output=SIZE "/dev/$name")
+        model=$(lsblk --nodeps --noheadings --output=MODEL "/dev/$name")
+        printf "  %d) %s\t%s\n" "$((VOLUMEN_INDEX+1))" "$size" "$model"
     done
 
     VOLUMENS_COUNT=${#VOLUMES_LIST[@]}
