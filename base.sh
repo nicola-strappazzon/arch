@@ -11,8 +11,8 @@ function main() {
     USERNAME="nicola"
     HOSTNAME="strappazzon"
 
-    configure_basic
-    user_password
+    # configure_basic
+    # user_password
     partitioning
     # install_base
     # configure_input
@@ -115,6 +115,11 @@ function partitioning() {
 
     # Verify partitions:
     partprobe "${VOLUMEN}"
+
+    echo "--> Partition layout:"
+    echo "    EFI: $UEFI"
+    echo "    SWAP: $SWAP"
+    echo "    ROOT: $ROOT"
 
     # Mount: swap, root and boot:
     swapon "${SWAP}"
