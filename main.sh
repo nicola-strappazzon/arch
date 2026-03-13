@@ -97,10 +97,10 @@ function run_remote_script() {
 function help() {
     echo " Usage:"
     echo ""
-    echo "  curl -s strappazzon.me | sh -s -- base"
-    echo "  curl -s strappazzon.me | sh -s -- kde"
-    echo "  curl -s strappazzon.me | sh -s -- packages"
-    echo "  curl -s strappazzon.me | sh -s -- profile"
+    echo "  curl -s strappazzon.me | sh -s base"
+    echo "  curl -s strappazzon.me | sh -s kde"
+    echo "  curl -s strappazzon.me | sh -s packages"
+    echo "  curl -s strappazzon.me | sh -s profile"
     echo ""
 }
 
