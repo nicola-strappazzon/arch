@@ -94,6 +94,8 @@ function partitioning() {
     umount --quiet --recursive /mnt/boot/efi 2>/dev/null || true
     umount --quiet --recursive /mnt 2>/dev/null || true
     swapoff --all 2>/dev/null || true
+    cryptsetup close cryptroot 2>/dev/null || true
+    udevadm settle
 
     # Delete all partitions:
     wipefs --all --force --quiet "${VOLUMEN}"
@@ -131,9 +133,9 @@ function partitioning() {
 
     # Encrypt disk
 
-    cryptsetup luksFormat --type luks2 --batch-mode "$ROOT" --key-file -
+    cryptsetup luksFormat --type luks2 --batch-mode "$ROOT"
     cryptsetup open "$ROOT" cryptroot
-
+    udevadm settle
     mkfs.ext4 -L ROOT "/dev/mapper/cryptroot" &> /dev/null
 
     # Mount: swap, root and boot:
