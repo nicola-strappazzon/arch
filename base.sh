@@ -122,7 +122,7 @@ function partitioning() {
     fi
 
     echo "--> Partition layout:"
-    printf "    EFI : %s\n    SWAP: %s\n    ROOT: %s\n" "$UEFI" "$SWAP" "$ROOT"
+    printf "     EFI: %s\n    SWAP: %s\n    ROOT: %s\n" "$UEFI" "$SWAP" "$ROOT"
 
     # Format partitions:
     mkfs.fat -F32 -n UEFI "${UEFI}" &> /dev/null
