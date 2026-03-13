@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 # set -eu
 
-# declare VOLUMEN;
-# declare VOLUMEN_ID;
 declare HOSTNAME;
 declare PASSWORD;
 
 function main() {
-    # VOLUMEN="/dev/nvme0n1"
     USERCOMMENT="Nicola Strappazzon C."
     USERNAME="nicola"
     HOSTNAME="strappazzon"
@@ -55,71 +52,18 @@ function configure_basic() {
     loadkeys us
 }
 
-function user_password() {
-    echo "--> Define password for root and user."
-    while true; do
-        IFS="" read -r -s -p "    Enter your password: " PASSWORD </dev/tty
-        echo
-        IFS="" read -r -s -p "    Confirm your password: " password_confirm </dev/tty
-        echo
-        [ "${PASSWORD}" = "${password_confirm}" ] && break
-        echo "--> Passwords do not match. Please try again."
+function partitioning() {
+    readarray -t VOLUMES_LIST < <(lsblk --list --nodeps --ascii --noheadings --output=NAME | sort)
+    VOLUMENS_COUNT=$(( ${#VOLUMES_LIST[@]} - 1 ))
+
+    echo "--> Available volumes:"
+    for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
+        echo "    ${VOLUMEN_INDEX}. ${VOLUMES_LIST[$VOLUMEN_INDEX]}"
     done
-    PASSWORD=$(openssl passwd -6 "$password_confirm")
-}
 
-detect_partitions() {
-    case "$DISK" in
-        *nvme*|*mmcblk*)
-            EFI_PART="${DISK}p1"
-            ROOT_PART="${DISK}p2"
-            ;;
-        *)
-            EFI_PART="${DISK}1"
-            ROOT_PART="${DISK}2"
-            ;;
-    esac
-}
-
-partition_disk() {
-    local disk="$1"
-
-    [ -b "$disk" ] || { echo "Invalid disk: $disk"; exit 1; }
-
-    echo "--> Preparing disk $disk"
-
-    wipefs -af "$disk"
-
-    sgdisk -Z "$disk"
-    sgdisk -g "$disk"
-
-    sgdisk -n1:0:+512M -t1:ef00 -c1:"EFI" "$disk"
-    sgdisk -n2:0:0 -t2:8300 -c2:"ROOT" "$disk"
-
-    partprobe "$disk"
-    udevadm settle
-}
-
-partitioning() {
-    partition_disk "$DISK"
-    detect_partitions
-
-    echo "EFI partition: $EFI_PART"
-    echo "ROOT partition: $ROOT_PART"
-}
-
-# function partitioning() {
-#     readarray -t VOLUMES_LIST < <(lsblk --list --nvme --nodeps --ascii --noheadings --output=NAME | sort)
-#     VOLUMENS_COUNT=$(( ${#VOLUMES_LIST[@]} - 1 ))
-
-#     echo "--> Available volumes:"
-#     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
-#         echo "    ${VOLUMEN_INDEX}. ${VOLUMES_LIST[$VOLUMEN_INDEX]}"
-#     done
-
-#     until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
-#         IFS="" read -r -p "  > Choice volume number: " VOLUMEN_ID </dev/tty
-#     done
+    until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
+        IFS="" read -r -p "  > Choice volume number: " VOLUMEN_ID </dev/tty
+    done
 
 #     VOLUMEN="/dev/${VOLUMES_LIST[$VOLUMEN_ID]}"
 #     echo "  > Has chosen this volume: $VOLUMEN"
@@ -163,7 +107,7 @@ partitioning() {
 #     # Generate fstab:
 #     mkdir /mnt/etc/
 #     genfstab -pU /mnt >> /mnt/etc/fstab
-# }
+}
 
 function install_base() {
     echo "--> Installing essential packages."
