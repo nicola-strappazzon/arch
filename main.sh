@@ -90,10 +90,10 @@ function run_remote_script() {
     else
         echo " Usage:"
         echo ""
-        echo "  curl -sfL strappazzon.me/arch | sh -s -- base"
-        echo "  curl -sfL strappazzon.me/arch | sh -s -- kde"
-        echo "  curl -sfL strappazzon.me/arch | sh -s -- packages"
-        echo "  curl -sfL strappazzon.me/arch | sh -s -- profile"
+        echo "  curl -s strappazzon.me | sh -s -- base"
+        echo "  curl -s strappazzon.me | sh -s -- kde"
+        echo "  curl -s strappazzon.me | sh -s -- packages"
+        echo "  curl -s strappazzon.me | sh -s -- profile"
         echo ""
     fi
 }
