@@ -302,9 +302,6 @@ function packages() {
         bind-tools
         btop
         ca-certificates
-        cups
-        cups-filters
-        cups-pdf
         curl
         dosfstools
         foomatic-db
@@ -362,10 +359,8 @@ function drivers() {
 
 function services() {
     echo "--> Enable services."
-    arch-chroot /mnt systemctl enable cups.service &> /dev/null
     arch-chroot /mnt systemctl enable NetworkManager &> /dev/null
     arch-chroot /mnt systemctl enable sshd &> /dev/null
-    arch-chroot /mnt systemctl start cups.service &> /dev/null
     arch-chroot /mnt systemctl start NetworkManager &> /dev/null
     arch-chroot /mnt systemctl start sshd &> /dev/null
 }
