@@ -18,7 +18,7 @@ function main() {
         run_remote_script "$1"
         exit 0
     else
-        show_help
+        help
     fi
 }
 
@@ -90,11 +90,11 @@ function run_remote_script() {
         echo ""
         curl -s -f -L "${URI}" | sh
     else
-        show_help
+        help
     fi
 }
 
-function show_help() {
+function help() {
     echo " Usage:"
     echo ""
     echo "  curl -s strappazzon.me | sh -s -- base"
