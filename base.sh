@@ -13,6 +13,7 @@ function main() {
 
     # configure_basic
     user_password
+    volumen_password
     partitioning
     # install_base
     # configure_input
@@ -66,6 +67,18 @@ function user_password() {
         echo "--> Passwords do not match. Please try again."
     done
     PASSWORD=$(openssl passwd -6 "$password_confirm")
+}
+
+function volumen_password() {
+    echo "--> Define password for volumen."
+    while true; do
+        IFS="" read -r -s -p "    Enter your password: " PASSWORD_VOLUMEN </dev/tty
+        echo
+        IFS="" read -r -s -p "    Confirm your password: " password_confirm </dev/tty
+        echo
+        [ "${PASSWORD_VOLUMEN}" = "${password_confirm}" ] && break
+        echo "--> Passwords do not match. Please try again."
+    done
 }
 
 function partitioning() {
@@ -132,8 +145,8 @@ function partitioning() {
     # mkfs.ext4 -L ROOT "${ROOT}" &> /dev/null
 
     # Encrypt disk
-    printf "%s" "$PASSWORD" | cryptsetup luksFormat --type luks2 --batch-mode --key-file - "$ROOT"
-    printf "%s" "$PASSWORD" | cryptsetup open --key-file - "$ROOT" cryptroot
+    printf "%s" "$PASSWORD_VOLUMEN" | cryptsetup luksFormat --type luks2 --batch-mode --key-file - "$ROOT"
+    printf "%s" "$PASSWORD_VOLUMEN" | cryptsetup open --key-file - "$ROOT" cryptroot
     udevadm settle
     mkfs.ext4 -L ROOT "/dev/mapper/cryptroot" &> /dev/null
 
