@@ -42,7 +42,8 @@ function configure_basic() {
       --protocol https \
       --latest 20 \
       --number 10 \
-      --sort rate \
+      --sort score \
+      --download-timeout 10 \
       --save /etc/pacman.d/mirrorlist
 
     # Synchronize database:
