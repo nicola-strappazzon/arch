@@ -58,7 +58,7 @@ function configure_basic() {
 
 function user_password() {
     local confirm
-    echo "--> Define password for root and user."
+    echo "--> Set password for root and the user account."
     while true; do
         IFS="" read -r -s -p "    Enter your password: " PASSWORD </dev/tty
         echo
@@ -81,7 +81,7 @@ function user_password() {
 
 function volumen_password() {
     local confirm
-    echo "--> Define password for volumen."
+    echo "--> Set password for the encrypted disk."
     while true; do
         IFS="" read -r -s -p "    Enter your password: " PASSWORD_VOLUMEN </dev/tty
         echo
