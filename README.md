@@ -6,10 +6,6 @@ The repository contains a personal distribution based on Arch Linux.
 > - The author of these scripts is not responsible for any inconveniences.
 > - By default, the username and hostname are set to my first and last name, and is part of code.
 
-```bash
-curl -s strappazzon.me
-```
-
 ## Flash OS images to USB drives
 
 Download the [Arch Linux ISO](https://archlinux.org/download) and use [Etcher](https://etcher.balena.io) to flash it to a USB drive.
