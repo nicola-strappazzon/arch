@@ -11,22 +11,22 @@ function main() {
     USERNAME="nicola"
     HOSTNAME="strappazzon"
 
-    configure_basic
-    user_password
+    # configure_basic
+    # user_password
     partitioning
-    install_base
-    configure_input
-    configure_locale
-    configure_environment
-    configure_profile
-    configure_network
-    configure_user
-    configure_grub
-    configure_ntp
-    configure_wakeup
-    packages
-    drivers
-    services
+    # install_base
+    # configure_input
+    # configure_locale
+    # configure_environment
+    # configure_profile
+    # configure_network
+    # configure_user
+    # configure_grub
+    # configure_ntp
+    # configure_wakeup
+    # packages
+    # drivers
+    # services
     # finish
 }
 
@@ -127,11 +127,19 @@ function partitioning() {
     # Format partitions:
     mkfs.fat -F32 -n UEFI "${UEFI}" &> /dev/null
     mkswap -L SWAP "${SWAP}" &> /dev/null
-    mkfs.ext4 -L ROOT "${ROOT}" &> /dev/null
+    # mkfs.ext4 -L ROOT "${ROOT}" &> /dev/null
+
+    # Encrypt disk
+
+    cryptsetup luksFormat --type luks2 --batch-mode "$ROOT" --key-file -
+    cryptsetup open "$ROOT" cryptroot
+
+    mkfs.ext4 -L ROOT "/dev/mapper/cryptroot" &> /dev/null
 
     # Mount: swap, root and boot:
     swapon "${SWAP}"
-    mount "${ROOT}" /mnt
+    # mount "${ROOT}" /mnt
+    mount "/dev/mapper/cryptroot" /mnt
     mkdir -p /mnt/boot/efi/
     mount "${UEFI}" /mnt/boot/efi/
 
@@ -142,6 +150,7 @@ function partitioning() {
     # Generate fstab:
     mkdir -p /mnt/etc/
     genfstab -pU /mnt >> /mnt/etc/fstab
+    echo "cryptroot $ROOT none luks" >> /mnt/etc/crypttab
 }
 
 function install_base() {
@@ -395,7 +404,7 @@ function finish() {
     reboot
 }
 
-ltrim() {
+function ltrim() {
     local s="$*"
     printf "%s" "${s#"${s%%[![:space:]]*}"}"
 }
