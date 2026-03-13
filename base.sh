@@ -423,7 +423,6 @@ function drivers() {
     arch-chroot /mnt pacman --sync --noconfirm --needed \
         alsa-firmware \
         alsa-utils \
-        amd-ucode \
         pulseaudio \
         pulseaudio-alsa \
         pipewire \
