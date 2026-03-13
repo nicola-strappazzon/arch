@@ -292,23 +292,35 @@ function configure_user() {
 
 function configure_grub() {
     echo "==> Install and configure bootloader."
+
     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
     # Configure kernel parameters for LUKS
     sed -i "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot\"|" /mnt/etc/default/grub
+
+    # Silent boot
+    sed -i 's/^#GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /mnt/etc/default/grub
+    sed -i 's/^#GRUB_TIMEOUT_STYLE=.*/GRUB_TIMEOUT_STYLE=hidden/' /mnt/etc/default/grub
+    sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3"/' /mnt/etc/default/grub
+
     # Enable encrypt hook
     sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
 
-    echo 'GRUB_ENABLE_CRYPTODISK=y' >> /mnt/etc/default/grub
     arch-chroot /mnt mkinitcpio -P &> /dev/null
-    arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
 
+    # Required temporarily for grub-install with encrypted root
+    echo 'GRUB_ENABLE_CRYPTODISK=y' >> /mnt/etc/default/grub
+
+    arch-chroot /mnt grub-install \
+        --target=x86_64-efi \
+        --efi-directory=/boot/efi \
+        --bootloader-id=GRUB \
+    &> /dev/null
+
+    # Remove it to avoid double password prompt
     sed -i '/GRUB_ENABLE_CRYPTODISK/d' /mnt/etc/default/grub
-    sed -i "s/timeout=5/timeout=0/" /mnt/boot/grub/grub.cfg
-    sed -i "s/echo	'Loading Linux linux ...'//" /mnt/boot/grub/grub.cfg
-    sed -i "s/echo	'Loading initial ramdisk ...'//" /mnt/boot/grub/grub.cfg
-    sed -i "s/loglevel=3 quiet/quiet loglevel=0 rd.systemd.show_status=auto rd.udev.log_level=3/" /mnt/boot/grub/grub.cfg
 
+    # Generate final config
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
 }
 
