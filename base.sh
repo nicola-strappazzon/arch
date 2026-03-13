@@ -12,20 +12,20 @@ function main() {
     USERNAME="nicola"
     HOSTNAME="strappazzon"
 
-    # configure_basic
+    configure_basic
     user_password
     volumen_password
     partitioning
-    # install_base
-    # configure_input
-    # configure_locale
-    # configure_environment
-    # configure_profile
-    # configure_network
-    # configure_user
-    # configure_grub
-    # configure_ntp
-    # configure_wakeup
+    install_base
+    configure_input
+    configure_locale
+    configure_environment
+    configure_profile
+    configure_network
+    configure_user
+    configure_grub
+    configure_ntp
+    configure_wakeup
     # packages
     # drivers
     # services
@@ -157,13 +157,9 @@ function partitioning() {
         exit 1
     fi
 
-    echo "--> Partition layout:"
-    printf "     EFI: %s\n    SWAP: %s\n    ROOT: %s\n" "$UEFI" "$SWAP" "$ROOT"
-
     # Format partitions:
     mkfs.fat -F32 -n UEFI "${UEFI}" &> /dev/null
     mkswap -L SWAP "${SWAP}" &> /dev/null
-    # mkfs.ext4 -L ROOT "${ROOT}" &> /dev/null
 
     # Encrypt disk
     printf "%s" "$PASSWORD_VOLUMEN" | cryptsetup luksFormat --type luks2 --batch-mode --key-file - "$ROOT"
@@ -173,7 +169,6 @@ function partitioning() {
 
     # Mount: swap, root and boot:
     swapon "${SWAP}"
-    # mount "${ROOT}" /mnt
     mount "/dev/mapper/cryptroot" /mnt
     mkdir -p /mnt/boot/efi/
     mount "${UEFI}" /mnt/boot/efi/
@@ -291,6 +286,14 @@ function configure_user() {
 
 function configure_grub() {
     echo "--> Install and configure bootloader."
+    ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
+
+    # Configure kernel parameters for LUKS
+    sed -i "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot\"|" /mnt/etc/default/grub
+    # Enable encrypt hook
+    sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
+
+    arch-chroot /mnt mkinitcpio -P &> /dev/null
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB &> /dev/null
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
 
