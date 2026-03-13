@@ -115,6 +115,12 @@ function partitioning() {
     SWAP=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='swap' && PKNAME=='$DISK'")
     ROOT=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='root' && PKNAME=='$DISK'")
 
+    if [[ -z "$UEFI" || -z "$SWAP" || -z "$ROOT" ]]; then
+        echo "ERROR: Partition detection failed"
+        lsblk -o NAME,PARTLABEL,SIZE
+        exit 1
+    fi
+
     # Format partitions:
     mkfs.fat -F32 -n UEFI "${UEFI}" &> /dev/null
     mkswap -L SWAP "${SWAP}" &> /dev/null
@@ -131,7 +137,7 @@ function partitioning() {
     rm -rf /mnt/lost+found
 
     # Generate fstab:
-    mkdir /mnt/etc/
+    mkdir -p /mnt/etc/
     genfstab -pU /mnt >> /mnt/etc/fstab
 }
 
