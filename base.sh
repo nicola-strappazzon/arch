@@ -17,6 +17,7 @@ function main() {
     volumen_password
     partitioning
     install_base
+    install_microcode
     configure_input
     configure_locale
     configure_environment
@@ -180,14 +181,11 @@ function partitioning() {
     # Generate fstab:
     mkdir -p /mnt/etc/
     genfstab -pU /mnt >> /mnt/etc/fstab
-    echo "cryptroot $ROOT none luks" >> /mnt/etc/crypttab
 }
 
 function install_base() {
     echo "--> Installing essential packages."
     pacstrap /mnt \
-        amd-ucode \
-        intel-ucode \
         base \
         base-devel \
         dhcpcd \
@@ -203,6 +201,16 @@ function install_base() {
         openssh \
         vim \
     &> /dev/null
+}
+
+function install_microcode() {
+    echo "--> Installing CPU microcode."
+
+    if grep -q AuthenticAMD /proc/cpuinfo; then
+        pacstrap /mnt amd-ucode &> /dev/null
+    elif grep -q GenuineIntel /proc/cpuinfo; then
+        pacstrap /mnt intel-ucode &> /dev/null
+    fi
 }
 
 function configure_input() {
@@ -289,6 +297,8 @@ function configure_grub() {
     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
     # Configure kernel parameters for LUKS
+    # echo "cryptroot $ROOT none luks" >> /mnt/etc/crypttab
+    echo 'GRUB_ENABLE_CRYPTODISK=y' >> /mnt/etc/default/grub
     sed -i "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot\"|" /mnt/etc/default/grub
     # Enable encrypt hook
     sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
