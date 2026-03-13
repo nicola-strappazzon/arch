@@ -68,7 +68,7 @@ function partitioning() {
     VOLUMENS_COUNT=${#VOLUMES_LIST[@]}
 
     until [[ $VOLUMEN_ID =~ ^[1-9][0-9]*$ ]] && (( VOLUMEN_ID <= VOLUMENS_COUNT )); do
-        read -rp "  > Choice volume number: " VOLUMEN_ID
+        IFS="" read -r -p "  > Choice volume number: " VOLUMEN_ID </dev/tty
     done
 
     VOLUMEN="/dev/${VOLUMES_LIST[$((VOLUMEN_ID-1))]}"
