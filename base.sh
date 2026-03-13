@@ -12,9 +12,9 @@ function main() {
     USERNAME="nicola"
     HOSTNAME="strappazzon"
 
-    configure_basic
     user_password
     volumen_password
+    configure_basic
     partitioning
     install_base
     install_microcode
@@ -31,31 +31,6 @@ function main() {
     # drivers
     # services
     # finish
-}
-
-function configure_basic() {
-    echo "==> Basic configure before install."
-
-    # Configure time zone and NTP:
-    timedatectl set-timezone Europe/Madrid
-    timedatectl set-ntp true
-    hwclock --systohc
-
-    # Configure mirrorlist:
-    cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    reflector \
-      --protocol https \
-      --latest 20 \
-      --number 10 \
-      --sort score \
-      --download-timeout 10 \
-      --save /etc/pacman.d/mirrorlist
-
-    # Synchronize database:
-    pacman -Sy &> /dev/null
-
-    # Configure keyboard layaout:
-    loadkeys us
 }
 
 function user_password() {
@@ -101,6 +76,31 @@ function volumen_password() {
 
         echo "==> Passwords do not match. Please try again."
     done
+}
+
+function configure_basic() {
+    echo "==> Basic configure before install."
+
+    # Configure time zone and NTP:
+    timedatectl set-timezone Europe/Madrid
+    timedatectl set-ntp true
+    hwclock --systohc
+
+    # Configure mirrorlist:
+    cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+    reflector \
+      --protocol https \
+      --latest 20 \
+      --number 10 \
+      --sort score \
+      --download-timeout 10 \
+      --save /etc/pacman.d/mirrorlist
+
+    # Synchronize database:
+    pacman -Sy &> /dev/null
+
+    # Configure keyboard layaout:
+    loadkeys us
 }
 
 function partitioning() {
