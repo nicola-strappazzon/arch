@@ -90,8 +90,8 @@ function partitioning() {
 
     echo "--> Partitioning and format volume."
     # Umount partitions:
-    (umount --all-targets --quiet --recursive /mnt/boot/efi) || true
-    (umount --all-targets --quiet --recursive /mnt/) || true
+    (umount --quiet --recursive /mnt/boot/efi) || true
+    (umount --quiet --recursive /mnt/) || true
     (swapoff --all) || true
 
     # Delete all partitions:
