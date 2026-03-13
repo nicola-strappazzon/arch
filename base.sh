@@ -132,9 +132,8 @@ function partitioning() {
     # mkfs.ext4 -L ROOT "${ROOT}" &> /dev/null
 
     # Encrypt disk
-
-    cryptsetup luksFormat --type luks2 --batch-mode "$ROOT"
-    cryptsetup open "$ROOT" cryptroot
+    printf "%s" "$PASSWORD" | cryptsetup luksFormat --type luks2 --batch-mode --key-file - "$ROOT"
+    printf "%s" "$PASSWORD" | cryptsetup open --key-file - "$ROOT" cryptroot
     udevadm settle
     mkfs.ext4 -L ROOT "/dev/mapper/cryptroot" &> /dev/null
 
