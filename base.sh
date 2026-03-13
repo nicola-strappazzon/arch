@@ -69,24 +69,35 @@ function user_password() {
 }
 
 detect_partitions() {
-    if [[ "$DISK" =~ nvme|mmcblk ]]; then
-        EFI_PART="${DISK}p1"
-        ROOT_PART="${DISK}p2"
-    else
-        EFI_PART="${DISK}1"
-        ROOT_PART="${DISK}2"
-    fi
+    case "$DISK" in
+        *nvme*|*mmcblk*)
+            EFI_PART="${DISK}p1"
+            ROOT_PART="${DISK}p2"
+            ;;
+        *)
+            EFI_PART="${DISK}1"
+            ROOT_PART="${DISK}2"
+            ;;
+    esac
 }
 
 partition_disk() {
     local disk="$1"
-    echo "Preparing disk $disk"
+
+    [ -b "$disk" ] || { echo "Invalid disk: $disk"; exit 1; }
+
+    echo "--> Preparing disk $disk"
+
     wipefs -af "$disk"
-    sgdisk --zap-all "$disk"
+
+    sgdisk -Z "$disk"
+    sgdisk -g "$disk"
+
     sgdisk -n1:0:+512M -t1:ef00 -c1:"EFI" "$disk"
     sgdisk -n2:0:0 -t2:8300 -c2:"ROOT" "$disk"
+
     partprobe "$disk"
-    sleep 2
+    udevadm settle
 }
 
 partitioning() {
