@@ -10,9 +10,13 @@ The repository contains a personal distribution based on Arch Linux.
 curl -s strappazzon.me
 ```
 
+## Flash OS images to USB drives
+
+Download the [Arch Linux ISO](https://archlinux.org/download) and use [Etcher](https://etcher.balena.io) to flash it to a USB drive.
+
 ## Install
 
-Prepare a USB flash drive with an [Arch Linux image](https://archlinux.org/download). During the computer's boot process, select the USB as the boot device (F12). Once Arch Linux Live has started, enter the following commands:
+During the computer's boot process, select the USB as the boot device (F12). Once Arch Linux Live has started, enter the following commands:
 
 ```bash
 curl -s strappazzon.me | sh -s base
