@@ -11,22 +11,22 @@ function main() {
     USERNAME="nicola"
     HOSTNAME="strappazzon"
 
-    # configure_basic
-    # user_password
+    configure_basic
+    user_password
     partitioning
-    # install_base
-    # configure_input
-    # configure_locale
-    # configure_environment
-    # configure_profile
-    # configure_network
-    # configure_user
-    # configure_grub
-    # configure_ntp
-    # configure_wakeup
-    # packages
-    # drivers
-    # services
+    install_base
+    configure_input
+    configure_locale
+    configure_environment
+    configure_profile
+    configure_network
+    configure_user
+    configure_grub
+    configure_ntp
+    configure_wakeup
+    packages
+    drivers
+    services
     # finish
 }
 
