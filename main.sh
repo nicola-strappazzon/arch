@@ -5,12 +5,12 @@ declare PLATFORM
 declare ARCH
 
 function main() {
-    PLATFORM="$(uname -s)"
-    ARCH="$(uname -m)"
+    # PLATFORM="$(uname -s)"
+    # ARCH="$(uname -m)"
 
-    check_valid_platform
-    check_valid_platform_architecture
-    check_valid_distribution
+    # check_valid_platform
+    # check_valid_platform_architecture
+    # check_valid_distribution
     check_exist_curl
     banner
 

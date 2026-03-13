@@ -7,30 +7,34 @@ The repository contains a personal distribution based on Arch Linux.
 > - By default, the username and hostname are set to my first and last name, and is part of code.
 > - Is adapted for a computer with the `Gigabyte B550I Aorus Pro AX` motherboard.
 
+```bash
+curl -s strappazzon.me
+```
+
 ## Install
 
 Prepare a USB flash drive with an [Arch Linux image](https://archlinux.org/download). During the computer's boot process, select the USB as the boot device (F12). Once Arch Linux Live has started, enter the following commands:
 
 ```bash
-curl -sfL strappazzon.me/arch | sh -s -- base
+curl -s strappazzon.me | sh -s -- base
 ```
 
 Once the previous step is completed without errors and you have restarted the computer, run the following command to install KDE Plasma 6.x or GNOME with all applications:
 
 ```bash
-curl -sfL strappazzon.me/arch | sh -s -- gnome
+curl -s strappazzon.me | sh -s -- gnome
 ```
 
 Install aditional applications and tools independently of the desktop:
 
 ```bash
-curl -sfL strappazzon.me/arch | sh -s -- packages
+curl -s strappazzon.me | sh -s -- packages
 ```
 
 Finally, the work environment needs to be configured:
 
 ```bash
-curl -sfL strappazzon.me/arch | sh -s -- profile
+curl -s strappazzon.me | sh -s -- profile
 ```
 
 Enjoy!
