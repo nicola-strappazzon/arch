@@ -188,7 +188,6 @@ function install_base() {
     pacstrap /mnt \
         base \
         base-devel \
-        dhcpcd \
         efibootmgr \
         grub \
         iwd \
@@ -196,7 +195,6 @@ function install_base() {
         linux-firmware \
         linux-headers \
         man-db \
-        mkinitcpio \
         networkmanager \
         openssh \
         vim \
@@ -297,7 +295,6 @@ function configure_grub() {
     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
     # Configure kernel parameters for LUKS
-    echo 'GRUB_ENABLE_CRYPTODISK=y' >> /mnt/etc/default/grub
     sed -i "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot\"|" /mnt/etc/default/grub
     # Enable encrypt hook
     sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
