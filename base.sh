@@ -12,7 +12,7 @@ function main() {
     HOSTNAME="strappazzon"
 
     # configure_basic
-    # user_password
+    user_password
     partitioning
     # install_base
     # configure_input
