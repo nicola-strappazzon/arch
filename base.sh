@@ -34,7 +34,7 @@ function main() {
 }
 
 function configure_basic() {
-    echo "--> Basic configure before install."
+    echo "==> Basic configure before install."
 
     # Configure time zone and NTP:
     timedatectl set-timezone Europe/Madrid
@@ -60,7 +60,7 @@ function configure_basic() {
 
 function user_password() {
     local confirm
-    echo "--> Set password for root and the user account."
+    echo "==> Set password for root and the user account."
     while true; do
         IFS="" read -r -s -p "    Enter your password: " PASSWORD_USER </dev/tty
         echo
@@ -68,7 +68,7 @@ function user_password() {
         echo
 
         if [ -z "$PASSWORD_USER" ]; then
-            echo "--> Password cannot be empty."
+            echo "==> Password cannot be empty."
             continue
         fi
 
@@ -76,14 +76,14 @@ function user_password() {
             break
         fi
 
-        echo "--> Passwords do not match. Please try again."
+        echo "==> Passwords do not match. Please try again."
     done
     PASSWORD_USER=$(openssl passwd -6 "$confirm")
 }
 
 function volumen_password() {
     local confirm
-    echo "--> Set password for the encrypted disk."
+    echo "==> Set password for the encrypted disk."
     while true; do
         IFS="" read -r -s -p "    Enter your password: " PASSWORD_VOLUMEN </dev/tty
         echo
@@ -91,7 +91,7 @@ function volumen_password() {
         echo
 
         if [ -z "$PASSWORD_VOLUMEN" ]; then
-            echo "--> Password cannot be empty."
+            echo "==> Password cannot be empty."
             continue
         fi
 
@@ -99,14 +99,14 @@ function volumen_password() {
             break
         fi
 
-        echo "--> Passwords do not match. Please try again."
+        echo "==> Passwords do not match. Please try again."
     done
 }
 
 function partitioning() {
     readarray -t VOLUMES_LIST < <(lsblk --list --nodeps --ascii --noheadings --output=NAME --filter 'TYPE=="disk" && SIZE > 0' | sort)
 
-    echo "--> Available volumes:"
+    echo "==> Available volumes:"
     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
         name="${VOLUMES_LIST[$VOLUMEN_INDEX]}"
         size=$(lsblk --nodeps --noheadings --output=SIZE "/dev/$name")
@@ -117,14 +117,14 @@ function partitioning() {
     VOLUMENS_COUNT=${#VOLUMES_LIST[@]}
 
     until [[ $VOLUMEN_ID =~ ^[1-9][0-9]*$ ]] && (( VOLUMEN_ID <= VOLUMENS_COUNT )); do
-        IFS="" read -r -p "  > Choice volume number: " VOLUMEN_ID </dev/tty
+        IFS="" read -r -p "--> Choice volume number: " VOLUMEN_ID </dev/tty
     done
 
     VOLUMEN="/dev/${VOLUMES_LIST[$((VOLUMEN_ID-1))]}"
 
-    echo "  > Has chosen this volume: $VOLUMEN"
+    echo "--> Has chosen this volume: $VOLUMEN"
 
-    echo "--> Partitioning and format volume."
+    echo "==> Partitioning and format volume."
     # Umount partitions:
     umount --quiet --recursive /mnt/boot/efi 2>/dev/null || true
     umount --quiet --recursive /mnt 2>/dev/null || true
@@ -184,7 +184,7 @@ function partitioning() {
 }
 
 function install_base() {
-    echo "--> Installing essential packages."
+    echo "==> Installing essential packages."
     pacstrap /mnt \
         base \
         base-devel \
@@ -204,7 +204,7 @@ function install_base() {
 }
 
 function install_microcode() {
-    echo "--> Installing CPU microcode."
+    echo "==> Installing CPU microcode."
 
     if grep -q AuthenticAMD /proc/cpuinfo; then
         pacstrap /mnt amd-ucode &> /dev/null
@@ -272,7 +272,7 @@ EOF
 }
 
 function configure_network() {
-    echo "--> Network configuration."
+    echo "==> Network configuration."
     echo $HOSTNAME > /mnt/etc/hostname
 
     cat << EOF > /mnt/etc/hosts
@@ -282,7 +282,7 @@ EOF
 }
 
 function configure_user() {
-    echo "--> Create user."
+    echo "==> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD_USER" --comment="$USERCOMMENT" "$USERNAME"
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
@@ -293,7 +293,7 @@ function configure_user() {
 }
 
 function configure_grub() {
-    echo "--> Install and configure bootloader."
+    echo "==> Install and configure bootloader."
     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
     # Configure kernel parameters for LUKS
@@ -319,14 +319,14 @@ function configure_grub() {
 }
 
 function configure_ntp() {
-    echo "--> Configure time zone and NTP."
+    echo "==> Configure time zone and NTP."
     arch-chroot /mnt timedatectl set-timezone Europe/Madrid
     arch-chroot /mnt timedatectl set-ntp true
     arch-chroot /mnt hwclock --systohc
 }
 
 function configure_wakeup() {
-    echo "--> Configure wakeup."
+    echo "==> Configure wakeup."
 
     cat << EOF | sudo tee /mnt/usr/local/bin/wakeup-disable.sh &> /dev/null
 #!/usr/bin/env sh
@@ -360,7 +360,7 @@ EOF
 }
 
 function configure_hibernation() {
-    echo "--> Configure hibernation ."
+    echo "==> Configure hibernation ."
 
     cat << EOF | sudo tee /mnt/etc/systemd/sleep.conf &> /dev/null
 [Sleep]
@@ -371,7 +371,7 @@ EOF
 }
 
 function packages() {
-    echo "--> Install aditional packages."
+    echo "==> Install aditional packages."
     PACKAGES=(
         bash-completion
         bind-tools
@@ -419,7 +419,7 @@ function packages() {
 }
 
 function drivers() {
-    echo "--> Install drivers."
+    echo "==> Install drivers."
     arch-chroot /mnt pacman --sync --noconfirm --needed \
         alsa-firmware \
         alsa-utils \
@@ -433,7 +433,7 @@ function drivers() {
 }
 
 function services() {
-    echo "--> Enable services."
+    echo "==> Enable services."
     arch-chroot /mnt systemctl enable NetworkManager &> /dev/null
     arch-chroot /mnt systemctl enable sshd &> /dev/null
     arch-chroot /mnt systemctl start NetworkManager &> /dev/null
@@ -441,7 +441,7 @@ function services() {
 }
 
 function finish() {
-    echo "--> Install process is finished."
+    echo "==> Install process is finished."
     echo
     read -n 1 -s -r -p "Please remove the installation medium and press any KEY to reboot or press Ctrl+C to cancel" </dev/tty
 
