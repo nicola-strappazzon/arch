@@ -83,34 +83,34 @@ function partitioning() {
     # Delete all partitions:
     (wipefs --all --force --quiet "${VOLUMEN}") || true
 
-#     # Create new partitions:
-#     parted --script "${VOLUMEN}" mklabel gpt
-#     parted --script "${VOLUMEN}" mkpart efi fat32 1MiB 1024MiB
-#     parted --script "${VOLUMEN}" set 1 esp on
-#     parted --script "${VOLUMEN}" mkpart swap linux-swap 1GiB 32GiB
-#     parted --script "${VOLUMEN}" mkpart root ext4 32GiB 100%
+    # Create new partitions:
+    parted --script "${VOLUMEN}" mklabel gpt
+    parted --script "${VOLUMEN}" mkpart efi fat32 1MiB 1024MiB
+    parted --script "${VOLUMEN}" set 1 esp on
+    parted --script "${VOLUMEN}" mkpart swap linux-swap 1GiB 32GiB
+    parted --script "${VOLUMEN}" mkpart root ext4 32GiB 100%
 
-#     # Format partitions:
-#     mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
-#     mkswap -L SWAP "${VOLUMEN}p2" &> /dev/null
-#     mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
+    # Format partitions:
+    mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
+    mkswap -L SWAP "${VOLUMEN}p2" &> /dev/null
+    mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
 
-#     # Verify partitions:
-#     partprobe "${VOLUMEN}"
+    # Verify partitions:
+    partprobe "${VOLUMEN}"
 
-#     # Mount: swap, root and boot:
-#     swapon "${VOLUMEN}p2"
-#     mount "${VOLUMEN}p3" /mnt
-#     mkdir -p /mnt/boot/efi/
-#     mount "${VOLUMEN}p1" /mnt/boot/efi/
+    # Mount: swap, root and boot:
+    swapon "${VOLUMEN}p2"
+    mount "${VOLUMEN}p3" /mnt
+    mkdir -p /mnt/boot/efi/
+    mount "${VOLUMEN}p1" /mnt/boot/efi/
 
-#     # Remove default directories lost+found:
-#     rm -rf /mnt/boot/efi/lost+found
-#     rm -rf /mnt/lost+found
+    # Remove default directories lost+found:
+    rm -rf /mnt/boot/efi/lost+found
+    rm -rf /mnt/lost+found
 
-#     # Generate fstab:
-#     mkdir /mnt/etc/
-#     genfstab -pU /mnt >> /mnt/etc/fstab
+    # Generate fstab:
+    mkdir /mnt/etc/
+    genfstab -pU /mnt >> /mnt/etc/fstab
 }
 
 function install_base() {
