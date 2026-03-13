@@ -57,26 +57,46 @@ function configure_basic() {
 }
 
 function user_password() {
+    local confirm
     echo "--> Define password for root and user."
     while true; do
         IFS="" read -r -s -p "    Enter your password: " PASSWORD </dev/tty
         echo
-        IFS="" read -r -s -p "    Confirm your password: " password_confirm </dev/tty
+        IFS="" read -r -s -p "    Confirm your password: " confirm </dev/tty
         echo
-        [ "${PASSWORD}" = "${password_confirm}" ] && break
+
+        if [ -z "$PASSWORD" ]; then
+            echo "--> Password cannot be empty."
+            continue
+        fi
+
+        if [ "$PASSWORD" = "$confirm" ]; then
+            break
+        fi
+
         echo "--> Passwords do not match. Please try again."
     done
-    PASSWORD=$(openssl passwd -6 "$password_confirm")
+    PASSWORD=$(openssl passwd -6 "$confirm")
 }
 
 function volumen_password() {
+    local confirm
     echo "--> Define password for volumen."
     while true; do
         IFS="" read -r -s -p "    Enter your password: " PASSWORD_VOLUMEN </dev/tty
         echo
-        IFS="" read -r -s -p "    Confirm your password: " password_confirm </dev/tty
+        IFS="" read -r -s -p "    Confirm your password: " confirm </dev/tty
         echo
-        [ "${PASSWORD_VOLUMEN}" = "${password_confirm}" ] && break
+
+        if [ -z "$PASSWORD_VOLUMEN" ]; then
+            echo "--> Password cannot be empty."
+            continue
+        fi
+
+        if [ "$PASSWORD_VOLUMEN" = "$confirm" ]; then
+            break
+        fi
+
         echo "--> Passwords do not match. Please try again."
     done
 }
