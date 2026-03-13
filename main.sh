@@ -5,18 +5,20 @@ declare PLATFORM
 declare ARCH
 
 function main() {
-    # PLATFORM="$(uname -s)"
-    # ARCH="$(uname -m)"
+    PLATFORM="$(uname -s)"
+    ARCH="$(uname -m)"
 
-    # check_valid_platform
-    # check_valid_platform_architecture
-    # check_valid_distribution
+    check_valid_platform
+    check_valid_platform_architecture
+    check_valid_distribution
     check_exist_curl
     banner
 
     if [ "$#" -eq 1 ]; then
         run_remote_script "$1"
         exit 0
+    else
+        show_help
     fi
 }
 
@@ -88,14 +90,18 @@ function run_remote_script() {
         echo ""
         curl -s -f -L "${URI}" | sh
     else
-        echo " Usage:"
-        echo ""
-        echo "  curl -s strappazzon.me | sh -s -- base"
-        echo "  curl -s strappazzon.me | sh -s -- kde"
-        echo "  curl -s strappazzon.me | sh -s -- packages"
-        echo "  curl -s strappazzon.me | sh -s -- profile"
-        echo ""
+        show_help
     fi
+}
+
+function show_help() {
+    echo " Usage:"
+    echo ""
+    echo "  curl -s strappazzon.me | sh -s -- base"
+    echo "  curl -s strappazzon.me | sh -s -- kde"
+    echo "  curl -s strappazzon.me | sh -s -- packages"
+    echo "  curl -s strappazzon.me | sh -s -- profile"
+    echo ""
 }
 
 main "$@"
