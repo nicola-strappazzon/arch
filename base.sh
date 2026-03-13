@@ -2,7 +2,8 @@
 # set -eu
 
 declare HOSTNAME;
-declare PASSWORD;
+declare PASSWORD_USER;
+declare PASSWORD_VOLUMEN;
 declare VOLUMEN;
 declare VOLUMEN_ID;
 
@@ -60,23 +61,23 @@ function user_password() {
     local confirm
     echo "--> Set password for root and the user account."
     while true; do
-        IFS="" read -r -s -p "    Enter your password: " PASSWORD </dev/tty
+        IFS="" read -r -s -p "    Enter your password: " PASSWORD_USER </dev/tty
         echo
         IFS="" read -r -s -p "    Confirm your password: " confirm </dev/tty
         echo
 
-        if [ -z "$PASSWORD" ]; then
+        if [ -z "$PASSWORD_USER" ]; then
             echo "--> Password cannot be empty."
             continue
         fi
 
-        if [ "$PASSWORD" = "$confirm" ]; then
+        if [ "$PASSWORD_USER" = "$confirm" ]; then
             break
         fi
 
         echo "--> Passwords do not match. Please try again."
     done
-    PASSWORD=$(openssl passwd -6 "$confirm")
+    PASSWORD_USER=$(openssl passwd -6 "$confirm")
 }
 
 function volumen_password() {
@@ -279,13 +280,13 @@ EOF
 
 function configure_user() {
     echo "--> Create user."
-    arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD" --comment="$USERCOMMENT" "$USERNAME"
+    arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD_USER" --comment="$USERCOMMENT" "$USERNAME"
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
     cp /mnt/etc/skel/.bashrc /mnt/root/.bashrc
     chmod 0600 /mnt/root/.bashrc
     arch-chroot /mnt usermod --shell /bin/bash root
-    printf "root:%s" "$PASSWORD" | arch-chroot /mnt chpasswd --encrypted
+    printf "root:%s" "$PASSWORD_USER" | arch-chroot /mnt chpasswd --encrypted
 }
 
 function configure_grub() {
