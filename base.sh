@@ -55,6 +55,19 @@ function configure_basic() {
     loadkeys us
 }
 
+function user_password() {
+    echo "--> Define password for root and user."
+    while true; do
+        IFS="" read -r -s -p "    Enter your password: " PASSWORD </dev/tty
+        echo
+        IFS="" read -r -s -p "    Confirm your password: " password_confirm </dev/tty
+        echo
+        [ "${PASSWORD}" = "${password_confirm}" ] && break
+        echo "--> Passwords do not match. Please try again."
+    done
+    PASSWORD=$(openssl passwd -6 "$password_confirm")
+}
+
 function partitioning() {
     readarray -t VOLUMES_LIST < <(lsblk --list --nodeps --ascii --noheadings --output=NAME --filter 'TYPE=="disk"' | sort)
 
