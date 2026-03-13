@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 # set -eu
 
-declare VOLUMEN;
-declare VOLUMEN_ID;
+# declare VOLUMEN;
+# declare VOLUMEN_ID;
 declare HOSTNAME;
 declare PASSWORD;
 
 function main() {
-    VOLUMEN="/dev/nvme0n1"
+    # VOLUMEN="/dev/nvme0n1"
     USERCOMMENT="Nicola Strappazzon C."
     USERNAME="nicola"
     HOSTNAME="strappazzon"
 
     configure_basic
     user_password
-    # partitioning
+    partitioning
     # install_base
     # configure_input
     # configure_locale
@@ -68,62 +68,91 @@ function user_password() {
     PASSWORD=$(openssl passwd -6 "$password_confirm")
 }
 
-function partitioning() {
-    readarray -t VOLUMES_LIST < <(lsblk --list --nvme --nodeps --ascii --noheadings --output=NAME | sort)
-    VOLUMENS_COUNT=$(( ${#VOLUMES_LIST[@]} - 1 ))
-
-    echo "--> Available volumes:"
-    for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
-        echo "    ${VOLUMEN_INDEX}. ${VOLUMES_LIST[$VOLUMEN_INDEX]}"
-    done
-
-    until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
-        IFS="" read -r -p "  > Choice volume number: " VOLUMEN_ID </dev/tty
-    done
-
-    VOLUMEN="/dev/${VOLUMES_LIST[$VOLUMEN_ID]}"
-    echo "  > Has chosen this volume: $VOLUMEN"
-
-    echo "--> Partitioning and format volume."
-    # Umount partitions:
-    (umount --all-targets --quiet --recursive /mnt/) || true
-    (swapoff --all) || true
-
-    # Delete all partitions:
-    (wipefs --all --force --quiet "${VOLUMEN}") || true
-#     (parted --script "${VOLUMEN}" rm 1 &> /dev/null) || true
-#     (parted --script "${VOLUMEN}" rm 2 &> /dev/null) || true
-#     (parted --script "${VOLUMEN}" rm 3 &> /dev/null) || true
-
-    # Create new partitions:
-    parted --script "${VOLUMEN}" mklabel gpt
-    parted --script "${VOLUMEN}" mkpart efi fat32 1MiB 1024MiB
-    parted --script "${VOLUMEN}" set 1 esp on
-    parted --script "${VOLUMEN}" mkpart swap linux-swap 1GiB 32GiB
-    parted --script "${VOLUMEN}" mkpart root ext4 32GiB 100%
-
-    # Format partitions:
-    mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
-    mkswap -L SWAP "${VOLUMEN}p2" &> /dev/null
-    mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
-
-    # Verify partitions:
-    partprobe "${VOLUMEN}"
-
-    # Mount: swap, root and boot:
-    swapon "${VOLUMEN}p2"
-    mount "${VOLUMEN}p3" /mnt
-    mkdir -p /mnt/boot/efi/
-    mount "${VOLUMEN}p1" /mnt/boot/efi/
-
-    # Remove default directories lost+found:
-    rm -rf /mnt/boot/efi/lost+found
-    rm -rf /mnt/lost+found
-
-    # Generate fstab:
-    mkdir /mnt/etc/
-    genfstab -pU /mnt >> /mnt/etc/fstab
+detect_partitions() {
+    if [[ "$DISK" =~ nvme|mmcblk ]]; then
+        EFI_PART="${DISK}p1"
+        ROOT_PART="${DISK}p2"
+    else
+        EFI_PART="${DISK}1"
+        ROOT_PART="${DISK}2"
+    fi
 }
+
+partition_disk() {
+    local disk="$1"
+    echo "Preparing disk $disk"
+    wipefs -af "$disk"
+    sgdisk --zap-all "$disk"
+    sgdisk -n1:0:+512M -t1:ef00 -c1:"EFI" "$disk"
+    sgdisk -n2:0:0 -t2:8300 -c2:"ROOT" "$disk"
+    partprobe "$disk"
+    sleep 2
+}
+
+partitioning() {
+    partition_disk "$DISK"
+    detect_partitions
+
+    echo "EFI partition: $EFI_PART"
+    echo "ROOT partition: $ROOT_PART"
+}
+
+# function partitioning() {
+#     readarray -t VOLUMES_LIST < <(lsblk --list --nvme --nodeps --ascii --noheadings --output=NAME | sort)
+#     VOLUMENS_COUNT=$(( ${#VOLUMES_LIST[@]} - 1 ))
+
+#     echo "--> Available volumes:"
+#     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
+#         echo "    ${VOLUMEN_INDEX}. ${VOLUMES_LIST[$VOLUMEN_INDEX]}"
+#     done
+
+#     until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
+#         IFS="" read -r -p "  > Choice volume number: " VOLUMEN_ID </dev/tty
+#     done
+
+#     VOLUMEN="/dev/${VOLUMES_LIST[$VOLUMEN_ID]}"
+#     echo "  > Has chosen this volume: $VOLUMEN"
+
+#     echo "--> Partitioning and format volume."
+#     # Umount partitions:
+#     (umount --all-targets --quiet --recursive /mnt/) || true
+#     (swapoff --all) || true
+
+#     # Delete all partitions:
+#     (wipefs --all --force --quiet "${VOLUMEN}") || true
+# #     (parted --script "${VOLUMEN}" rm 1 &> /dev/null) || true
+# #     (parted --script "${VOLUMEN}" rm 2 &> /dev/null) || true
+# #     (parted --script "${VOLUMEN}" rm 3 &> /dev/null) || true
+
+#     # Create new partitions:
+#     parted --script "${VOLUMEN}" mklabel gpt
+#     parted --script "${VOLUMEN}" mkpart efi fat32 1MiB 1024MiB
+#     parted --script "${VOLUMEN}" set 1 esp on
+#     parted --script "${VOLUMEN}" mkpart swap linux-swap 1GiB 32GiB
+#     parted --script "${VOLUMEN}" mkpart root ext4 32GiB 100%
+
+#     # Format partitions:
+#     mkfs.fat -F32 -n UEFI "${VOLUMEN}p1" &> /dev/null
+#     mkswap -L SWAP "${VOLUMEN}p2" &> /dev/null
+#     mkfs.ext4 -L ROOT "${VOLUMEN}p3" &> /dev/null
+
+#     # Verify partitions:
+#     partprobe "${VOLUMEN}"
+
+#     # Mount: swap, root and boot:
+#     swapon "${VOLUMEN}p2"
+#     mount "${VOLUMEN}p3" /mnt
+#     mkdir -p /mnt/boot/efi/
+#     mount "${VOLUMEN}p1" /mnt/boot/efi/
+
+#     # Remove default directories lost+found:
+#     rm -rf /mnt/boot/efi/lost+found
+#     rm -rf /mnt/lost+found
+
+#     # Generate fstab:
+#     mkdir /mnt/etc/
+#     genfstab -pU /mnt >> /mnt/etc/fstab
+# }
 
 function install_base() {
     echo "--> Installing essential packages."
