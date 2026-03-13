@@ -134,6 +134,7 @@ function install_base() {
     echo "--> Installing essential packages."
     pacstrap /mnt \
         amd-ucode \
+        intel-ucode \
         base \
         base-devel \
         dhcpcd \
