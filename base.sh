@@ -75,7 +75,7 @@ function partitioning() {
     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
         name="${VOLUMES_LIST[$VOLUMEN_INDEX]}"
         info=$(lsblk -dn -o SIZE,MODEL "/dev/$name")
-        printf "    %d) %s %s\n" "$((i+1))" "$name" "$info"
+        printf "    %d) %s %s\n" "$((VOLUMEN_INDEX+1))" "$name" "$info"
     done
 
     VOLUMENS_COUNT=${#VOLUMES_LIST[@]}
@@ -94,10 +94,9 @@ function partitioning() {
     umount --quiet --recursive /mnt 2>/dev/null || true
     swapoff --all 2>/dev/null || true
 
-    udevadm settle
-
     # Delete all partitions:
     wipefs --all --force --quiet "${VOLUMEN}"
+    sgdisk --zap-all "${VOLUMEN}" &>/dev/null || true
 
     # Create new partitions:
     parted --script "${VOLUMEN}" mklabel gpt
@@ -106,22 +105,19 @@ function partitioning() {
     parted --script "${VOLUMEN}" mkpart swap linux-swap 1GiB 32GiB
     parted --script "${VOLUMEN}" mkpart root ext4 32GiB 100%
 
-    UEFI=$(lsblk --ascii --noheadings --output=PATH --filter 'PARTLABEL=="efi"')
-    SWAP=$(lsblk --ascii --noheadings --output=PATH --filter 'PARTLABEL=="swap"')
-    ROOT=$(lsblk --ascii --noheadings --output=PATH --filter 'PARTLABEL=="root"')
+    # Verify partitions:
+    partprobe "${VOLUMEN}"
+    udevadm settle
 
-    echo "--> Partition layout:"
-    echo "    EFI: $UEFI"
-    echo "    SWAP: $SWAP"
-    echo "    ROOT: $ROOT"
+    DISK=$(basename "$VOLUMEN")
+    UEFI=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='efi'  && PKNAME=='$DISK'")
+    SWAP=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='swap' && PKNAME=='$DISK'")
+    ROOT=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='root' && PKNAME=='$DISK'")
 
     # Format partitions:
     mkfs.fat -F32 -n UEFI "${UEFI}" &> /dev/null
     mkswap -L SWAP "${SWAP}" &> /dev/null
     mkfs.ext4 -L ROOT "${ROOT}" &> /dev/null
-
-    # Verify partitions:
-    partprobe "${VOLUMEN}"
 
     # Mount: swap, root and boot:
     swapon "${SWAP}"
