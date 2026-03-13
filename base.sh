@@ -94,6 +94,8 @@ function partitioning() {
     umount --quiet --recursive /mnt 2>/dev/null || true
     swapoff --all 2>/dev/null || true
 
+    udevadm settle
+
     # Delete all partitions:
     wipefs --all --force --quiet "${VOLUMEN}"
 
