@@ -297,7 +297,6 @@ function configure_grub() {
     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
     # Configure kernel parameters for LUKS
-    # echo "cryptroot $ROOT none luks" >> /mnt/etc/crypttab
     echo 'GRUB_ENABLE_CRYPTODISK=y' >> /mnt/etc/default/grub
     sed -i "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot\"|" /mnt/etc/default/grub
     # Enable encrypt hook
