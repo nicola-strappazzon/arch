@@ -14,21 +14,21 @@ function main() {
 
     configure_basic
     user_password
-    partitioning
-    install_base
-    configure_input
-    configure_locale
-    configure_environment
-    configure_profile
-    configure_network
-    configure_user
-    configure_grub
-    configure_ntp
-    configure_wakeup
-    packages
-    drivers
-    services
-    finish
+    # partitioning
+    # install_base
+    # configure_input
+    # configure_locale
+    # configure_environment
+    # configure_profile
+    # configure_network
+    # configure_user
+    # configure_grub
+    # configure_ntp
+    # configure_wakeup
+    # packages
+    # drivers
+    # services
+    # finish
 }
 
 function configure_basic() {
