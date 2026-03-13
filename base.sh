@@ -3,6 +3,8 @@
 
 declare HOSTNAME;
 declare PASSWORD;
+declare VOLUMEN;
+declare VOLUMEN_ID;
 
 function main() {
     USERCOMMENT="Nicola Strappazzon C."
@@ -54,31 +56,32 @@ function configure_basic() {
 }
 
 function partitioning() {
-    readarray -t VOLUMES_LIST < <(lsblk --list --nodeps --ascii --noheadings --output=NAME | sort)
-    VOLUMENS_COUNT=$(( ${#VOLUMES_LIST[@]} - 1 ))
+    readarray -t VOLUMES_LIST < <(lsblk --list --nodeps --ascii --noheadings --output=NAME --filter 'TYPE=="disk"' | sort)
 
     echo "--> Available volumes:"
     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
-        echo "    ${VOLUMEN_INDEX}. ${VOLUMES_LIST[$VOLUMEN_INDEX]}"
+        name="${VOLUMES_LIST[$VOLUMEN_INDEX]}"
+        info=$(lsblk -dn -o SIZE,MODEL "/dev/$name")
+        printf "    %d) %s %s\n" "$((i+1))" "$name" "$info"
     done
 
-    until [[ $VOLUMEN_ID =~ ^[0-${VOLUMENS_COUNT}]$ ]]; do
-        IFS="" read -r -p "  > Choice volume number: " VOLUMEN_ID </dev/tty
+    VOLUMENS_COUNT=${#VOLUMES_LIST[@]}
+
+    until [[ $VOLUMEN_ID =~ ^[1-9][0-9]*$ ]] && (( VOLUMEN_ID <= VOLUMENS_COUNT )); do
+        read -rp "  > Choice volume number: " VOLUMEN_ID
     done
 
-#     VOLUMEN="/dev/${VOLUMES_LIST[$VOLUMEN_ID]}"
-#     echo "  > Has chosen this volume: $VOLUMEN"
+    VOLUMEN="/dev/${VOLUMES_LIST[$((VOLUMEN_ID-1))]}"
 
-#     echo "--> Partitioning and format volume."
-#     # Umount partitions:
-#     (umount --all-targets --quiet --recursive /mnt/) || true
-#     (swapoff --all) || true
+    echo "  > Has chosen this volume: $VOLUMEN"
 
-#     # Delete all partitions:
-#     (wipefs --all --force --quiet "${VOLUMEN}") || true
-# #     (parted --script "${VOLUMEN}" rm 1 &> /dev/null) || true
-# #     (parted --script "${VOLUMEN}" rm 2 &> /dev/null) || true
-# #     (parted --script "${VOLUMEN}" rm 3 &> /dev/null) || true
+    echo "--> Partitioning and format volume."
+    # Umount partitions:
+    (umount --all-targets --quiet --recursive /mnt/) || true
+    (swapoff --all) || true
+
+    # Delete all partitions:
+    (wipefs --all --force --quiet "${VOLUMEN}") || true
 
 #     # Create new partitions:
 #     parted --script "${VOLUMEN}" mklabel gpt
