@@ -108,6 +108,11 @@ function partitioning() {
     SWAP=$(lsblk --ascii --noheadings --output=PATH --filter 'PARTLABEL=="swap"')
     ROOT=$(lsblk --ascii --noheadings --output=PATH --filter 'PARTLABEL=="root"')
 
+    echo "--> Partition layout:"
+    echo "    EFI: $UEFI"
+    echo "    SWAP: $SWAP"
+    echo "    ROOT: $ROOT"
+
     # Format partitions:
     mkfs.fat -F32 -n UEFI "${UEFI}" &> /dev/null
     mkswap -L SWAP "${SWAP}" &> /dev/null
@@ -115,11 +120,6 @@ function partitioning() {
 
     # Verify partitions:
     partprobe "${VOLUMEN}"
-
-    echo "--> Partition layout:"
-    echo "    EFI: $UEFI"
-    echo "    SWAP: $SWAP"
-    echo "    ROOT: $ROOT"
 
     # Mount: swap, root and boot:
     swapon "${SWAP}"
