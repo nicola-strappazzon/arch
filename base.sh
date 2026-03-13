@@ -90,12 +90,12 @@ function partitioning() {
 
     echo "--> Partitioning and format volume."
     # Umount partitions:
-    (umount --quiet --recursive /mnt/boot/efi) || true
-    (umount --quiet --recursive /mnt/) || true
-    (swapoff --all) || true
+    umount --quiet --recursive /mnt/boot/efi 2>/dev/null || true
+    umount --quiet --recursive /mnt 2>/dev/null || true
+    swapoff --all 2>/dev/null || true
 
     # Delete all partitions:
-    (wipefs --all --force --quiet "${VOLUMEN}") || true
+    wipefs --all --force --quiet "${VOLUMEN}"
 
     # Create new partitions:
     parted --script "${VOLUMEN}" mklabel gpt
