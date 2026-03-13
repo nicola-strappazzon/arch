@@ -69,7 +69,7 @@ function user_password() {
 }
 
 function partitioning() {
-    readarray -t VOLUMES_LIST < <(lsblk --list --nodeps --ascii --noheadings --output=NAME --filter 'TYPE=="disk"' | sort)
+    readarray -t VOLUMES_LIST < <(lsblk --list --nodeps --ascii --noheadings --output=NAME --filter 'TYPE=="disk" && SIZE > 0' | sort)
 
     echo "--> Available volumes:"
     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
@@ -120,6 +120,9 @@ function partitioning() {
         lsblk -o NAME,PARTLABEL,SIZE
         exit 1
     fi
+
+    echo "--> Partition layout:"
+    printf "    EFI : %s\n    SWAP: %s\n    ROOT: %s\n" "$UEFI" "$SWAP" "$ROOT"
 
     # Format partitions:
     mkfs.fat -F32 -n UEFI "${UEFI}" &> /dev/null
