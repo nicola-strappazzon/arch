@@ -171,11 +171,11 @@ function partitioning() {
     # Mount: swap, root and boot:
     swapon "${SWAP}"
     mount "/dev/mapper/cryptroot" /mnt
-    mkdir -p /mnt/boot/efi/
-    mount "${UEFI}" /mnt/boot/efi/
+    mkdir -p /mnt/boot/
+    mount "${UEFI}" /mnt/boot/
 
     # Remove default directories lost+found:
-    rm -rf /mnt/boot/efi/lost+found
+    rm -rf /mnt/boot/lost+found
     rm -rf /mnt/lost+found
 
     # Generate fstab:
@@ -305,7 +305,7 @@ function configure_bootloader() {
     arch-chroot /mnt bootctl --path=/boot/efi install &> /dev/null
 
     # Loader configuration
-    mkdir -p /mnt/boot/efi/loader
+    mkdir -p /mnt/boot/loader
 
     cat << EOF | sudo tee /mnt/boot/efi/loader/loader.conf &> /dev/null
 default arch
