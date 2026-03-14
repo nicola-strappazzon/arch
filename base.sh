@@ -302,7 +302,7 @@ function configure_bootloader() {
     fi
 
     # Install systemd-boot
-    arch-chroot /mnt bootctl --path=/boot/efi install &> /dev/null
+    arch-chroot /mnt bootctl --path=/boot install &> /dev/null
 
     # Loader configuration
     mkdir -p /mnt/boot/loader
