@@ -109,9 +109,9 @@ function partitioning() {
     echo "==> Available volumes:"
     for VOLUMEN_INDEX in "${!VOLUMES_LIST[@]}"; do
         name="${VOLUMES_LIST[$VOLUMEN_INDEX]}"
-        size=$(lsblk --nodeps --noheadings --output=SIZE "/dev/$name")
-        model=$(lsblk --nodeps --noheadings --output=MODEL "/dev/$name")
-        printf "    %d) %s (%s)\n" "$((VOLUMEN_INDEX+1))" "$model" "$(ltrim "$size")"
+        size=$(lsblk --nodeps --noheadings --output=SIZE "/dev/${name}")
+        model=$(lsblk --nodeps --noheadings --output=MODEL "/dev/${name}")
+        printf "    %d) %s\t%s (%s)\n" "$((VOLUMEN_INDEX+1))" "${name}" "${model}" "$(ltrim "${size}")"
     done
 
     VOLUMENS_COUNT=${#VOLUMES_LIST[@]}
@@ -148,11 +148,11 @@ function partitioning() {
     udevadm settle
 
     DISK=$(basename "$VOLUMEN")
-    UEFI=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='efi'  && PKNAME=='$DISK'")
-    SWAP=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='swap' && PKNAME=='$DISK'")
-    ROOT=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='root' && PKNAME=='$DISK'")
+    UEFI=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='efi'  && PKNAME=='${DISK}'")
+    SWAP=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='swap' && PKNAME=='${DISK}'")
+    ROOT=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='root' && PKNAME=='${DISK}'")
 
-    if [[ -z "$UEFI" || -z "$SWAP" || -z "$ROOT" ]]; then
+    if [[ -z "${UEFI}" || -z "${SWAP}" || -z "${ROOT}" ]]; then
         echo "ERROR: Partition detection failed"
         lsblk -o NAME,PARTLABEL,SIZE
         exit 1
@@ -163,8 +163,8 @@ function partitioning() {
     mkswap -L SWAP "${SWAP}" &> /dev/null
 
     # Encrypt disk
-    printf "%s" "$PASSWORD_VOLUMEN" | cryptsetup luksFormat --type luks2 --batch-mode --key-file - "$ROOT"
-    printf "%s" "$PASSWORD_VOLUMEN" | cryptsetup open --key-file - "$ROOT" cryptroot
+    printf "%s" "${PASSWORD_VOLUMEN}" | cryptsetup luksFormat --type luks2 --batch-mode --key-file - "${ROOT}"
+    printf "%s" "${PASSWORD_VOLUMEN}" | cryptsetup open --key-file - "${ROOT}" cryptroot
     udevadm settle
     mkfs.ext4 -L ROOT "/dev/mapper/cryptroot" &> /dev/null
 
