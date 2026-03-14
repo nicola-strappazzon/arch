@@ -69,7 +69,7 @@ function configure_user() {
 
 function configure_network() {
     echo "--> Network configuration."
-    echo $HOSTNAME > /etc/hostname
+    echo "${HOSTNAME}" > /etc/hostname
 
     cat << EOF > /etc/hosts
 ::1         localhost
