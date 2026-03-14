@@ -307,16 +307,16 @@ function configure_bootloader() {
     # Loader configuration
     mkdir -p /mnt/boot/loader
 
-    cat << EOF | sudo tee /mnt/boot/efi/loader/loader.conf &> /dev/null
+    cat << EOF | sudo tee /mnt/boot/loader/loader.conf &> /dev/null
 default arch
 timeout 0
 editor no
 EOF
 
     # Boot entry
-    mkdir -p /mnt/boot/efi/loader/entries
+    mkdir -p /mnt/boot/loader/entries
 
-    cat << EOF | sudo tee /mnt/boot/efi/loader/entries/arch.conf &> /dev/null
+    cat << EOF | sudo tee /mnt/boot/loader/entries/arch.conf &> /dev/null
 title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /$MICROCODE
