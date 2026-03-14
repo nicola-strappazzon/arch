@@ -24,7 +24,7 @@ function main() {
     configure_profile
     configure_network
     configure_user
-    configure_grub
+    configure_bootloader
     configure_ntp
     configure_wakeup
     # packages
@@ -189,7 +189,6 @@ function install_base() {
         base \
         base-devel \
         efibootmgr \
-        grub \
         iwd \
         linux \
         linux-firmware \
@@ -290,38 +289,77 @@ function configure_user() {
     printf "root:%s" "$PASSWORD_USER" | arch-chroot /mnt chpasswd --encrypted
 }
 
-function configure_grub() {
-    echo "==> Install and configure bootloader."
+function configure_bootloader() {
+    echo "==> Install and configure systemd-boot."
 
     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
-    # Configure kernel parameters for LUKS
-    sed -i "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot\"|" /mnt/etc/default/grub
+    # Detect CPU microcode
+    if grep -q AuthenticAMD /proc/cpuinfo; then
+        MICROCODE="amd-ucode.img"
+    elif grep -q GenuineIntel /proc/cpuinfo; then
+        MICROCODE="intel-ucode.img"
+    fi
 
-    # Silent boot
-    sed -i 's/^#GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /mnt/etc/default/grub
-    sed -i 's/^#GRUB_TIMEOUT_STYLE=.*/GRUB_TIMEOUT_STYLE=hidden/' /mnt/etc/default/grub
-    sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3"/' /mnt/etc/default/grub
+    # Install systemd-boot
+    arch-chroot /mnt bootctl --path=/boot/efi install &> /dev/null
 
-    # Enable encrypt hook
+    # Loader configuration
+    mkdir -p /mnt/boot/efi/loader
+
+    cat > /mnt/boot/efi/loader/loader.conf << EOF
+default arch
+timeout 0
+editor no
+EOF
+
+    # Boot entry
+    mkdir -p /mnt/boot/efi/loader/entries
+
+    cat > /mnt/boot/efi/loader/entries/arch.conf << EOF
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /$MICROCODE
+initrd  /initramfs-linux.img
+options cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot rw quiet loglevel=3
+EOF
+
+    # Ensure encrypt hook exists
     sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
 
     arch-chroot /mnt mkinitcpio -P &> /dev/null
 
-    # Required temporarily for grub-install with encrypted root
-    echo 'GRUB_ENABLE_CRYPTODISK=y' >> /mnt/etc/default/grub
+    # echo "==> Install and configure bootloader."
 
-    arch-chroot /mnt grub-install \
-        --target=x86_64-efi \
-        --efi-directory=/boot/efi \
-        --bootloader-id=GRUB \
-    &> /dev/null
+    # ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
-    # Remove it to avoid double password prompt
-    sed -i '/GRUB_ENABLE_CRYPTODISK/d' /mnt/etc/default/grub
+    # # Configure kernel parameters for LUKS
+    # sed -i "s|^GRUB_CMDLINE_LINUX=.*|GRUB_CMDLINE_LINUX=\"cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot\"|" /mnt/etc/default/grub
 
-    # Generate final config
-    arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
+    # # Silent boot
+    # sed -i 's/^#GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /mnt/etc/default/grub
+    # sed -i 's/^#GRUB_TIMEOUT_STYLE=.*/GRUB_TIMEOUT_STYLE=hidden/' /mnt/etc/default/grub
+    # sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3"/' /mnt/etc/default/grub
+
+    # # Enable encrypt hook
+    # sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
+
+    # arch-chroot /mnt mkinitcpio -P &> /dev/null
+
+    # # Required temporarily for grub-install with encrypted root
+    # echo 'GRUB_ENABLE_CRYPTODISK=y' >> /mnt/etc/default/grub
+
+    # arch-chroot /mnt grub-install \
+    #     --target=x86_64-efi \
+    #     --efi-directory=/boot/efi \
+    #     --bootloader-id=GRUB \
+    # &> /dev/null
+
+    # # Remove it to avoid double password prompt
+    # sed -i '/GRUB_ENABLE_CRYPTODISK/d' /mnt/etc/default/grub
+
+    # # Generate final config
+    # arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &> /dev/null
 }
 
 function configure_ntp() {
