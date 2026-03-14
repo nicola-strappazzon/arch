@@ -37,9 +37,9 @@ function user_password() {
     local confirm
     echo "==> Set password for root and the user account."
     while true; do
-        IFS="" read -r -s -p "    Enter your password: " PASSWORD_USER </dev/tty
+        IFS="" read -r -s -p "--> Enter your password: " PASSWORD_USER </dev/tty
         echo
-        IFS="" read -r -s -p "    Confirm your password: " confirm </dev/tty
+        IFS="" read -r -s -p "--> Confirm your password: " confirm </dev/tty
         echo
 
         if [ -z "$PASSWORD_USER" ]; then
@@ -60,9 +60,9 @@ function volumen_password() {
     local confirm
     echo "==> Set password for the encrypted disk."
     while true; do
-        IFS="" read -r -s -p "    Enter your password: " PASSWORD_VOLUMEN </dev/tty
+        IFS="" read -r -s -p "--> Enter your password: " PASSWORD_VOLUMEN </dev/tty
         echo
-        IFS="" read -r -s -p "    Confirm your password: " confirm </dev/tty
+        IFS="" read -r -s -p "--> Confirm your password: " confirm </dev/tty
         echo
 
         if [ -z "$PASSWORD_VOLUMEN" ]; then
@@ -111,7 +111,7 @@ function partitioning() {
         name="${VOLUMES_LIST[$VOLUMEN_INDEX]}"
         size=$(lsblk --nodeps --noheadings --output=SIZE "/dev/${name}")
         model=$(lsblk --nodeps --noheadings --output=MODEL "/dev/${name}")
-        printf "    %d) %s\t%s (%s)\n" "$((VOLUMEN_INDEX+1))" "${name}" "${model}" "$(ltrim "${size}")"
+        printf "    %d) %s: %s %s\n" "$((VOLUMEN_INDEX+1))" "${name}" "$(ltrim "${size}")" "${model}"
     done
 
     VOLUMENS_COUNT=${#VOLUMES_LIST[@]}
