@@ -27,10 +27,10 @@ function main() {
     configure_bootloader
     configure_ntp
     configure_wakeup
-    # packages
-    # drivers
-    # services
-    # finish
+    packages
+    drivers
+    services
+    finish
 }
 
 function user_password() {
@@ -447,8 +447,6 @@ function services() {
     echo "==> Enable services."
     arch-chroot /mnt systemctl enable NetworkManager &> /dev/null
     arch-chroot /mnt systemctl enable sshd &> /dev/null
-    arch-chroot /mnt systemctl start NetworkManager &> /dev/null
-    arch-chroot /mnt systemctl start sshd &> /dev/null
 }
 
 function finish() {
