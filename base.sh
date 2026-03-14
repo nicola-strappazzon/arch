@@ -122,7 +122,7 @@ function partitioning() {
 
     VOLUMEN="/dev/${VOLUMES_LIST[$((VOLUMEN_ID-1))]}"
 
-    echo "--> Has chosen this volume: $VOLUMEN"
+    echo "--> Has chosen this volume: ${VOLUMEN}"
 
     echo "==> Partitioning and format volume."
     # Umount partitions:
@@ -147,7 +147,7 @@ function partitioning() {
     partprobe "${VOLUMEN}"
     udevadm settle
 
-    DISK=$(basename "$VOLUMEN")
+    DISK=$(basename "${VOLUMEN}")
     UEFI=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='efi'  && PKNAME=='${DISK}'")
     SWAP=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='swap' && PKNAME=='${DISK}'")
     ROOT=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='root' && PKNAME=='${DISK}'")
