@@ -84,7 +84,7 @@ function install_fonts() {
     ttf-jetbrains-mono-nerd \
   &> /dev/null
 
-  sudo fc-cache -fv
+  sudo fc-cache --force &> /dev/null
 }
 
 function configure_sway() {
@@ -93,10 +93,10 @@ function configure_sway() {
   mkdir -p "$HOME"/.config/sway/
   cp /etc/sway/config "$HOME"/.config/sway/config
 
-# cat << EOF | sudo tee /etc/sway/config.d/60-user-custom.conf &> /dev/null
-# set $term alacritty
-# set $menu wmenu-run
-# EOF
+cat << EOF | sudo tee /etc/sway/config.d/60-user-custom.conf &> /dev/null
+set \$term alacritty
+set \$menu wmenu-run
+EOF
 
 cat << EOF | sudo tee /etc/sway/config.d/60-user-brightness.conf &> /dev/null
 bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
