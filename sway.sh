@@ -94,6 +94,8 @@ function configure_sway() {
   # cp /etc/sway/config "$HOME"/.config/sway/config
 
 cat > "$HOME"/.config/sway/config << 'EOF'
+font pango:JetBrains Mono 10
+
 #
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
