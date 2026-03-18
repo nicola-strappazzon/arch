@@ -93,7 +93,7 @@ function configure_sway() {
   mkdir -p "$HOME"/.config/sway/
   # cp /etc/sway/config "$HOME"/.config/sway/config
 
-cat > "$HOME"/.config/waybar/config << 'EOF'
+cat > "$HOME"/.config/sway/config << 'EOF'
 #
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
