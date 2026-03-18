@@ -418,7 +418,11 @@ function configure_waybar() {
         "default": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
         "charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"]
     },
-    "tooltip-format": "{capacity}% ({time})"
+    "tooltip-format": "{capacity}% ({time})",
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
   },
 
   "custom/power": {
@@ -448,7 +452,6 @@ window#waybar {
   padding: 0 6px;
   color: #6c7086;
   font-size: 10px;
-  transition: all 0.2s ease;
 }
 
 #workspaces button.focused {
@@ -473,6 +476,18 @@ window#waybar {
 
 #custom-power {
   color: #D53E0F;
+}
+
+#battery {
+    color: #9CD5FF;
+}
+
+#battery.warning {
+    color: #f9e2af;
+}
+
+#battery.critical {
+    color: #D53E0F;
 }
 
 #cpu,
