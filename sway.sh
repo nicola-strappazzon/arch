@@ -135,10 +135,11 @@ input "type:touchpad" {
   tap enabled
 }
 EOF
+
 }
 
 function configure_background() {
-
+  echo "--> Configure background."
 }
 
 function configure_waybar() {
