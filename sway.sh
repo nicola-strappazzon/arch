@@ -48,7 +48,7 @@ function install_yay() {
 }
 
 function install_packages() {
-  echo "--> Install aditional packages."
+  echo "--> Install packages."
   sudo pacman -S --noconfirm --needed \
     alacritty              `# terminal` \
     sway                   `# window manager Wayland` \
@@ -70,6 +70,8 @@ function install_packages() {
 }
 
 function install_yay_packages() {
+  echo "--> Install yay packages."
+
   yay -Sy --noconfirm --needed \
     wlogout `# sleep/logout/reboot/shutdown` \
   &> /dev/null
@@ -135,7 +137,6 @@ input "type:touchpad" {
   tap enabled
 }
 EOF
-
 }
 
 function configure_background() {
@@ -355,4 +356,4 @@ function finish() {
   sudo -k
 }
 
-main
+main "$@"
