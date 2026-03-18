@@ -28,7 +28,6 @@ function main() {
     configure_ntp
     configure_wakeup
     packages
-    drivers
     services
     finish
 }
@@ -279,6 +278,9 @@ EOF
 }
 
 function configure_user() {
+    # /etc/sudoers.d/
+    # https://github.com/basecamp/omarchy/blob/dev/install/post-install/allow-reboot.sh
+
     echo "==> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD_USER" --comment="$USERCOMMENT" "$USERNAME"
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
@@ -391,26 +393,14 @@ function packages() {
         ca-certificates
         curl
         dosfstools
-        foomatic-db
-        foomatic-db-engine
-        foomatic-db-ppds
-        fzf
-        ghostscript
         git
-        go
-        gsfonts
-        hplip
         htop
         less
         libusb
         links
         neofetch
         net-tools
-        networkmanager-openvpn
         nmap
-        openvpn
-        pass
-        pass-otp
         rsync
         testdisk
         tmux
@@ -428,19 +418,6 @@ function packages() {
     for PACKAGE in "${PACKAGES[@]}"; do
         arch-chroot /mnt pacman --sync --noconfirm --needed "${PACKAGE}" &> /dev/null
     done
-}
-
-function drivers() {
-    echo "==> Install drivers."
-    arch-chroot /mnt pacman --sync --noconfirm --needed \
-        alsa-firmware \
-        alsa-utils \
-        pulseaudio \
-        pulseaudio-alsa \
-        pipewire \
-        pipewire-alsa \
-        ddcutil \
-    &> /dev/null
 }
 
 function services() {

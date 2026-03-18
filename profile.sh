@@ -4,8 +4,7 @@
 # shellcheck disable=SC2119,SC2120
 function main() {
     sudo -v
-    
-    configure_ntp
+
     configure_alacritty
     configure_git
     configure_gpg
@@ -14,15 +13,7 @@ function main() {
     configure_tmux
     configure_udev
     configure_vim
-    configure_vscode
     finish
-}
-
-function configure_ntp() {
-    echo "--> Configure time zone and NTP."
-    timedatectl set-timezone Europe/Madrid
-    timedatectl set-ntp true
-    sudo hwclock --systohc
 }
 
 function configure_alacritty() {
@@ -103,7 +94,6 @@ alias md="glow --line-numbers --pager"
 alias o="dolphin . &> /dev/null &"
 alias r="source ~/.bashrc"
 alias t="btop"
-alias p="pass"
 alias copy='xclip -sel clip'
 EOF
 
@@ -743,43 +733,6 @@ set -g prefix M-s
 set -g mouse on
 
 set-option -g default-terminal screen-256color
-EOF
-}
-
-function configure_vscode() {
-    echo "--> Configure vscode."
-
-    mkdir -p "$HOME"/.config/VSCodium/User/
-
-    cat > "$HOME"/.config/VSCodium/User/settings.json << 'EOF'
-{
-  "editor.fontSize": 14,
-  "editor.minimap.enabled": false,
-  "editor.occurrencesHighlight": "off",
-  "editor.selectionHighlight": false,
-  "editor.suggestOnTriggerCharacters": false,
-  "editor.tabCompletion": "on",
-  "editor.tabSize": 2,
-  "editor.quickSuggestions": {
-    "other": false,
-    "comments": false,
-    "strings": false
-  },
-  "explorer.confirmDelete": false,
-  "extensions.ignoreRecommendations": true,
-  "files.trimTrailingWhitespace": true,
-  "git.autofetch": true,
-  "git.confirmSync": false,
-  "git.ignoreMissingGitWarning": true,
-  "git.openRepositoryInParentFolders": "always",
-  "security.workspace.trust.untrustedFiles": "open",
-  "window.menuBarVisibility": "compact",
-  "window.titleBarStyle": "custom",
-  "workbench.activityBar.location": "hidden",
-  "workbench.colorTheme": "Tokyo Night",
-  "workbench.iconTheme": "vs-minimal",
-  "workbench.startupEditor": "none"
-}
 EOF
 }
 

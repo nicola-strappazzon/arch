@@ -4,18 +4,18 @@
 function main() {
     echo "--> Install fonts."
     sudo pacman -S --noconfirm --needed \
-      # nerd-fonts
+      adobe-source-code-pro-fonts \
       noto-fonts \
       noto-fonts-cjk \
       noto-fonts-emoji \
       noto-fonts-extra \
-      ttf-liberation \
       ttf-dejavu \
-      ttf-roboto \
-      ttf-jetbrains-mono \
       ttf-fira-code \
       ttf-hack \
-      adobe-source-code-pro-fonts \
+      ttf-jetbrains-mono \
+      ttf-jetbrains-mono-nerd \
+      ttf-liberation \
+      ttf-roboto \
     &> /dev/null
 
     sudo fc-cache -fv

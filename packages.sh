@@ -2,15 +2,46 @@
 # set -eu
 
 function main() {
-    yay_install
     install_packages
+    install_yay
+    install_yay_packages
     install_docker
     install_virtualbox
     install_electronics
     install_latex
 }
 
-function yay_install() {
+function install_packages() {
+    echo "--> Install aditional packages."
+    sudo pacman -S --noconfirm --needed \
+        alacritty \
+        bat \
+        fd \
+        ffmpeg \
+        go \
+        helix \
+        helm \
+        imagemagick \
+        jq \
+        kubectl \
+        lsd \
+        minikube \
+        nicotine+ \
+        p7zip \
+        percona-server-clients \
+        percona-toolkit \
+        poppler \
+        ripgrep \
+        shellcheck \
+        ttf-nerd-fonts-symbols \
+        virtualbox \
+        yazi \
+        zellij \
+        zoxide \
+    &> /dev/null
+}
+
+function install_yay() {
     echo "--> Install yay tool."
     if ! type "git" > /dev/null; then
         echo "Could not find: git"
@@ -44,34 +75,7 @@ function yay_install() {
     fi
 }
 
-function install_packages() {
-    echo "--> Install aditional packages."
-    sudo pacman -S --noconfirm --needed \
-        alacritty \
-        bat \
-        fd \
-        ffmpeg \
-        helix \
-        helm \
-        imagemagick \
-        jq \
-        kubectl \
-        lsd \
-        minikube \
-        nicotine+ \
-        p7zip \
-        percona-server-clients \
-        percona-toolkit \
-        poppler \
-        ripgrep \
-        shellcheck \
-        ttf-nerd-fonts-symbols \
-        virtualbox \
-        yazi \
-        zellij \
-        zoxide \
-    &> /dev/null
-
+function install_yay_packages() {
     yay -Sy --noconfirm --needed \
         aws-cli-v2                 `# AWS CLI`                   \
         aws-session-manager-plugin `# AWS CLI SSM Plugin`        \
