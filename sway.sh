@@ -64,7 +64,7 @@ function install_packages() {
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
     xdg-open               `# ...` \
     lxqt-policykit         `# authentication agent` \
-    luakit                 `# web browser` \
+    nyxt                   `# web browser` \
     touchegg               `# gestos para el touch mouse` \
     brightnessctl          `# gestor de brillo de pantalla` \
   &> /dev/null
@@ -288,34 +288,7 @@ exec_always waybar
 include /etc/sway/config.d/*
 EOF
 
-# cat << EOF | sudo tee /etc/sway/config.d/60-user-brightness.conf &> /dev/null
-# bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
-# bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
-# EOF
-
-#   cat << EOF | sudo tee /etc/sway/config.d/60-user-backlight.conf &> /dev/null
-# bindsym XF86KbdBrightnessUp exec brightnessctl -d smc::kbd_backlight set +20%
-# bindsym XF86KbdBrightnessDown exec brightnessctl -d smc::kbd_backlight set 20%-
-# EOF
-
-#   cat << EOF | sudo tee /etc/sway/config.d/60-user-volumen.conf &> /dev/null
-# bindsym XF86AudioRaiseVolume exec pamixer -i 5
-# bindsym XF86AudioLowerVolume exec pamixer -d 5
-# bindsym XF86AudioMute exec pamixer -t
-# EOF
-
-#   cat << EOF | sudo tee /etc/sway/config.d/60-user-multimedia.conf &> /dev/null
-# bindsym XF86AudioPlay exec playerctl play-pause
-# bindsym XF86AudioNext exec playerctl next
-# bindsym XF86AudioPrev exec playerctl previous
-# EOF
-
-#   cat << EOF | sudo tee /etc/sway/config.d/60-user-launcher.conf &> /dev/null
-# bindsym XF86LaunchA exec wmenu-run # F3
-# bindsym XF86LaunchB exec wmenu-run # F4
-# EOF
-
-  cat << EOF | sudo tee /etc/sway/config.d/60-user-touchpad.conf &> /dev/null
+  cat << EOF | sudo tee /etc/sway/config.d/60-touchpad.conf &> /dev/null
 input "type:touchpad" {
   accel_profile adaptive
   click_method clickfinger
@@ -346,7 +319,7 @@ function configure_waybar() {
 
   "modules-left": ["custom/launcher", "sway/workspaces"],
   "modules-center": ["clock"],
-  "modules-right": ["cpu", "memory", "disk", "pulseaudio", "network", "battery", "custom/power"],
+  "modules-right": ["pulseaudio", "network", "battery", "custom/power"],
 
   "custom/launcher": {
     "format": "󰣇",
@@ -467,7 +440,6 @@ EOF
 
 window#waybar {
   background: rgba(27, 38, 44, 1);
-  border-bottom: 2px solid transparent;
   color: rgb(187, 225, 250);
 }
 
