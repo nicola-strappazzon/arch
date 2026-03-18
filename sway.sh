@@ -62,6 +62,7 @@ function install_packages() {
     slurp                  `# seleccionar región screenshot` \
     wl-clipboard           `# clipboard` \
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
+    xdg-open               `# ...` \
     lxqt-policykit         `# authentication agent` \
     luakit                 `# web browser` \
     touchegg               `# gestos para el touch mouse` \
@@ -92,10 +93,10 @@ function configure_sway() {
   mkdir -p "$HOME"/.config/sway/
   cp /etc/sway/config "$HOME"/.config/sway/config
 
-cat << EOF | sudo tee /etc/sway/config.d/60-user-custom.conf &> /dev/null
-set $term alacritty
-set $menu wmenu-run
-EOF
+# cat << EOF | sudo tee /etc/sway/config.d/60-user-custom.conf &> /dev/null
+# set $term alacritty
+# set $menu wmenu-run
+# EOF
 
 cat << EOF | sudo tee /etc/sway/config.d/60-user-brightness.conf &> /dev/null
 bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
