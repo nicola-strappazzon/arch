@@ -388,13 +388,17 @@ function packages() {
     echo "==> Install aditional packages."
     PACKAGES=(
         bash-completion
+        bat
         bind-tools
         btop
         ca-certificates
         curl
         dosfstools
+        fzf
         git
+        helix
         htop
+        jq
         less
         libusb
         links
