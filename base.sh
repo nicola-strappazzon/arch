@@ -398,6 +398,7 @@ function packages() {
         less
         libusb
         links
+        lsd
         neofetch
         net-tools
         nmap
