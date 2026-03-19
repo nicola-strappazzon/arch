@@ -418,6 +418,7 @@ function packages() {
         wget
         wl-clipboard
         xclip
+        yazi
     )
 
     for PACKAGE in "${PACKAGES[@]}"; do

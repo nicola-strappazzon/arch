@@ -55,13 +55,14 @@ function install_packages() {
     grim                   `# screenshots` \
     lxqt-policykit         `# authentication agent` \
     mako                   `# notificaciones` \
+    mpv                    `# media player` \
     nyxt                   `# web browser` \
     slurp                  `# seleccionar región screenshot` \
     sway                   `# window manager Wayland` \
     swaybg                 `# fondo de pantalla` \
     swayidle               `# gestión de idle / suspensión` \
-    swaylock               `# lock screen` \
     swayimg                `# image viewer` \
+    swaylock               `# lock screen` \
     touchegg               `# gestos para el touch mouse` \
     waybar                 `# barra superior` \
     wl-clipboard           `# clipboard` \
@@ -69,7 +70,8 @@ function install_packages() {
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
     xdg-open               `# ...` \
     xdg-user-dirs          `# create user directories` \
-    mpv                    `# media player` \
+    zathura                `# document viewer` \
+    zathura-pdf-mupdf      `# pdf support for zathura` \
   &> /dev/null
 }
 
