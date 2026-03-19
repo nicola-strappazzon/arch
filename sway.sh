@@ -2,6 +2,7 @@
 # set -eu
 
 function main() {
+  update_date
   install_packages
   install_yay
   install_yay_packages
@@ -11,6 +12,12 @@ function main() {
   configure_background
   configure_alacritty
   finish
+}
+
+function update_date() {
+  echo "==> Update date."
+  sudo timedatectl set-ntp true
+  sudo hwclock --systohc
 }
 
 function install_yay() {
@@ -56,7 +63,6 @@ function install_packages() {
     lxqt-policykit         `# authentication agent` \
     mako                   `# notificaciones` \
     mpv                    `# media player` \
-    nyxt                   `# web browser` \
     slurp                  `# seleccionar región screenshot` \
     sway                   `# window manager Wayland` \
     swaybg                 `# fondo de pantalla` \
@@ -153,7 +159,7 @@ exec swayidle -w \
     bindsym $mod+Shift+p exec grim
 
     # screenshot region
-    bindsym $mod+Shift+4 exec slurp
+    bindsym $mod+Shift+o exec slurp
 #
 # Moving around:
 #
