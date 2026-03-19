@@ -79,8 +79,8 @@ function install_yay_packages() {
   echo "--> Install yay packages."
 
   yay -Sy --noconfirm --needed \
-    wlogout   `# sleep/logout/reboot/shutdown` \
-    librewolf `# web browser` \
+    wlogout       `# sleep/logout/reboot/shutdown` \
+    librewolf-bin `# web browser` \
   &> /dev/null
 }
 
