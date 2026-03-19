@@ -342,7 +342,7 @@ EOF
 function configure_background() {
   echo "--> Configure background."
 
-  wget -O ~/Pictures/background.jpg "https://raw.githubusercontent.com/nicola-strappazzon/arch/refs/heads/main/wallpaper/apple-grass-blades.jpg"
+  wget --quiet --output-document="${HOME}/Pictures/background.jpg" "https://raw.githubusercontent.com/nicola-strappazzon/arch/refs/heads/main/wallpaper/apple-grass-blades.jpg"
 }
 
 function configure_waybar() {
