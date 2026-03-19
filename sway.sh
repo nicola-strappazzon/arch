@@ -51,22 +51,25 @@ function install_packages() {
   echo "--> Install packages."
   sudo pacman -S --noconfirm --needed \
     alacritty              `# terminal` \
+    brightnessctl          `# gestor de brillo de pantalla` \
+    grim                   `# screenshots` \
+    lxqt-policykit         `# authentication agent` \
+    mako                   `# notificaciones` \
+    nyxt                   `# web browser` \
+    slurp                  `# seleccionar región screenshot` \
     sway                   `# window manager Wayland` \
     swaybg                 `# fondo de pantalla` \
-    swaylock               `# lock screen` \
     swayidle               `# gestión de idle / suspensión` \
+    swaylock               `# lock screen` \
+    swayimg                `# image viewer` \
+    touchegg               `# gestos para el touch mouse` \
     waybar                 `# barra superior` \
-    wmenu                  `# launcher o usar wofi` \
-    mako                   `# notificaciones` \
-    grim                   `# screenshots` \
-    slurp                  `# seleccionar región screenshot` \
     wl-clipboard           `# clipboard` \
+    wmenu                  `# launcher o usar wofi` \
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
     xdg-open               `# ...` \
-    lxqt-policykit         `# authentication agent` \
-    nyxt                   `# web browser` \
-    touchegg               `# gestos para el touch mouse` \
-    brightnessctl          `# gestor de brillo de pantalla` \
+    xdg-user-dirs          `# create user directories` \
+    mpv                    `# media player` \
   &> /dev/null
 }
 
@@ -91,6 +94,7 @@ function configure_sway() {
   echo "--> Configure sway."
 
   mkdir -p "$HOME"/.config/sway/
+  mkdir -p "$HOME"/.config/sway/scripts
   # cp /etc/sway/config "$HOME"/.config/sway/config
 
 cat > "$HOME"/.config/sway/config << 'EOF'
@@ -110,17 +114,11 @@ set $term alacritty
 set $menu wmenu-run
 
 ### Idle configuration
-#
-# Example configuration:
-#
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
+exec swayidle -w \
+  timeout 120 'swaylock -f -c 000000' \
+  timeout 300 'swaymsg "output * power off"' \
+  resume 'swaymsg "output * power on"' \
+  before-sleep 'swaylock -f -c 000000'
 
 ### Key bindings
 #
@@ -147,6 +145,12 @@ set $menu wmenu-run
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
+    # Screenshot
+    bindsym $mod+Shift+p exec grim
+
+    # screenshot region
+    bindsym $mod+Shift+4 exec slurp
 #
 # Moving around:
 #
@@ -285,7 +289,28 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym XF86LaunchA exec wmenu-run # F3
 bindsym XF86LaunchB exec wmenu-run # F4
 
-exec_always waybar
+# windows theme
+#                       border  background text    indicator child_border
+client.focused          #89b4fa #89b4fa    #1e1e2e #89b4fa   #89b4fa
+client.unfocused        #313244 #313244    #cdd6f4 #313244   #313244
+client.focused_inactive #45475a #45475a    #cdd6f4 #45475a   #45475a
+client.urgent           #f38ba8 #f38ba8    #1e1e2e #f38ba8   #f38ba8
+
+# disable title on windows
+default_border pixel 2
+default_floating_border pixel 2
+
+# windows gap
+gaps inner 4
+gaps outer 4
+smart_gaps on
+smart_borders on
+
+# wallpaper
+output * bg ~/Pictures/wallpaper.jpg fill
+
+# bar
+exec_always ~/.config/sway/scripts/waybar.sh
 
 include /etc/sway/config.d/*
 EOF
@@ -303,10 +328,21 @@ input "type:touchpad" {
   tap enabled
 }
 EOF
+
+  cat > "$HOME"/.config/sway/scripts/waybar.sh << 'EOF'
+#!/bin/bash
+
+pkill -x waybar
+waybar
+EOF
+
+  chmod +x "$HOME"/.config/sway/scripts/waybar.sh
 }
 
 function configure_background() {
   echo "--> Configure background."
+
+  wget -O ~/Pictures/background.jpg "https://raw.githubusercontent.com/nicola-strappazzon/arch/refs/heads/main/wallpaper/apple-grass-blades.jpg"
 }
 
 function configure_waybar() {
@@ -481,7 +517,7 @@ window#waybar {
 }
 
 #battery {
-    color: #9CD5FF;
+    color: rgb(187, 225, 250);
 }
 
 #battery.warning {
@@ -533,6 +569,8 @@ EOF
 }
 
 function finish() {
+  xdg-user-dirs-update
+
   sudo -k
 }
 
