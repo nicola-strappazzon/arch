@@ -21,7 +21,7 @@ function update_date() {
 }
 
 function install_yay() {
-  echo "--> Install yay tool."
+  echo "==> Install yay tool."
   if ! type "git" > /dev/null; then
     echo "Could not find: git"
     exit 1
@@ -55,7 +55,7 @@ function install_yay() {
 }
 
 function install_packages() {
-  echo "--> Install packages."
+  echo "==> Install packages."
   sudo pacman -S --noconfirm --needed \
     alacritty              `# terminal` \
     brightnessctl          `# gestor de brillo de pantalla` \
@@ -82,7 +82,7 @@ function install_packages() {
 }
 
 function install_yay_packages() {
-  echo "--> Install yay packages."
+  echo "==> Install yay packages."
 
   yay -Sy --noconfirm --needed \
     wlogout       `# sleep/logout/reboot/shutdown` \
@@ -91,7 +91,7 @@ function install_yay_packages() {
 }
 
 function install_fonts() {
-  echo "--> Install fonts."
+  echo "==> Install fonts."
   sudo pacman -S --noconfirm --needed \
     ttf-jetbrains-mono-nerd \
   &> /dev/null
@@ -100,7 +100,7 @@ function install_fonts() {
 }
 
 function configure_sway() {
-  echo "--> Configure sway."
+  echo "==> Configure sway."
 
   mkdir -p "$HOME"/.config/sway/
   mkdir -p "$HOME"/.config/sway/scripts
@@ -349,13 +349,13 @@ EOF
 }
 
 function configure_background() {
-  echo "--> Configure background."
+  echo "==> Configure background."
 
   wget --quiet --output-document="${HOME}/Pictures/wallpaper.jpg" "https://raw.githubusercontent.com/nicola-strappazzon/arch/refs/heads/main/wallpaper/apple-grass-blades.jpg"
 }
 
 function configure_waybar() {
-  echo "--> Configure waybar."
+  echo "==> Configure waybar."
 
 
   mkdir -p "$HOME"/.config/waybar/
@@ -551,7 +551,7 @@ EOF
 }
 
 function configure_alacritty() {
-  echo "--> Configure Alacritty."
+  echo "==> Configure Alacritty."
 
   mkdir -p "$HOME"/.config/alacritty/
   cat > "$HOME"/.config/alacritty/alacritty.toml << 'EOF'
