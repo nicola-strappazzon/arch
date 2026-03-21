@@ -536,15 +536,13 @@ window#waybar {
   color: #cdd6f4;
 }
 
-
 #custom-launcher {
   padding: 0 12px;
   color: #89b4fa;
 }
 
 #custom-launcher:hover {
-  background: #313244;
-  border-radius: 6px;
+  color: #cdd6f4;
 }
 
 #custom-power {
@@ -552,15 +550,15 @@ window#waybar {
 }
 
 #battery {
-    color: rgb(187, 225, 250);
+  color: rgb(187, 225, 250);
 }
 
 #battery.warning {
-    color: #f9e2af;
+  color: #f9e2af;
 }
 
 #battery.critical {
-    color: #D53E0F;
+  color: #D53E0F;
 }
 
 #cpu,
@@ -581,75 +579,96 @@ function configure_wlogout() {
 
     mkdir -p "$HOME"/.config/wlogout/
     cat > "$HOME"/.config/wlogout/layout << 'EOF'
-[
     {
-    "label": "lock",
-    "action": "swaylock"
-    },
-    {
-    "label": "logout",
-    "action": "hyprctl dispatch exit"
-    },
-    {
-    "label": "suspend",
-    "action": "systemctl suspend"
-    },
-    {
-    "label": "reboot",
-    "action": "systemctl reboot"
-    },
-    {
-    "label": "shutdown",
-    "action": "systemctl poweroff"
+        "label" : "lock",
+        "action" : "loginctl lock-session",
+        "text" : "Lock",
+        "keybind" : "l"
     }
-]
+    {
+        "label" : "hibernate",
+        "action" : "systemctl hibernate",
+        "text" : "Hibernate",
+        "keybind" : "h"
+    }
+    {
+        "label" : "logout",
+        "action" : "loginctl terminate-user $USER",
+        "text" : "Logout",
+        "keybind" : "e"
+    }
+    {
+        "label" : "shutdown",
+        "action" : "systemctl poweroff",
+        "text" : "Shutdown",
+        "keybind" : "s"
+    }
+    {
+        "label" : "suspend",
+        "action" : "systemctl suspend",
+        "text" : "Suspend",
+        "keybind" : "u"
+    }
+    {
+        "label" : "reboot",
+        "action" : "systemctl reboot",
+        "text" : "Reboot",
+        "keybind" : "r"
+    }
 EOF
 
     cat > "$HOME"/.config/wlogout/style.css << 'EOF'
 * {
     font-family: "JetBrainsMono Nerd Font";
     font-size: 16px;
+	background-image: none;
+	box-shadow: none;
 }
 
 window {
-    background-color: rgba(27, 38, 44, 0.95);
+	background-color: rgba(27, 38, 44, 0.95);
 }
 
 button {
-    color: rgb(187, 225, 250);
-    background-color: transparent;
-    border: none;
-    margin: 10px;
-    padding: 20px;
-    border-radius: 6px;
-    min-width: 120px;
-    min-height: 120px;
-    transition: all 0.2s ease;
+    border-radius: 0;
+    border-color: none;
+    text-decoration-color: #FFFFFF;
+    color: #FFFFFF;
+    background-color: #1E1E1E;
+    border-style: solid;
+    border-width: 1px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 25%;
 }
 
-button:hover {
-    background-color: #313244;
+button:focus, button:active, button:hover {
+    background-color: #3700B3;
+    outline-style: none;
 }
 
-/* Botones específicos */
 #lock {
-    color: #89b4fa;
+    background-image: image(url("/usr/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
 }
 
 #logout {
-    color: #89b4fa;
+    background-image: image(url("/usr/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
 }
 
 #suspend {
-    color: #f9e2af;
+    background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
 }
 
-#reboot {
-    color: #fab387;
+#hibernate {
+    background-image: image(url("/usr/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
 }
 
 #shutdown {
-    color: #D53E0F;
+    background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+}
+
+#reboot {
+    background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
 }
 EOF
 }
