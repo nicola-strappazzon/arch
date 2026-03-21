@@ -708,6 +708,7 @@ EOF
 
 function finish() {
   xdg-user-dirs-update
+  swaymsg reload
 
   sudo -k
 }
