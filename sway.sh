@@ -344,7 +344,7 @@ EOF
 }
 
 function configure_application_launcher() {
-  echo "==> Configure App launcher."
+  echo "==> Configure application launcher."
 
   mkdir -p "$HOME"/.config/fuzzel/
 
