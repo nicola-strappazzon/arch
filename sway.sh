@@ -582,11 +582,26 @@ function configure_wlogout() {
     mkdir -p "$HOME"/.config/wlogout/
     cat > "$HOME"/.config/wlogout/layout << 'EOF'
 [
-    { "label" : "lock", "action" : "swaylock" },
-    { "label" : "logout", "action" : "hyprctl dispatch exit" },
-    { "label" : "suspend", "action" : "systemctl suspend" },
-    { "label" : "reboot", "action" : "systemctl reboot" },
-    { "label" : "shutdown", "action" : "systemctl poweroff" }
+    {
+    "label": "lock",
+    "action": "swaylock"
+    },
+    {
+    "label": "logout",
+    "action": "hyprctl dispatch exit"
+    },
+    {
+    "label": "suspend",
+    "action": "systemctl suspend"
+    },
+    {
+    "label": "reboot",
+    "action": "systemctl reboot"
+    },
+    {
+    "label": "shutdown",
+    "action": "systemctl poweroff"
+    }
 ]
 EOF
 
