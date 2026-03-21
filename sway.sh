@@ -2,7 +2,6 @@
 # set -eu
 
 function main() {
-  update_date
   install_packages
   install_yay
   install_yay_packages
@@ -14,12 +13,6 @@ function main() {
   configure_background
   configure_alacritty
   finish
-}
-
-function update_date() {
-  echo "==> Update date."
-  sudo timedatectl set-ntp true
-  sudo hwclock --systohc
 }
 
 function install_yay() {
