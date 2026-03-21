@@ -1,0 +1,4 @@
+- Configurar wmenu-run
+- Configurar wlogout
+- Configurar xdg-open (pdf, img, video, music, txt, go, ...)
+- Probar cambiar de red: wifi/eth

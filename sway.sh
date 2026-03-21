@@ -9,6 +9,7 @@ function main() {
   install_fonts
   configure_sway
   configure_waybar
+  configure_application_launcher
   configure_background
   configure_alacritty
   finish
@@ -72,7 +73,7 @@ function install_packages() {
     touchegg               `# gestos para el touch mouse` \
     waybar                 `# barra superior` \
     wl-clipboard           `# clipboard` \
-    wmenu                  `# launcher o usar wofi` \
+    fuzzel                 `# application launcher` \
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
     xdg-open               `# ...` \
     xdg-user-dirs          `# create user directories` \
@@ -120,7 +121,7 @@ set $right l
 # Your preferred terminal emulator
 set $term alacritty
 # Your preferred application launcher
-set $menu wmenu-run
+set $menu fuzzel
 
 ### Idle configuration
 exec swayidle -w \
@@ -295,8 +296,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # launcher
-bindsym XF86LaunchA exec wmenu-run # F3
-bindsym XF86LaunchB exec wmenu-run # F4
+bindsym XF86LaunchA exec fuzzel # F3
+bindsym XF86LaunchB exec fuzzel # F4
 
 # windows theme
 #                       border  background text    indicator child_border
@@ -348,6 +349,37 @@ EOF
   chmod +x "$HOME"/.config/sway/scripts/waybar.sh
 }
 
+function configure_application_launcher() {
+  echo "==> Configure App launcher."
+
+  mkdir -p "$HOME"/.config/fuzzel/
+
+cat > "$HOME"/.config/fuzzel/fuzzel.ini << 'EOF'
+[main]
+font=JetBrainsMono Nerd Font:size=16
+dpi-aware=yes
+prompt="> "
+
+[colors]
+background=1e1e2eff
+text=dcd7baff
+match=7aa2f7ff
+selection=3e4452ff
+selection-text=ffffff
+border=7aa2f7ff
+
+[border]
+width=2
+radius=8
+
+[layout]
+width=30
+lines=10
+horizontal-pad=20
+vertical-pad=15
+EOF
+}
+
 function configure_background() {
   echo "==> Configure background."
 
@@ -370,8 +402,8 @@ function configure_waybar() {
 
   "custom/launcher": {
     "format": "󰣇",
-    "tooltip": "Applications",
-    "on-click": "wmenu-run"
+    "tooltip": false,
+    "on-click": "fuzzel"
   },
 
   "sway/workspaces": {
@@ -474,6 +506,7 @@ function configure_waybar() {
 
   "custom/power": {
     "format": "⏻",
+    "tooltip": false,
     "on-click": "wlogout"
   }
 }
