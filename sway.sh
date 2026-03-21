@@ -9,6 +9,7 @@ function main() {
   install_fonts
   configure_sway
   configure_waybar
+  configure_wlogout
   configure_application_launcher
   configure_background
   configure_alacritty
@@ -389,7 +390,6 @@ function configure_background() {
 function configure_waybar() {
   echo "==> Configure waybar."
 
-
   mkdir -p "$HOME"/.config/waybar/
   cat > "$HOME"/.config/waybar/config << 'EOF'
 {
@@ -579,6 +579,69 @@ window#waybar {
 #pulseaudio,
 #custom-power {
     padding: 0 8px;
+}
+EOF
+}
+
+function configure_wlogout() {
+    echo "==> Configure wlogout."
+
+    mkdir -p "$HOME"/.config/wlogout/
+    cat > "$HOME"/.config/wlogout/layout << 'EOF'
+[
+    { "label" : "lock", "action" : "swaylock" },
+    { "label" : "logout", "action" : "hyprctl dispatch exit" },
+    { "label" : "suspend", "action" : "systemctl suspend" },
+    { "label" : "reboot", "action" : "systemctl reboot" },
+    { "label" : "shutdown", "action" : "systemctl poweroff" }
+]
+EOF
+
+    cat > "$HOME"/.config/wlogout/style.css << 'EOF'
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 16px;
+}
+
+window {
+    background-color: rgba(27, 38, 44, 0.95);
+}
+
+button {
+    color: rgb(187, 225, 250);
+    background-color: transparent;
+    border: none;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 6px;
+    min-width: 120px;
+    min-height: 120px;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background-color: #313244;
+}
+
+/* Botones específicos */
+#lock {
+    color: #89b4fa;
+}
+
+#logout {
+    color: #89b4fa;
+}
+
+#suspend {
+    color: #f9e2af;
+}
+
+#reboot {
+    color: #fab387;
+}
+
+#shutdown {
+    color: #D53E0F;
 }
 EOF
 }
