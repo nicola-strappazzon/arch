@@ -430,6 +430,7 @@ function services() {
     echo "==> Enable services."
     arch-chroot /mnt systemctl enable NetworkManager &> /dev/null
     arch-chroot /mnt systemctl enable sshd &> /dev/null
+    arch-chroot /mnt systemctl enable systemd-timesyncd &> /dev/null
 }
 
 function finish() {
