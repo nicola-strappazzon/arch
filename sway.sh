@@ -532,6 +532,12 @@ window#waybar {
   font-weight: bold;
 }
 
+#workspaces button:hover {
+  background: none;
+  border-top: none;
+  box-shadow: none;
+}
+
 #workspaces button:not(.focused):hover {
   color: #cdd6f4;
 }
