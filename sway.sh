@@ -525,27 +525,27 @@ window#waybar {
   padding: 0 6px;
   color: #6c7086;
   font-size: 10px;
-  background: none;
+}
+
+#workspaces button,
+#workspaces button:hover,
+#workspaces button:focus,
+#workspaces button:active,
+#workspaces button.focused,
+#workspaces button.focused:hover {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  background: none !important;
+  font-weight: normal;
 }
 
 #workspaces button.focused {
   color: #89b4fa;
-  font-weight: normal;
-}
-
-#workspaces button:hover {
-  background: none;
-  border-top: none;
-  box-shadow: none;
-  font-weight: normal;
 }
 
 #workspaces button:not(.focused):hover {
   color: #cdd6f4;
-}
-
-#workspaces button.focused:hover {
-  color: #89b4fa;
 }
 
 #custom-launcher {
