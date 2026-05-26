@@ -1,4 +1,15 @@
-- Configurar fuzzel
-- Configurar wlogout
+- btrfs
+- limine
+- Quitar fuzzel
+- Instalar https://github.com/lbonn/rofi
+- Configurar rofi:
+  - Apps
+  - Emojis
+  - Cheat sheet
+  - SSH
+  - Passwords
+  - Messages
+- Configurar wlogout ()
 - Configurar xdg-open (pdf, img, video, music, txt, go, ...)
+
 - Probar cambiar de red: wifi/eth
