@@ -30,6 +30,7 @@ Base
 - Configurar wlogout (quitar)
 - Configurar xdg-open (pdf, img, video, music, txt, go, ...)
 - Probar cambiar de red: wifi/eth
+- Teclas multimedia: swayosd, brightnessctl y playerctl
 
 Sistema y servicios base (yo los añadiría sí o sí)
 - avahi + nss-mdns — resolución .local / Bonjour.
