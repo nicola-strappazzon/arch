@@ -8,10 +8,10 @@ function main() {
   install_fonts
   configure_sway
   configure_waybar
-  configure_wlogout
-  configure_application_launcher
-  configure_background
-  configure_alacritty
+  # configure_wlogout
+  # configure_application_launcher
+  # configure_background
+  # configure_alacritty
   finish
 }
 
@@ -52,7 +52,7 @@ function install_yay() {
 function install_packages() {
   echo "==> Install packages."
   sudo pacman -S --noconfirm --needed \
-    alacritty              `# terminal` \
+    foot                   `# terminal` \
     brightnessctl          `# gestor de brillo de pantalla` \
     grim                   `# screenshots` \
     lxqt-policykit         `# authentication agent` \
@@ -69,6 +69,7 @@ function install_packages() {
     wl-clipboard           `# clipboard` \
     fuzzel                 `# application launcher` \
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
+    xdg-terminal-exec      `# ...` \
     xdg-open               `# ...` \
     xdg-user-dirs          `# create user directories` \
     zathura                `# document viewer` \
@@ -586,131 +587,131 @@ window#waybar {
 EOF
 }
 
-function configure_wlogout() {
-    echo "==> Configure wlogout."
+# function configure_wlogout() {
+#     echo "==> Configure wlogout."
 
-    mkdir -p "$HOME"/.config/wlogout/
-    cat > "$HOME"/.config/wlogout/layout << 'EOF'
-    {
-        "label" : "lock",
-        "action" : "loginctl lock-session",
-        "text" : "Lock",
-        "keybind" : "l"
-    }
-    {
-        "label" : "hibernate",
-        "action" : "systemctl hibernate",
-        "text" : "Hibernate",
-        "keybind" : "h"
-    }
-    {
-        "label" : "logout",
-        "action" : "loginctl terminate-user $USER",
-        "text" : "Logout",
-        "keybind" : "e"
-    }
-    {
-        "label" : "shutdown",
-        "action" : "systemctl poweroff",
-        "text" : "Shutdown",
-        "keybind" : "s"
-    }
-    {
-        "label" : "suspend",
-        "action" : "systemctl suspend",
-        "text" : "Suspend",
-        "keybind" : "u"
-    }
-    {
-        "label" : "reboot",
-        "action" : "systemctl reboot",
-        "text" : "Reboot",
-        "keybind" : "r"
-    }
-EOF
+#     mkdir -p "$HOME"/.config/wlogout/
+#     cat > "$HOME"/.config/wlogout/layout << 'EOF'
+#     {
+#         "label" : "lock",
+#         "action" : "loginctl lock-session",
+#         "text" : "Lock",
+#         "keybind" : "l"
+#     }
+#     {
+#         "label" : "hibernate",
+#         "action" : "systemctl hibernate",
+#         "text" : "Hibernate",
+#         "keybind" : "h"
+#     }
+#     {
+#         "label" : "logout",
+#         "action" : "loginctl terminate-user $USER",
+#         "text" : "Logout",
+#         "keybind" : "e"
+#     }
+#     {
+#         "label" : "shutdown",
+#         "action" : "systemctl poweroff",
+#         "text" : "Shutdown",
+#         "keybind" : "s"
+#     }
+#     {
+#         "label" : "suspend",
+#         "action" : "systemctl suspend",
+#         "text" : "Suspend",
+#         "keybind" : "u"
+#     }
+#     {
+#         "label" : "reboot",
+#         "action" : "systemctl reboot",
+#         "text" : "Reboot",
+#         "keybind" : "r"
+#     }
+# EOF
 
-    cat > "$HOME"/.config/wlogout/style.css << 'EOF'
-* {
-  font-family: "JetBrainsMono Nerd Font";
-  font-size: 16px;
-  background-image: none;
-  box-shadow: none;
-}
+#     cat > "$HOME"/.config/wlogout/style.css << 'EOF'
+# * {
+#   font-family: "JetBrainsMono Nerd Font";
+#   font-size: 16px;
+#   background-image: none;
+#   box-shadow: none;
+# }
 
-window {
-  background-color: rgba(12, 12, 12, 0.9);
-}
+# window {
+#   background-color: rgba(12, 12, 12, 0.9);
+# }
 
-button {
-  border-radius: 0;
-  border-color: none;
-  text-decoration-color: #FFFFFF;
-  color: #FFFFFF;
-  background-color: #1E1E1E;
-  border-style: solid;
-  border-width: 1px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 25%;
-}
+# button {
+#   border-radius: 0;
+#   border-color: none;
+#   text-decoration-color: #FFFFFF;
+#   color: #FFFFFF;
+#   background-color: #1E1E1E;
+#   border-style: solid;
+#   border-width: 1px;
+#   background-repeat: no-repeat;
+#   background-position: center;
+#   background-size: 25%;
+# }
 
-button:focus, button:active, button:hover {
-  background-color: #3700B3;
-  outline-style: none;
-}
+# button:focus, button:active, button:hover {
+#   background-color: #3700B3;
+#   outline-style: none;
+# }
 
-#lock {
-  background-image: image(url("/usr/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
-}
+# #lock {
+#   background-image: image(url("/usr/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+# }
 
-#logout {
-  background-image: image(url("/usr/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
-}
+# #logout {
+#   background-image: image(url("/usr/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+# }
 
-#suspend {
-  background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
-}
+# #suspend {
+#   background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+# }
 
-#hibernate {
-  background-image: image(url("/usr/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
-}
+# #hibernate {
+#   background-image: image(url("/usr/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
+# }
 
-#shutdown {
-  background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
-}
+# #shutdown {
+#   background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
+# }
 
-#reboot {
-  background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-}
-EOF
-}
+# #reboot {
+#   background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+# }
+# EOF
+# }
 
-function configure_alacritty() {
-  echo "==> Configure Alacritty."
+# function configure_alacritty() {
+#   echo "==> Configure Alacritty."
 
-  mkdir -p "$HOME"/.config/alacritty/
-  cat > "$HOME"/.config/alacritty/alacritty.toml << 'EOF'
-[terminal]
-shell = { program = "/bin/bash" }
+#   mkdir -p "$HOME"/.config/alacritty/
+#   cat > "$HOME"/.config/alacritty/alacritty.toml << 'EOF'
+# [terminal]
+# shell = { program = "/bin/bash" }
 
-[bell]
-duration = 0
+# [bell]
+# duration = 0
 
-[cursor.style]
-blinking = "Always"
-shape = "Underline"
+# [cursor.style]
+# blinking = "Always"
+# shape = "Underline"
 
-[selection]
-save_to_clipboard = true
+# [selection]
+# save_to_clipboard = true
 
-[mouse]
-bindings = [{mouse = "Right", action = "Paste"}]
+# [mouse]
+# bindings = [{mouse = "Right", action = "Paste"}]
 
-[window]
-opacity = 1.0
-startup_mode = "Maximized"
-EOF
-}
+# [window]
+# opacity = 1.0
+# startup_mode = "Maximized"
+# EOF
+# }
 
 function finish() {
   xdg-user-dirs-update

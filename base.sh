@@ -165,12 +165,26 @@ function partitioning() {
     printf "%s" "${PASSWORD_VOLUMEN}" | cryptsetup luksFormat --type luks2 --batch-mode --key-file - "${ROOT}"
     printf "%s" "${PASSWORD_VOLUMEN}" | cryptsetup open --key-file - "${ROOT}" cryptroot
     udevadm settle
-    mkfs.ext4 -L ROOT "/dev/mapper/cryptroot" &> /dev/null
+    mkfs.btrfs -L ROOT "/dev/mapper/cryptroot" &> /dev/null
 
     # Mount: swap, root and boot:
     swapon "${SWAP}"
     mount "/dev/mapper/cryptroot" /mnt
-    mkdir -p /mnt/boot/
+    btrfs subvolume create /mnt/@
+    btrfs subvolume create /mnt/@home
+    btrfs subvolume create /mnt/@log
+    btrfs subvolume create /mnt/@pkg
+    btrfs subvolume create /mnt/@snapshots
+    umount /mnt
+
+    OPTS="noatime,compress=zstd,ssd,space_cache=v2"
+    mount -o ${OPTS},subvol=@           "/dev/mapper/cryptroot" /mnt
+    mkdir -p /mnt/{home,var/log,var/cache/pacman/pkg,.snapshots,boot}
+    mount -o ${OPTS},subvol=@home       "/dev/mapper/cryptroot" /mnt/home
+    mount -o ${OPTS},subvol=@log        "/dev/mapper/cryptroot" /mnt/var/log
+    mount -o ${OPTS},subvol=@pkg        "/dev/mapper/cryptroot" /mnt/var/cache/pacman/pkg
+    mount -o ${OPTS},subvol=@snapshots  "/dev/mapper/cryptroot" /mnt/.snapshots
+
     mount "${UEFI}" /mnt/boot/
 
     # Remove default directories lost+found:
@@ -187,11 +201,13 @@ function install_base() {
     pacstrap /mnt \
         base \
         base-devel \
+        btrfs-progs \
         efibootmgr \
         iwd \
         linux \
         linux-firmware \
         linux-headers \
+        limine \
         man-db \
         networkmanager \
         openssh \
@@ -292,45 +308,86 @@ function configure_user() {
 }
 
 function configure_bootloader() {
-    echo "==> Install and configure systemd-boot."
+    echo "==> Install and configure Limine."
 
     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
-    # Detect CPU microcode
     if grep -q AuthenticAMD /proc/cpuinfo; then
         MICROCODE="amd-ucode.img"
     elif grep -q GenuineIntel /proc/cpuinfo; then
         MICROCODE="intel-ucode.img"
     fi
 
-    # Install systemd-boot
-    arch-chroot /mnt bootctl --path=/boot install &> /dev/null
+    # Copiar binario EFI de limine a la ESP (montada en /boot)
+    arch-chroot /mnt mkdir -p /boot/EFI/BOOT
+    arch-chroot /mnt cp /usr/share/limine/BOOTX64.EFI /boot/EFI/BOOT/BOOTX64.EFI
 
-    # Loader configuration
-    mkdir -p /mnt/boot/loader
+    # Registrar entrada UEFI
+    arch-chroot /mnt efibootmgr --create \
+        --disk "${VOLUMEN}" --part 1 \
+        --loader '\EFI\BOOT\BOOTX64.EFI' \
+        --label "Arch Linux Limine" --unicode &> /dev/null
 
-    cat << EOF | sudo tee /mnt/boot/loader/loader.conf &> /dev/null
-default arch
-timeout 0
-editor no
+    # Config de limine (formato nuevo limine.conf)
+    cat << EOF | tee /mnt/boot/limine.conf &> /dev/null
+timeout: 0
+default_entry: 1
+
+/Arch Linux
+    protocol: linux
+    kernel_path: boot():/vmlinuz-linux
+    module_path: boot():/${MICROCODE}
+    module_path: boot():/initramfs-linux.img
+    cmdline: cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ rw quiet loglevel=3
 EOF
 
-    # Boot entry
-    mkdir -p /mnt/boot/loader/entries
-
-    cat << EOF | sudo tee /mnt/boot/loader/entries/arch.conf &> /dev/null
-title   Arch Linux
-linux   /vmlinuz-linux
-initrd  /$MICROCODE
-initrd  /initramfs-linux.img
-options cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot rw quiet loglevel=3
-EOF
-
-    # Ensure encrypt hook exists
-    sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
+    # mkinitcpio: añadir btrfs y quitar fsck (btrfs no usa fsck)
+    sed -i 's/^MODULES=.*/MODULES=(btrfs)/' /mnt/etc/mkinitcpio.conf
+    sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems)/' /mnt/etc/mkinitcpio.conf
 
     arch-chroot /mnt mkinitcpio -P &> /dev/null
 }
+
+# function configure_bootloader() {
+#     echo "==> Install and configure systemd-boot."
+
+#     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
+
+#     # Detect CPU microcode
+#     if grep -q AuthenticAMD /proc/cpuinfo; then
+#         MICROCODE="amd-ucode.img"
+#     elif grep -q GenuineIntel /proc/cpuinfo; then
+#         MICROCODE="intel-ucode.img"
+#     fi
+
+#     # Install systemd-boot
+#     arch-chroot /mnt bootctl --path=/boot install &> /dev/null
+
+#     # Loader configuration
+#     mkdir -p /mnt/boot/loader
+
+#     cat << EOF | sudo tee /mnt/boot/loader/loader.conf &> /dev/null
+# default arch
+# timeout 0
+# editor no
+# EOF
+
+#     # Boot entry
+#     mkdir -p /mnt/boot/loader/entries
+
+#     cat << EOF | sudo tee /mnt/boot/loader/entries/arch.conf &> /dev/null
+# title   Arch Linux
+# linux   /vmlinuz-linux
+# initrd  /$MICROCODE
+# initrd  /initramfs-linux.img
+# options cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot rw quiet loglevel=3
+# EOF
+
+#     # Ensure encrypt hook exists
+#     sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
+
+#     arch-chroot /mnt mkinitcpio -P &> /dev/null
+# }
 
 function configure_ntp() {
     echo "==> Configure time zone and NTP."
