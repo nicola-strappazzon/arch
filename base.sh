@@ -170,11 +170,11 @@ function partitioning() {
     # Mount: swap, root and boot:
     swapon "${SWAP}"
     mount "/dev/mapper/cryptroot" /mnt
-    btrfs subvolume create /mnt/@
-    btrfs subvolume create /mnt/@home
-    btrfs subvolume create /mnt/@log
-    btrfs subvolume create /mnt/@pkg
-    btrfs subvolume create /mnt/@snapshots
+    btrfs subvolume create /mnt/@ &> /dev/null
+    btrfs subvolume create /mnt/@home &> /dev/null
+    btrfs subvolume create /mnt/@log &> /dev/null
+    btrfs subvolume create /mnt/@pkg &> /dev/null
+    btrfs subvolume create /mnt/@snapshots &> /dev/null
     umount /mnt
 
     OPTS="noatime,compress=zstd,ssd,space_cache=v2"
@@ -294,9 +294,6 @@ EOF
 }
 
 function configure_user() {
-    # /etc/sudoers.d/
-    # https://github.com/basecamp/omarchy/blob/dev/install/post-install/allow-reboot.sh
-
     echo "==> Create user."
     arch-chroot /mnt useradd --create-home --shell=/bin/bash --gid=users --groups=wheel,uucp,video --password="$PASSWORD_USER" --comment="$USERCOMMENT" "$USERNAME"
     arch-chroot /mnt sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
@@ -308,7 +305,7 @@ function configure_user() {
 }
 
 function configure_bootloader() {
-    echo "==> Install and configure Limine."
+    echo "==> Install and configure bootloader."
 
     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
 
@@ -318,17 +315,14 @@ function configure_bootloader() {
         MICROCODE="intel-ucode.img"
     fi
 
-    # Copiar binario EFI de limine a la ESP (montada en /boot)
     arch-chroot /mnt mkdir -p /boot/EFI/BOOT
     arch-chroot /mnt cp /usr/share/limine/BOOTX64.EFI /boot/EFI/BOOT/BOOTX64.EFI
 
-    # Registrar entrada UEFI
     arch-chroot /mnt efibootmgr --create \
         --disk "${VOLUMEN}" --part 1 \
         --loader '\EFI\BOOT\BOOTX64.EFI' \
         --label "Arch Linux Limine" --unicode &> /dev/null
 
-    # Config de limine (formato nuevo limine.conf)
     cat << EOF | tee /mnt/boot/limine.conf &> /dev/null
 timeout: 0
 default_entry: 1
@@ -341,53 +335,11 @@ default_entry: 1
     cmdline: cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot rootflags=subvol=@ rw quiet loglevel=3
 EOF
 
-    # mkinitcpio: añadir btrfs y quitar fsck (btrfs no usa fsck)
     sed -i 's/^MODULES=.*/MODULES=(btrfs)/' /mnt/etc/mkinitcpio.conf
     sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems)/' /mnt/etc/mkinitcpio.conf
 
     arch-chroot /mnt mkinitcpio -P &> /dev/null
 }
-
-# function configure_bootloader() {
-#     echo "==> Install and configure systemd-boot."
-
-#     ROOT_UUID=$(blkid -s UUID -o value "$ROOT")
-
-#     # Detect CPU microcode
-#     if grep -q AuthenticAMD /proc/cpuinfo; then
-#         MICROCODE="amd-ucode.img"
-#     elif grep -q GenuineIntel /proc/cpuinfo; then
-#         MICROCODE="intel-ucode.img"
-#     fi
-
-#     # Install systemd-boot
-#     arch-chroot /mnt bootctl --path=/boot install &> /dev/null
-
-#     # Loader configuration
-#     mkdir -p /mnt/boot/loader
-
-#     cat << EOF | sudo tee /mnt/boot/loader/loader.conf &> /dev/null
-# default arch
-# timeout 0
-# editor no
-# EOF
-
-#     # Boot entry
-#     mkdir -p /mnt/boot/loader/entries
-
-#     cat << EOF | sudo tee /mnt/boot/loader/entries/arch.conf &> /dev/null
-# title   Arch Linux
-# linux   /vmlinuz-linux
-# initrd  /$MICROCODE
-# initrd  /initramfs-linux.img
-# options cryptdevice=UUID=${ROOT_UUID}:cryptroot root=/dev/mapper/cryptroot rw quiet loglevel=3
-# EOF
-
-#     # Ensure encrypt hook exists
-#     sed -i 's/^HOOKS=.*/HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt filesystems fsck)/' /mnt/etc/mkinitcpio.conf
-
-#     arch-chroot /mnt mkinitcpio -P &> /dev/null
-# }
 
 function configure_ntp() {
     echo "==> Configure time zone and NTP."
