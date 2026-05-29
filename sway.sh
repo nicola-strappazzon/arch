@@ -7,6 +7,7 @@ function main() {
   install_fonts
   configure_sway
   configure_waybar
+  configure_terminal
   configure_application_launcher
   configure_background
   finish
@@ -339,6 +340,34 @@ EOF
   chmod +x "$HOME"/.config/sway/scripts/waybar.sh
 }
 
+function configure_terminal() {
+    mkdir -p "$HOME"/.config/foot/
+    cat > "$HOME"/.config/foot/foot.ini  << 'EOF'
+[colors]
+alpha=1.0
+foreground=adbcbc
+background=103c48
+regular0=184956  # black
+regular1=fa5750  # red
+regular2=75b938  # green
+regular3=dbb32d  # yellow
+regular4=4695f7  # blue
+regular5=f275be  # magenta
+regular6=41c7b9  # cyan
+regular7=72898f  # white
+bright0=2d5b69   # bright black
+bright1=ff665c   # bright red
+bright2=84c747   # bright green
+bright3=ebc13d   # bright yellow
+bright4=58a3ff   # bright blue
+bright5=ff84cd   # bright magenta
+bright6=53d6c7   # bright cyan
+bright7=cad8d9   # bright white
+selection-foreground=cad8d9
+selection-background=184956
+EOF
+}
+
 function configure_application_launcher() {
   echo "==> Configure application launcher."
 
@@ -351,6 +380,7 @@ EOF
 function configure_background() {
   echo "==> Configure background."
 
+  mkdir -p "${HOME}/Pictures/"
   wget --quiet --output-document="${HOME}/Pictures/wallpaper.jpg" "https://raw.githubusercontent.com/nicola-strappazzon/arch/refs/heads/main/wallpaper/apple-grass-blades.jpg"
 }
 
