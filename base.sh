@@ -405,6 +405,7 @@ function packages() {
         dosfstools
         fzf
         git
+        go
         helix
         htop
         jq
