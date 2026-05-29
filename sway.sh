@@ -111,7 +111,7 @@ set $right l
 # Your preferred terminal emulator
 set $term foot
 # Your preferred application launcher
-set $menu rofi
+set $menu rofi -show drun
 
 ### Idle configuration
 exec swayidle -w \
@@ -286,8 +286,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # launcher
-bindsym XF86LaunchA exec rofi # F3
-bindsym XF86LaunchB exec rofi # F4
+bindsym XF86LaunchA exec rofi -show drun # F3
+bindsym XF86LaunchB exec rofi -show drun # F4
 
 # windows theme
 #                       border  background text    indicator child_border
@@ -377,7 +377,7 @@ function configure_waybar() {
   "custom/launcher": {
     "format": "󰣇",
     "tooltip": false,
-    "on-click": "rofi"
+    "on-click": "rofi -show drun"
   },
 
   "sway/workspaces": {
@@ -475,7 +475,7 @@ function configure_waybar() {
     "states": {
       "warning": 30,
       "critical": 15
-    },
+    }
   },
 
   "custom/power": {
