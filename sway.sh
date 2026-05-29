@@ -104,7 +104,6 @@ function configure_sway() {
 
   mkdir -p "$HOME"/.config/sway/
   mkdir -p "$HOME"/.config/sway/scripts
-  # cp /etc/sway/config "$HOME"/.config/sway/config
 
 cat > "$HOME"/.config/sway/config << 'EOF'
 font pango:JetBrains Mono 12
