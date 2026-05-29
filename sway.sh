@@ -71,6 +71,13 @@ function install_packages() {
     xdg-user-dirs          `# create user directories` \
     zathura                `# document viewer` \
     zathura-pdf-mupdf      `# pdf support for zathura` \
+    nautilus               `# ...` \
+    nautilus-python        `# ...` \
+    imv                    `# ...` \
+    evince                 `# ...` \
+    mpv                    `# ...` \
+    mpv-mpris              `# ...` \
+    impala                 `# ...` \
   &> /dev/null
 }
 
