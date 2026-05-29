@@ -8,10 +8,8 @@ function main() {
   install_fonts
   configure_sway
   configure_waybar
-  # configure_wlogout
-  # configure_application_launcher
-  # configure_background
-  # configure_alacritty
+  configure_application_launcher
+  configure_background
   finish
 }
 
@@ -67,7 +65,6 @@ function install_packages() {
     touchegg               `# gestos para el touch mouse` \
     waybar                 `# barra superior` \
     wl-clipboard           `# clipboard` \
-    fuzzel                 `# application launcher` \
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
     xdg-terminal-exec      `# ...` \
     xdg-open               `# ...` \
@@ -81,7 +78,7 @@ function install_yay_packages() {
   echo "==> Install yay packages."
 
   yay -Sy --noconfirm --needed \
-    wlogout       `# sleep/logout/reboot/shutdown` \
+    walker        `# application launcher` \
     librewolf-bin `# web browser` \
   &> /dev/null
 }
@@ -114,9 +111,9 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term alacritty
+set $term foot
 # Your preferred application launcher
-set $menu fuzzel
+set $menu walker
 
 ### Idle configuration
 exec swayidle -w \
@@ -291,8 +288,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # launcher
-bindsym XF86LaunchA exec fuzzel # F3
-bindsym XF86LaunchB exec fuzzel # F4
+bindsym XF86LaunchA exec walker # F3
+bindsym XF86LaunchB exec walker # F4
 
 # windows theme
 #                       border  background text    indicator child_border
@@ -347,31 +344,9 @@ EOF
 function configure_application_launcher() {
   echo "==> Configure application launcher."
 
-  mkdir -p "$HOME"/.config/fuzzel/
+  mkdir -p "$HOME"/.config/walker/
 
-cat > "$HOME"/.config/fuzzel/fuzzel.ini << 'EOF'
-[main]
-font=JetBrainsMono Nerd Font:size=16
-dpi-aware=yes
-prompt="> "
-
-[colors]
-background=1e1e2eff
-text=dcd7baff
-match=7aa2f7ff
-selection=3e4452ff
-selection-text=ffffff
-border=7aa2f7ff
-
-[border]
-width=2
-radius=8
-
-[layout]
-width=30
-lines=10
-horizontal-pad=20
-vertical-pad=15
+cat > "$HOME"/.config/walker/walker.ini << 'EOF'
 EOF
 }
 
@@ -397,7 +372,7 @@ function configure_waybar() {
   "custom/launcher": {
     "format": "󰣇",
     "tooltip": false,
-    "on-click": "fuzzel"
+    "on-click": "walker"
   },
 
   "sway/workspaces": {
@@ -586,132 +561,6 @@ window#waybar {
 }
 EOF
 }
-
-# function configure_wlogout() {
-#     echo "==> Configure wlogout."
-
-#     mkdir -p "$HOME"/.config/wlogout/
-#     cat > "$HOME"/.config/wlogout/layout << 'EOF'
-#     {
-#         "label" : "lock",
-#         "action" : "loginctl lock-session",
-#         "text" : "Lock",
-#         "keybind" : "l"
-#     }
-#     {
-#         "label" : "hibernate",
-#         "action" : "systemctl hibernate",
-#         "text" : "Hibernate",
-#         "keybind" : "h"
-#     }
-#     {
-#         "label" : "logout",
-#         "action" : "loginctl terminate-user $USER",
-#         "text" : "Logout",
-#         "keybind" : "e"
-#     }
-#     {
-#         "label" : "shutdown",
-#         "action" : "systemctl poweroff",
-#         "text" : "Shutdown",
-#         "keybind" : "s"
-#     }
-#     {
-#         "label" : "suspend",
-#         "action" : "systemctl suspend",
-#         "text" : "Suspend",
-#         "keybind" : "u"
-#     }
-#     {
-#         "label" : "reboot",
-#         "action" : "systemctl reboot",
-#         "text" : "Reboot",
-#         "keybind" : "r"
-#     }
-# EOF
-
-#     cat > "$HOME"/.config/wlogout/style.css << 'EOF'
-# * {
-#   font-family: "JetBrainsMono Nerd Font";
-#   font-size: 16px;
-#   background-image: none;
-#   box-shadow: none;
-# }
-
-# window {
-#   background-color: rgba(12, 12, 12, 0.9);
-# }
-
-# button {
-#   border-radius: 0;
-#   border-color: none;
-#   text-decoration-color: #FFFFFF;
-#   color: #FFFFFF;
-#   background-color: #1E1E1E;
-#   border-style: solid;
-#   border-width: 1px;
-#   background-repeat: no-repeat;
-#   background-position: center;
-#   background-size: 25%;
-# }
-
-# button:focus, button:active, button:hover {
-#   background-color: #3700B3;
-#   outline-style: none;
-# }
-
-# #lock {
-#   background-image: image(url("/usr/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
-# }
-
-# #logout {
-#   background-image: image(url("/usr/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
-# }
-
-# #suspend {
-#   background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
-# }
-
-# #hibernate {
-#   background-image: image(url("/usr/share/wlogout/icons/hibernate.png"), url("/usr/local/share/wlogout/icons/hibernate.png"));
-# }
-
-# #shutdown {
-#   background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
-# }
-
-# #reboot {
-#   background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-# }
-# EOF
-# }
-
-# function configure_alacritty() {
-#   echo "==> Configure Alacritty."
-
-#   mkdir -p "$HOME"/.config/alacritty/
-#   cat > "$HOME"/.config/alacritty/alacritty.toml << 'EOF'
-# [terminal]
-# shell = { program = "/bin/bash" }
-
-# [bell]
-# duration = 0
-
-# [cursor.style]
-# blinking = "Always"
-# shape = "Underline"
-
-# [selection]
-# save_to_clipboard = true
-
-# [mouse]
-# bindings = [{mouse = "Right", action = "Paste"}]
-
-# [window]
-# opacity = 1.0
-# startup_mode = "Maximized"
-# EOF
-# }
 
 function finish() {
   xdg-user-dirs-update
