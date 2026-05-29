@@ -1,14 +1,6 @@
 Base
-- btrfs
-- limine
-- xdg-terminal-exec
-- Reemplazar alacritty foot https://codeberg.org/dnkl/foot
-- Instalar nautilus y nautilus-python, imv, evince, mpv, mpv-mpris
-- Instalar Walker
 - Instalar impala
-- Quitar fuzzel
-- https://github.com/emersion/mako
-- Configurar Walker:
+- Configurar rofi:
   - Buscador
   - Calc
   - Web Search

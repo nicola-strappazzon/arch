@@ -501,7 +501,6 @@ window#waybar {
   color: rgb(187, 225, 250);
 }
 
-
 #workspaces button {
   padding: 0 6px;
   color: #6c7086;
@@ -514,10 +513,9 @@ window#waybar {
 #workspaces button:active,
 #workspaces button.focused,
 #workspaces button.focused:hover {
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
-  background: none !important;
+  border: none;
+  box-shadow: 0 0 transparent;
+  background: transparent;
   font-weight: normal;
 }
 
