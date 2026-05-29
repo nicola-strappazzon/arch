@@ -4,7 +4,6 @@
 function main() {
   install_packages
   install_yay
-  install_yay_packages
   install_fonts
   configure_sway
   configure_waybar
@@ -78,15 +77,8 @@ function install_packages() {
     mpv                    `# ...` \
     mpv-mpris              `# ...` \
     impala                 `# ...` \
-  &> /dev/null
-}
-
-function install_yay_packages() {
-  echo "==> Install yay packages."
-
-  yay -Sy --noconfirm --needed \
-    walker        `# application launcher` \
-    librewolf-bin `# web browser` \
+    rofi-wayland           `# ...` \
+    firefox                `# web browser` \
   &> /dev/null
 }
 
@@ -119,7 +111,7 @@ set $right l
 # Your preferred terminal emulator
 set $term foot
 # Your preferred application launcher
-set $menu walker
+set $menu rofi
 
 ### Idle configuration
 exec swayidle -w \
@@ -294,8 +286,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # launcher
-bindsym XF86LaunchA exec walker # F3
-bindsym XF86LaunchB exec walker # F4
+bindsym XF86LaunchA exec rofi # F3
+bindsym XF86LaunchB exec rofi # F4
 
 # windows theme
 #                       border  background text    indicator child_border
@@ -350,9 +342,9 @@ EOF
 function configure_application_launcher() {
   echo "==> Configure application launcher."
 
-  mkdir -p "$HOME"/.config/walker/
+  mkdir -p "$HOME"/.config/rofy/
 
-cat > "$HOME"/.config/walker/walker.ini << 'EOF'
+cat > "$HOME"/.config/rofy/rofy.ini << 'EOF'
 EOF
 }
 
@@ -378,7 +370,7 @@ function configure_waybar() {
   "custom/launcher": {
     "format": "󰣇",
     "tooltip": false,
-    "on-click": "walker"
+    "on-click": "rofi"
   },
 
   "sway/workspaces": {
