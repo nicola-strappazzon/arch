@@ -66,8 +66,7 @@ function install_packages() {
     waybar                 `# barra superior` \
     wl-clipboard           `# clipboard` \
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
-    xdg-terminal-exec      `# ...` \
-    xdg-open               `# ...` \
+    xdg-utils              `# ...` \
     xdg-user-dirs          `# create user directories` \
     zathura                `# document viewer` \
     zathura-pdf-mupdf      `# pdf support for zathura` \
