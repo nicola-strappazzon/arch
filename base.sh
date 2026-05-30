@@ -150,6 +150,7 @@ function partitioning() {
     UEFI=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='efi'  && PKNAME=='${DISK}'")
     SWAP=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='swap' && PKNAME=='${DISK}'")
     ROOT=$(lsblk --ascii --noheadings --output=PATH --filter "PARTLABEL=='root' && PKNAME=='${DISK}'")
+    OPTS="noatime,compress=zstd,ssd,space_cache=v2"
 
     if [[ -z "${UEFI}" || -z "${SWAP}" || -z "${ROOT}" ]]; then
         echo "ERROR: Partition detection failed"
@@ -166,25 +167,28 @@ function partitioning() {
     printf "%s" "${PASSWORD_VOLUMEN}" | cryptsetup open --key-file - "${ROOT}" cryptroot
     udevadm settle
     mkfs.btrfs -L ROOT "/dev/mapper/cryptroot" &> /dev/null
-
-    # Mount: swap, root and boot:
-    swapon "${SWAP}"
     mount "/dev/mapper/cryptroot" /mnt
-    btrfs subvolume create /mnt/@ &> /dev/null
-    btrfs subvolume create /mnt/@home &> /dev/null
-    btrfs subvolume create /mnt/@log &> /dev/null
-    btrfs subvolume create /mnt/@pkg &> /dev/null
+
+    # Mount the swap:
+    swapon "${SWAP}"
+
+    # Create subvolumes:
+    btrfs subvolume create /mnt/@          &> /dev/null
+    btrfs subvolume create /mnt/@home      &> /dev/null
+    btrfs subvolume create /mnt/@log       &> /dev/null
+    btrfs subvolume create /mnt/@pkg       &> /dev/null
     btrfs subvolume create /mnt/@snapshots &> /dev/null
+
+    # Unmount the root mount point:
     umount /mnt
 
-    OPTS="noatime,compress=zstd,ssd,space_cache=v2"
+    # Mount all subvolumes in their correct locations:
     mount -o ${OPTS},subvol=@           "/dev/mapper/cryptroot" /mnt
     mkdir -p /mnt/{home,var/log,var/cache/pacman/pkg,.snapshots,boot}
     mount -o ${OPTS},subvol=@home       "/dev/mapper/cryptroot" /mnt/home
     mount -o ${OPTS},subvol=@log        "/dev/mapper/cryptroot" /mnt/var/log
     mount -o ${OPTS},subvol=@pkg        "/dev/mapper/cryptroot" /mnt/var/cache/pacman/pkg
     mount -o ${OPTS},subvol=@snapshots  "/dev/mapper/cryptroot" /mnt/.snapshots
-
     mount "${UEFI}" /mnt/boot/
 
     # Remove default directories lost+found:
