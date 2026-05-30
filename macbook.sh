@@ -3,13 +3,15 @@
 
 function main() {
   echo "==> Install drivers."
-  sudo pacman --sync --noconfirm broadcom-wl-dkms
-  sudo modprobe wl
+  sudo pacman --sync --noconfirm broadcom-wl-dkms &> /dev/null
+  sudo modprobe wl &> /dev/null
 
   # Connect to wifi:
   # ================
   # nmcli device wifi list
   # sudo nmcli device wifi connect YourSSID password YourPassword
+  # ip a
+  # curl ifconfig.co
 
   sudo pacman --sync --noconfirm --needed \
     pipewire \
@@ -24,7 +26,7 @@ function main() {
 
   echo "==> Enable services."
 
-  systemctl --user enable --now pipewire pipewire-pulse wireplumber
+  systemctl --user enable --now pipewire pipewire-pulse wireplumber &> /dev/null
 
   # Test sound:
   # ===========
