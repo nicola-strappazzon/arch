@@ -208,8 +208,8 @@ exec swayidle -w \
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    bindsym $mod+Shift+b splith
+    bindsym $mod+Shift+v splitv
 
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
@@ -346,8 +346,6 @@ font=JetBrainsMono Nerd Font:size=16
 pad=14x14
 term=xterm-256color
 
-include=~/.config/omarchy/current/theme/foot.ini
-
 [scrollback]
 lines=10000
 
@@ -356,8 +354,7 @@ style=block
 blink=yes
 
 [key-bindings]
-clipboard-copy=Control+Insert
-clipboard-paste=Shift+Insert
+primary-paste=Super+v
 EOF
 }
 
