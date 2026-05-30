@@ -364,9 +364,85 @@ EOF
 function configure_application_launcher() {
   echo "==> Configure application launcher."
 
-  mkdir -p "$HOME"/.config/rofy/
+  mkdir -p "$HOME"/.config/rofi/
 
-cat > "$HOME"/.config/rofy/rofy.ini << 'EOF'
+cat > "$HOME"/.config/rofi/config.rasi << 'EOF'
+configuration {
+    modi:                "drun,run";
+    show-icons:          true;
+    drun-display-format: "{name}";
+}
+
+* {
+    bg:     #002b36;
+    bg-alt: #073642;
+    fg:     #839496;
+    fg-alt: #93a1a1;
+    accent: #268bd2;
+    urgent: #dc322f;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 11";
+}
+
+window {
+    background-color: @bg;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    8px;
+    width:            40%;
+    padding:          12px;
+}
+
+mainbox {
+    children: [ inputbar, listview ];
+    spacing:  8px;
+}
+
+inputbar {
+    background-color: @bg-alt;
+    text-color:       @fg-alt;
+    padding:          8px;
+    border-radius:    6px;
+    spacing:          8px;
+    children:         [ prompt, entry ];
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    placeholder:       "Search...";
+    placeholder-color: @fg;
+}
+
+listview {
+    lines:     10;
+    spacing:   4px;
+    scrollbar: false;
+}
+
+element {
+    padding:       6px 8px;
+    border-radius: 6px;
+}
+
+element selected {
+    background-color: @accent;
+    text-color:       @bg;
+}
+
+element-icon {
+    size:    1.1em;
+    padding: 0 6px 0 0;
+}
+
+element-text {
+    text-color:     inherit;
+    vertical-align: 0.5;
+}
 EOF
 }
 
