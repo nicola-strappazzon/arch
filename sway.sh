@@ -112,7 +112,7 @@ set $right l
 # Your preferred terminal emulator
 set $term foot
 # Your preferred application launcher
-set $menu rofi -show run
+set $menu rofi -show run -theme-str 'mainbox { children: [ inputbar ]; }'
 
 ### Idle configuration
 exec swayidle -w \
@@ -396,7 +396,7 @@ window {
 }
 
 mainbox {
-    children: [ inputbar ];
+    children: [ inputbar, listview ];
 }
 
 inputbar {
