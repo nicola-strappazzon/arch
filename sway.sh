@@ -342,7 +342,7 @@ EOF
 function configure_terminal() {
     mkdir -p "$HOME"/.config/foot/
     cat > "$HOME"/.config/foot/foot.ini  << 'EOF'
-font=JetBrainsMono Nerd Font:size=16
+font=JetBrainsMono Nerd Font:size=10
 pad=14x14
 term=xterm-256color
 
