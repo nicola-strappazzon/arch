@@ -111,7 +111,7 @@ set $right l
 # Your preferred terminal emulator
 set $term foot
 # Your preferred application launcher
-set $menu rofi -show drun
+set $menu rofi -show run
 
 ### Idle configuration
 exec swayidle -w \
@@ -131,7 +131,7 @@ exec swayidle -w \
     bindsym $mod+Shift+q kill
 
     # Start your launcher
-    bindsym $mod+d exec $menu
+    bindsym $mod+space exec $menu
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -223,7 +223,7 @@ exec swayidle -w \
     bindsym $mod+Shift+space floating toggle
 
     # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
+    # bindsym $mod+space focus mode_toggle
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
@@ -343,7 +343,7 @@ function configure_terminal() {
     mkdir -p "$HOME"/.config/foot/
     cat > "$HOME"/.config/foot/foot.ini  << 'EOF'
 font=JetBrainsMono Nerd Font:size=10
-pad=14x14
+pad=0x0
 term=xterm-256color
 
 [scrollback]
@@ -368,6 +368,8 @@ configuration {
     modi:                "drun,run";
     show-icons:          true;
     drun-display-format: "{name}";
+    display-drun: "";
+    display-run: "";
 }
 
 * {
@@ -393,8 +395,7 @@ window {
 }
 
 mainbox {
-    children: [ inputbar, listview ];
-    spacing:  8px;
+    children: [ inputbar ];
 }
 
 inputbar {
@@ -411,7 +412,7 @@ prompt {
 }
 
 entry {
-    placeholder:       "Search...";
+    placeholder:       "";
     placeholder-color: @fg;
 }
 
