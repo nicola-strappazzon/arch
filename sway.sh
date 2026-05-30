@@ -366,7 +366,7 @@ function configure_application_launcher() {
 
   mkdir -p "$HOME"/.config/rofi/
 
-cat > "$HOME"/.config/rofi/config.rasi << 'EOF'
+  cat > "$HOME"/.config/rofi/config.rasi << 'EOF'
 configuration {
     modi:                "drun,run";
     show-icons:          true;
