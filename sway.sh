@@ -366,10 +366,10 @@ function configure_application_launcher() {
   cat > "$HOME"/.config/rofi/config.rasi << 'EOF'
 configuration {
     modi:                "drun,run";
-    show-icons:          true;
+    show-icons:          false;
     drun-display-format: "{name}";
-    display-drun: "";
-    display-run: "";
+    display-drun:        "";
+    display-run:         "";
 }
 
 * {
