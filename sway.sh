@@ -64,6 +64,7 @@ function install_packages() {
     swaylock               `# lock screen` \
     touchegg               `# gestos para el touch mouse` \
     waybar                 `# barra superior` \
+    wlogout                `# ...` \
     wl-clipboard           `# clipboard` \
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
     xdg-utils              `# ...` \
