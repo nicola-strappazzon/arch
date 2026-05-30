@@ -382,7 +382,7 @@ configuration {
 
     background-color: transparent;
     text-color:       @fg;
-    font:             "JetBrainsMono Nerd Font 11";
+    font:             "JetBrainsMono Nerd Font 10";
 }
 
 window {
