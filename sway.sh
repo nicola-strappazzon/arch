@@ -342,6 +342,22 @@ EOF
 function configure_terminal() {
     mkdir -p "$HOME"/.config/foot/
     cat > "$HOME"/.config/foot/foot.ini  << 'EOF'
+font=JetBrainsMono Nerd Font:size=16
+pad=14x14
+term=xterm-256color
+
+include=~/.config/omarchy/current/theme/foot.ini
+
+[scrollback]
+lines=10000
+
+[cursor]
+style=block
+blink=yes
+
+[key-bindings]
+clipboard-copy=Control+Insert
+clipboard-paste=Shift+Insert
 EOF
 }
 
