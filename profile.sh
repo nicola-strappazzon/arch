@@ -111,6 +111,7 @@ alias gf="gofmt -w ."
 EOF
 
     cat > "$HOME"/.bashrc.d/env/general.sh << 'EOF'
+export MOZ_ENABLE_WAYLAND=1
 export BROWSER=firefox
 export CLICOLOR=1
 export EDITOR=helix
