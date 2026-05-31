@@ -10,6 +10,7 @@ function main() {
   configure_terminal
   configure_application_launcher
   configure_background
+  configure_notification
   finish
 }
 
@@ -313,6 +314,9 @@ output * bg ~/Pictures/wallpaper.jpg fill
 # bar
 exec_always ~/.config/sway/scripts/waybar.sh
 
+# notification
+exec_always ~/.config/sway/scripts/mako.sh
+
 include /etc/sway/config.d/*
 EOF
 
@@ -338,6 +342,15 @@ waybar
 EOF
 
   chmod +x "$HOME"/.config/sway/scripts/waybar.sh
+
+  cat > "$HOME"/.config/sway/scripts/mako.sh << 'EOF'
+#!/bin/bash
+
+pkill -x mako
+mako
+EOF
+
+  chmod +x "$HOME"/.config/sway/scripts/mako.sh
 }
 
 function configure_terminal() {
@@ -656,11 +669,44 @@ window#waybar {
 EOF
 }
 
+function configure_notification() {
+  echo "==> Configure notification."
+
+  mkdir -p "$HOME"/.config/mako/
+  cat > "$HOME"/.config/mako/config << 'EOF'
+font=JetBrains Mono 10
+background-color=#1e1e2e
+text-color=#cdd6f4
+border-color=#89b4fa
+border-size=2
+border-radius=8
+padding=10
+margin=10
+default-timeout=5000
+anchor=top-right
+width=350
+height=120
+
+[urgency=high]
+border-color=#f38ba8
+default-timeout=0
+EOF
+
+  # Test:
+  # =====
+  # notify-send "Título" "Cuerpo del mensaje"
+  # notify-send -u low      "Baja"    "Notificación de prioridad baja"
+  # notify-send -u normal   "Normal"  "Notificación normal"
+  # notify-send -u critical "Crítica" "Esta no expira sola"
+  # notify-send -t 3000 -i dialog-information "Con icono" "Expira en 3s"
+}
+
 function finish() {
   xdg-user-dirs-update
 
   if [ -n "$SWAYSOCK" ]; then
-    swaymsg reload
+    swaymsg reload 2>/dev/null || true
+    makoctl reload 2>/dev/null || true
   fi
 
   sudo -k
