@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 function main() {
   install_packages
@@ -81,6 +80,7 @@ function install_packages() {
     impala                 `# ...` \
     rofi-wayland           `# ...` \
     firefox                `# web browser` \
+    libnotify              `# ...` \
   &> /dev/null
 }
 
@@ -391,7 +391,7 @@ configuration {
     bg-alt: #073642;
     fg:     #839496;
     fg-alt: #93a1a1;
-    accent: #6c7086;
+    accent: #89b4fa;
     urgent: #dc322f;
 
     background-color: transparent;

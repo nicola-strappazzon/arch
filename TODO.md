@@ -12,13 +12,13 @@ Base
   - Passwords
   - Messages
   - menu que hace wlogout:
-    - Screensaver: omarchy-launch-screensaver force
-    - Lock: omarchy-system-lock
+    - Screensaver: launch-screensaver force
+    - Lock: system-lock
     - Suspend: systemctl suspend
     - Hibernate: systemctl hibernate
-    - Logout: omarchy-system-logout
-    - Restart: omarchy-system-reboot
-    - Shutdown: omarchy-system-shutdown
+    - Logout: system-logout
+    - Restart: system-reboot
+    - Shutdown: system-shutdown
 - Configurar wlogout (quitar)
 - Configurar xdg-open (pdf, img, video, music, txt, go, ...)
 - Probar cambiar de red: wifi/eth
@@ -45,7 +45,7 @@ Audio / Vídeo / Imagen
 - ffmpegthumbnailer — thumbnails de vídeo en Nautilus.
 - obs-studio, kdenlive — captura/edición.
 - pinta, xournalpp — editor de imágenes ligero / anotar PDFs.
-- tesseract + tesseract-data-eng — OCR (omarchy lo combina con grim+satty para "copiar texto de la pantalla").
+- tesseract + tesseract-data-eng — OCR (lo combina con grim+satty para "copiar texto de la pantalla").
 
 Filesystem / Nautilus integrations
 - exfatprogs — soporte exFAT.
@@ -68,16 +68,16 @@ Dev / CLI / TUI
 - lazygit, lazydocker.
 - eza — reemplazo de ls/lsd.
 - dust — reemplazo de du.
-- gum — para hacer scripts bash bonitos (omarchy lo usa en su menú).
+- gum — para hacer scripts bash bonitos (lo usa en su menú).
 - tldr — man pages cortas.
 - mise — gestor de versiones (asdf-like).
-- expac — query sobre la DB de pacman (útil para omarchy-update style scripts).
+- expac — query sobre la DB de pacman (útil para update style scripts).
 - tree-sitter-cli, luarocks, llvm, clang.
 
 Fonts / Themes
 - noto-fonts-emoji — emojis.
 - woff2-font-awesome — iconos para waybar.
-- ttf-ia-writer — la fuente del estilo omarchy.
+- ttf-ia-writer — la fuente del estilo 
 - yaru-icon-theme — iconos Yaru.
 - gnome-themes-extra, kvantum-qt5 — coherencia GTK/Qt.
 

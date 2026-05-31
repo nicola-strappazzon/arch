@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 declare HOSTNAME;
 declare PASSWORD_USER;
