@@ -13,40 +13,6 @@ function main() {
   finish
 }
 
-function install_yay() {
-  echo "==> Install yay tool."
-  if ! type "git" > /dev/null; then
-    echo "Could not find: git"
-    exit 1
-  fi
-
-  if ! type "makepkg" > /dev/null; then
-    echo "Could not find: makepkg"
-    exit 1
-  fi
-
-  if ! type "go" > /dev/null; then
-    echo "Could not find: go"
-    exit 1
-  fi
-
-  if ! type "yay" &> /dev/null; then
-    tmp="$(mktemp -d)"
-
-    mkdir -p "$tmp"
-
-    if [[ ! "${tmp}" || ! -d "${tmp}" ]]; then
-      echo "Could not find ${tmp} dir"
-      exit 1
-    fi
-
-    cd "$tmp" || return
-    git clone https://aur.archlinux.org/yay.git &> /dev/null
-    cd yay || return
-    makepkg -sif --noconfirm &> /dev/null
-  fi
-}
-
 function install_packages() {
   echo "==> Install packages."
   sudo pacman -S --noconfirm --needed \
@@ -84,6 +50,40 @@ function install_packages() {
   &> /dev/null
 }
 
+function install_yay() {
+  echo "==> Install yay tool."
+  if ! type "git" > /dev/null; then
+    echo "Could not find: git"
+    exit 1
+  fi
+
+  if ! type "makepkg" > /dev/null; then
+    echo "Could not find: makepkg"
+    exit 1
+  fi
+
+  if ! type "go" > /dev/null; then
+    echo "Could not find: go"
+    exit 1
+  fi
+
+  if ! type "yay" &> /dev/null; then
+    tmp="$(mktemp -d)"
+
+    mkdir -p "$tmp"
+
+    if [[ ! "${tmp}" || ! -d "${tmp}" ]]; then
+      echo "Could not find ${tmp} dir"
+      exit 1
+    fi
+
+    cd "$tmp" || return
+    git clone https://aur.archlinux.org/yay.git &> /dev/null
+    cd yay || return
+    makepkg -sif --noconfirm &> /dev/null
+  fi
+}
+
 function install_fonts() {
   echo "==> Install fonts."
   sudo pacman -S --noconfirm --needed \
@@ -99,7 +99,7 @@ function configure_sway() {
   mkdir -p "$HOME"/.config/sway/
   mkdir -p "$HOME"/.config/sway/scripts
 
-cat > "$HOME"/.config/sway/config << 'EOF'
+  cat > "$HOME"/.config/sway/config << 'EOF'
 font pango:JetBrains Mono 12
 
 #
@@ -342,7 +342,6 @@ waybar
 EOF
 
   chmod +x "$HOME"/.config/sway/scripts/waybar.sh
-
   cat > "$HOME"/.config/sway/scripts/mako.sh << 'EOF'
 #!/bin/bash
 
@@ -354,8 +353,8 @@ EOF
 }
 
 function configure_terminal() {
-    mkdir -p "$HOME"/.config/foot/
-    cat > "$HOME"/.config/foot/foot.ini  << 'EOF'
+  mkdir -p "$HOME"/.config/foot/
+  cat > "$HOME"/.config/foot/foot.ini  << 'EOF'
 font=JetBrainsMono Nerd Font:size=10
 pad=1x1
 term=xterm-256color
@@ -376,7 +375,6 @@ function configure_application_launcher() {
   echo "==> Configure application launcher."
 
   mkdir -p "$HOME"/.config/rofi/
-
   cat > "$HOME"/.config/rofi/config.rasi << 'EOF'
 configuration {
     modi:                "drun,run";
