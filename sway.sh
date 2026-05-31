@@ -13,6 +13,7 @@ function main() {
   configure_helix
   configure_profile
   configure_udev
+  configure_calendar
   finish
 }
 
@@ -786,6 +787,7 @@ alias o="dolphin . &> /dev/null &"
 alias r="source ~/.bashrc"
 alias t="btop"
 alias copy='xclip -sel clip'
+alias cal='cal -3'
 EOF
 
   cat > "$HOME"/.bashrc.d/env/general.sh << 'EOF'
@@ -816,6 +818,17 @@ EOF
 
   sudo udevadm control --reload
   sudo udevadm trigger
+}
+
+function configure_calendar() {
+  echo "==> Configure calendar."
+
+  mkdir -p "$HOME"/.config/terminal-colors.d/
+  cat > "$HOME"/.config/rofi/config.rasi << 'EOF'
+weekend 35
+today 1;41
+header yellow
+EOF
 }
 
 function finish() {
