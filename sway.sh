@@ -695,14 +695,6 @@ layer=overlay
 border-color=#f38ba8
 default-timeout=0
 EOF
-
-  # Test:
-  # =====
-  # notify-send "title" "message"
-  # notify-send -u low      "Low"      "Lorem ipsum dolor sit amet..."
-  # notify-send -u normal   "Normal"   "Lorem ipsum dolor sit amet..."
-  # notify-send -u critical "Critical" "Lorem ipsum dolor sit amet..."
-  # notify-send -t 3000 -i dialog-information "With icon" "Lorem ipsum dolor sit amet..."
 }
 
 function finish() {
