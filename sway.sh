@@ -687,6 +687,10 @@ anchor=top-right
 width=350
 height=120
 
+[urgency=critical]
+default-timeout=0
+layer=overlay
+
 [urgency=high]
 border-color=#f38ba8
 default-timeout=0
@@ -694,11 +698,11 @@ EOF
 
   # Test:
   # =====
-  # notify-send "Título" "Cuerpo del mensaje"
-  # notify-send -u low      "Baja"    "Notificación de prioridad baja"
-  # notify-send -u normal   "Normal"  "Notificación normal"
-  # notify-send -u critical "Crítica" "Esta no expira sola"
-  # notify-send -t 3000 -i dialog-information "Con icono" "Expira en 3s"
+  # notify-send "title" "message"
+  # notify-send -u low      "Low"      "Lorem ipsum dolor sit amet..."
+  # notify-send -u normal   "Normal"   "Lorem ipsum dolor sit amet..."
+  # notify-send -u critical "Critical" "Lorem ipsum dolor sit amet..."
+  # notify-send -t 3000 -i dialog-information "With icon" "Lorem ipsum dolor sit amet..."
 }
 
 function finish() {
