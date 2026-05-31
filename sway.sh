@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# set -eu
+set -euo pipefail
 
 function main() {
   install_packages
@@ -374,11 +374,11 @@ configuration {
 }
 
 * {
-    bg:     #002b36;
+    bg:     #1B262C;
     bg-alt: #073642;
     fg:     #839496;
     fg-alt: #93a1a1;
-    accent: #268bd2;
+    accent: #6c7086;
     urgent: #dc322f;
 
     background-color: transparent;
@@ -392,7 +392,7 @@ window {
     border-color:     @accent;
     border-radius:    8px;
     width:            40%;
-    padding:          12px;
+    padding:          10px;
 }
 
 mainbox {
@@ -658,9 +658,12 @@ EOF
 
 function finish() {
   xdg-user-dirs-update
-  swaymsg reload
+
+  if [ -n "$SWAYSOCK" ]; then
+    swaymsg reload
+  fi
 
   sudo -k
 }
 
-main "$@"
+main
