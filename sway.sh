@@ -214,7 +214,7 @@ exec swayidle -w \
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+Shift+b splith
+    bindsym $mod+Shift+h splith
     bindsym $mod+Shift+v splitv
 
     # Switch the current container between different layout styles
@@ -227,9 +227,6 @@ exec swayidle -w \
 
     # Toggle the current focus between tiling and floating mode
     bindsym $mod+Shift+space floating toggle
-
-    # Swap focus between the tiling area and the floating area
-    # bindsym $mod+space focus mode_toggle
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
