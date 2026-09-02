@@ -21,37 +21,44 @@ function main() {
 function install_packages() {
   echo "==> Install packages."
   sudo pacman -S --noconfirm --needed \
-    foot                   `# terminal` \
-    brightnessctl          `# gestor de brillo de pantalla` \
-    grim                   `# screenshots` \
+    foot                   `# terminal emulator` \
+    alsa-utils             `# ALSA audio tools` \
+    brightnessctl          `# brightness control` \
+    grim                   `# screenshot tool` \
     lxqt-policykit         `# authentication agent` \
-    mako                   `# notificaciones` \
+    mako                   `# notification daemon` \
     mpv                    `# media player` \
-    pamixer                `# control de volumen` \
-    playerctl              `# control multimedia` \
-    slurp                  `# seleccionar región screenshot` \
-    sway                   `# window manager Wayland` \
-    swaybg                 `# fondo de pantalla` \
-    swayidle               `# gestión de idle / suspensión` \
+    pamixer                `# volume control` \
+    pavucontrol            `# graphical audio control` \
+    pipewire               `# multimedia server` \
+    pipewire-alsa          `# ALSA compatibility` \
+    pipewire-pulse         `# PulseAudio compatibility` \
+    playerctl              `# media control` \
+    slurp                  `# screen region selector` \
+    sway                   `# Wayland compositor` \
+    swaybg                 `# wallpaper utility` \
+    swayidle               `# idle manager` \
     swayimg                `# image viewer` \
-    swaylock               `# lock screen` \
-    touchegg               `# gestos para el touch mouse` \
-    waybar                 `# barra superior` \
-    wl-clipboard           `# clipboard` \
-    xdg-desktop-portal-wlr `# compatibilidad con apps` \
-    xdg-utils              `# ...` \
-    xdg-user-dirs          `# create user directories` \
+    swaylock               `# screen locker` \
+    sof-firmware           `# Intel audio firmware` \
+    touchegg               `# touchpad gestures` \
+    waybar                 `# status bar` \
+    wireplumber            `# PipeWire session manager` \
+    wl-clipboard           `# clipboard tools` \
+    xdg-desktop-portal-wlr `# Wayland desktop portal` \
+    xdg-utils              `# desktop utilities` \
+    xdg-user-dirs          `# user directory setup` \
     zathura                `# document viewer` \
-    zathura-pdf-mupdf      `# pdf support for zathura` \
-    nautilus               `# ...` \
-    nautilus-python        `# ...` \
-    imv                    `# ...` \
-    evince                 `# ...` \
-    mpv-mpris              `# ...` \
-    impala                 `# ...` \
-    rofi-wayland           `# ...` \
+    zathura-pdf-mupdf      `# Zathura PDF support` \
+    nautilus               `# file manager` \
+    nautilus-python        `# Nautilus Python extensions` \
+    imv                    `# image viewer` \
+    evince                 `# document viewer` \
+    mpv-mpris              `# MPV media integration` \
+    impala                 `# Wi-Fi interface` \
+    rofi-wayland           `# application launcher` \
     firefox                `# web browser` \
-    libnotify              `# ...` \
+    libnotify              `# notification tools` \
   &> /dev/null
 }
 
@@ -91,15 +98,15 @@ function install_yay() {
 
 function install_yay_packages() {
     yay -Sy --noconfirm --needed \
-        wlogout                    `# YouTube player`            \
-        google-chrome              `# Google Chrome`             \
+        wlogout                    `# Wayland logout menu`        \
+        google-chrome              `# web browser`                \
     &> /dev/null
 }
 
 function install_fonts() {
   echo "==> Install fonts."
   sudo pacman -S --noconfirm --needed \
-    ttf-jetbrains-mono-nerd \
+    ttf-jetbrains-mono-nerd `# patched monospace font` \
   &> /dev/null
 
   sudo fc-cache --force &> /dev/null
