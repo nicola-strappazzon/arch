@@ -155,7 +155,7 @@ exec swayidle -w \
     bindsym $mod+space exec $menu
 
     # Show keyboard shortcuts and command help
-    bindsym $mod+F1 exec ~/.config/sway/scripts/help.sh
+    bindsym F1 exec ~/.config/sway/scripts/help.sh
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -419,7 +419,7 @@ shortcuts() {
   show_tips "Sway shortcuts (Super = Logo key)" \
     "Super+Return             →  Open terminal|Super+Return" \
     "Super+Space              →  Application launcher|Super+Space" \
-    "Super+F1                 →  Show this help|Super+F1" \
+    "F1                       →  Show this help|F1" \
     "Super+Shift+Q            →  Close window|Super+Shift+Q" \
     "Super+Shift+C            →  Reload Sway|Super+Shift+C" \
     "Super+Shift+E            →  Exit Sway|Super+Shift+E" \
@@ -496,7 +496,7 @@ configuration {
 * {
     bg:     #1B262C;
     bg-alt: #073642;
-    fg:     #839496;
+    fg:     #bbe1fa;
     fg-alt: #93a1a1;
     accent: #89b4fa;
     urgent: #dc322f;
@@ -521,7 +521,7 @@ mainbox {
 
 inputbar {
     background-color: @bg-alt;
-    text-color:       @fg-alt;
+    text-color:       @accent;
     padding:          8px;
     border-radius:    6px;
     spacing:          8px;
