@@ -5,7 +5,6 @@ function main() {
   install_yay
   install_yay_packages
   install_fonts
-  configure_audio
   configure_sway
   configure_waybar
   configure_terminal
@@ -23,30 +22,19 @@ function install_packages() {
   echo "==> Install packages."
   sudo pacman -S --noconfirm --needed \
     foot                   `# terminal emulator` \
-    alsa-ucm-conf          `# ALSA device profiles` \
-    alsa-utils             `# ALSA audio tools` \
     brightnessctl          `# brightness control` \
     grim                   `# screenshot tool` \
     lxqt-policykit         `# authentication agent` \
     mako                   `# notification daemon` \
     mpv                    `# media player` \
-    pamixer                `# volume control` \
-    pavucontrol            `# graphical audio control` \
-    pipewire               `# multimedia server` \
-    pipewire-alsa          `# ALSA compatibility` \
-    pipewire-audio         `# PipeWire audio support` \
-    pipewire-pulse         `# PulseAudio compatibility` \
-    playerctl              `# media control` \
     slurp                  `# screen region selector` \
     sway                   `# Wayland compositor` \
     swaybg                 `# wallpaper utility` \
     swayidle               `# idle manager` \
     swayimg                `# image viewer` \
     swaylock               `# screen locker` \
-    sof-firmware           `# Intel audio firmware` \
     touchegg               `# touchpad gestures` \
     waybar                 `# status bar` \
-    wireplumber            `# PipeWire session manager` \
     wl-clipboard           `# clipboard tools` \
     xdg-desktop-portal-wlr `# Wayland desktop portal` \
     xdg-utils              `# desktop utilities` \
@@ -113,14 +101,6 @@ function install_fonts() {
   &> /dev/null
 
   sudo fc-cache --force &> /dev/null
-}
-
-function configure_audio() {
-  echo "==> Configure audio."
-
-  sudo mkinitcpio -P  &> /dev/null
-  systemctl --user enable --now pipewire.socket pipewire-pulse.socket wireplumber.service  &> /dev/null
-  systemctl --user restart pipewire pipewire-pulse wireplumber  &> /dev/null
 }
 
 function configure_sway() {
@@ -979,7 +959,7 @@ function finish() {
 
   sudo -k
 
-  echo "Installation complete. Reboot if SOF firmware was installed during this run."
+  echo "Installation complete."
 }
 
 main

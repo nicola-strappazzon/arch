@@ -27,6 +27,7 @@ function main() {
     configure_ntp
     configure_wakeup
     packages
+    configure_audio
     services
     finish
 }
@@ -399,6 +400,8 @@ EOF
 function packages() {
     echo "==> Install aditional packages."
     PACKAGES=(
+        alsa-ucm-conf
+        alsa-utils
         bash-completion
         bat
         bind-tools
@@ -419,7 +422,15 @@ function packages() {
         neofetch
         net-tools
         nmap
+        pamixer
+        pavucontrol
+        pipewire
+        pipewire-alsa
+        pipewire-audio
+        pipewire-pulse
+        playerctl
         rsync
+        sof-firmware
         testdisk
         tmux
         traceroute
@@ -429,6 +440,7 @@ function packages() {
         usbutils
         vim
         wget
+        wireplumber
         wl-clipboard
         xclip
         yazi
@@ -437,6 +449,17 @@ function packages() {
     for PACKAGE in "${PACKAGES[@]}"; do
         arch-chroot /mnt pacman --sync --noconfirm --needed "${PACKAGE}" &> /dev/null
     done
+}
+
+function configure_audio() {
+    echo "==> Configure audio."
+
+    arch-chroot /mnt mkinitcpio -P &> /dev/null
+    arch-chroot /mnt systemctl --global enable \
+        pipewire.socket \
+        pipewire-pulse.socket \
+        wireplumber.service \
+        &> /dev/null
 }
 
 function services() {
