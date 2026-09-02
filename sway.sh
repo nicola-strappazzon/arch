@@ -561,13 +561,16 @@ listview {
 }
 
 element {
-    padding:       6px 8px;
-    border-radius: 6px;
+    background-color: transparent;
+    text-color:       @fg;
+    border:           0px;
+    border-radius:    0px;
+    padding:          6px 8px;
 }
 
 element selected {
-    background-color: @accent;
-    text-color:       @bg;
+    background-color: @bg-alt;
+    text-color:       @fg;
 }
 
 element-icon {
