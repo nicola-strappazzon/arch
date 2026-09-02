@@ -548,7 +548,19 @@ element {
     padding:          6px 8px;
 }
 
-element selected {
+element normal.normal,
+element normal.active,
+element normal.urgent,
+element alternate.normal,
+element alternate.active,
+element alternate.urgent {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element selected.normal,
+element selected.active,
+element selected.urgent {
     background-color: @bg-alt;
     text-color:       @fg;
 }
@@ -559,6 +571,7 @@ element-icon {
 }
 
 element-text {
+    background-color: inherit;
     text-color:     inherit;
     vertical-align: 0.5;
 }
