@@ -543,6 +543,7 @@ prompt {
 }
 
 entry {
+    text-color:        @accent;
     placeholder:       "";
     placeholder-color: @fg;
 }
