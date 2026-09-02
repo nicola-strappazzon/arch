@@ -154,6 +154,9 @@ exec swayidle -w \
     # Start your launcher
     bindsym $mod+space exec $menu
 
+    # Show keyboard shortcuts and command help
+    bindsym $mod+F1 exec ~/.config/sway/scripts/help.sh
+
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
     # Despite the name, also works for non-floating windows.
@@ -366,6 +369,96 @@ mako
 EOF
 
   chmod +x "$HOME"/.config/sway/scripts/mako.sh
+
+  cat > "$HOME"/.config/sway/scripts/help.sh << 'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROFI=(rofi -dmenu -i)
+
+show_tips() {
+  local title="$1"
+  shift
+  local -a pairs=("$@") labels=()
+  local pair
+
+  for pair in "${pairs[@]}"; do
+    labels+=("${pair%%|*}")
+  done
+
+  local choice
+  choice=$(printf '%s\n' "${labels[@]}" | "${ROFI[@]}" -p "$title") || return 0
+  [ -z "$choice" ] && return 0
+
+  for pair in "${pairs[@]}"; do
+    if [ "${pair%%|*}" = "$choice" ]; then
+      local command="${pair#*|}"
+      printf '%s' "$command" | wl-copy
+      notify-send "Copied to clipboard" "$command"
+      return 0
+    fi
+  done
+}
+
+wifi() {
+  show_tips "Wi-Fi (nmcli)" \
+    "List available networks|nmcli device wifi list" \
+    "Rescan networks|nmcli device wifi rescan" \
+    "Connect to a new network|nmcli device wifi connect \"SSID\" password \"PASSWORD\"" \
+    "Connect to a saved network|nmcli connection up \"SSID\"" \
+    "Show active connection|nmcli connection show --active" \
+    "List saved connections|nmcli connection show" \
+    "Disconnect Wi-Fi|nmcli device disconnect wlan0" \
+    "Forget a network|nmcli connection delete \"SSID\"" \
+    "Turn Wi-Fi on|nmcli radio wifi on" \
+    "Turn Wi-Fi off|nmcli radio wifi off" \
+    "Wi-Fi radio status|nmcli radio wifi"
+}
+
+shortcuts() {
+  show_tips "Sway shortcuts (Super = Logo key)" \
+    "Super+Return             →  Open terminal|Super+Return" \
+    "Super+Space              →  Application launcher|Super+Space" \
+    "Super+F1                 →  Show this help|Super+F1" \
+    "Super+Shift+Q            →  Close window|Super+Shift+Q" \
+    "Super+Shift+C            →  Reload Sway|Super+Shift+C" \
+    "Super+Shift+E            →  Exit Sway|Super+Shift+E" \
+    "Super+H / J / K / L      →  Move focus|Super+H J K L" \
+    "Super+Shift+H/J/K/L      →  Move window|Super+Shift+H J K L" \
+    "Super+[1-0]              →  Go to workspace|Super+1..0" \
+    "Super+Shift+[1-0]        →  Move window to workspace|Super+Shift+1..0" \
+    "Super+B / Super+V        →  Split horizontal / vertical|Super+B / Super+V" \
+    "Super+S                  →  Stacking layout|Super+S" \
+    "Super+W                  →  Tabbed layout|Super+W" \
+    "Super+E                  →  Toggle split|Super+E" \
+    "Super+F                  →  Toggle fullscreen|Super+F" \
+    "Super+Shift+Space        →  Toggle floating|Super+Shift+Space" \
+    "Super+A                  →  Focus parent|Super+A" \
+    "Super+Shift+-            →  Send to scratchpad|Super+Shift+minus" \
+    "Super+-                  →  Show scratchpad|Super+minus" \
+    "Super+R                  →  Enter resize mode|Super+R" \
+    "Super+Shift+P / Print    →  Take screenshot|grim" \
+    "Super+Shift+O            →  Select screen region|slurp" \
+    "Brightness keys          →  Screen brightness|XF86MonBrightness" \
+    "Keyboard brightness keys →  Keyboard brightness|XF86KbdBrightness" \
+    "Volume keys              →  Volume and mute|XF86Audio" \
+    "Media keys               →  Play / next / previous|XF86Audio"
+}
+
+main() {
+  local category
+  category=$(printf '%s\n' "󰌌  Shortcuts" "󰖩  Wi-Fi" | "${ROFI[@]}" -p "Help") || exit 0
+
+  case "$category" in
+    *Shortcuts*) shortcuts ;;
+    *Wi-Fi*)     wifi ;;
+  esac
+}
+
+main
+EOF
+
+  chmod +x "$HOME"/.config/sway/scripts/help.sh
 }
 
 function configure_terminal() {
