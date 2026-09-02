@@ -597,7 +597,7 @@ function configure_waybar() {
 
   "modules-left": ["custom/launcher", "sway/workspaces"],
   "modules-center": ["clock"],
-  "modules-right": ["pulseaudio", "network", "battery", "custom/power"],
+  "modules-right": ["pulseaudio", "pulseaudio#microphone", "network", "battery", "custom/power"],
 
   "custom/launcher": {
     "format": "󰣇",
@@ -670,11 +670,18 @@ function configure_waybar() {
   },
 
   "pulseaudio": {
-    "format": "  {volume}% {format_source}",
-    "format-muted": "  {volume}% {format_source}",
+    "format": "  {volume}%",
+    "format-muted": "  {volume}%",
+    "tooltip-format": "Output: {volume}%"
+  },
+
+  "pulseaudio#microphone": {
+    "format": "{format_source}",
     "format-source": "",
     "format-source-muted": "",
-    "tooltip-format": "Output: {volume}%\nInput: {source_volume}%"
+    "tooltip-format": "Input: {source_volume}%",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "target": "source"
   },
 
   "network": {
