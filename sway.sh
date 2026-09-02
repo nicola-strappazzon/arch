@@ -5,6 +5,7 @@ function main() {
   install_yay
   install_yay_packages
   install_fonts
+  configure_audio
   configure_sway
   configure_waybar
   configure_terminal
@@ -110,6 +111,13 @@ function install_fonts() {
   &> /dev/null
 
   sudo fc-cache --force &> /dev/null
+}
+
+function configure_audio() {
+  echo "==> Configure audio."
+
+  systemctl --user enable --now pipewire.socket pipewire-pulse.socket wireplumber.service
+  systemctl --user restart pipewire pipewire-pulse wireplumber
 }
 
 function configure_sway() {
