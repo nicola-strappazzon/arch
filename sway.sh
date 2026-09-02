@@ -308,7 +308,7 @@ bindsym XF86KbdBrightnessDown exec brightnessctl -d smc::kbd_backlight set 20%-
 bindsym XF86AudioRaiseVolume exec pamixer -i 5
 bindsym XF86AudioLowerVolume exec pamixer -d 5
 bindsym XF86AudioMute exec pamixer -t
-bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 
 # multimedia
 bindsym XF86AudioPlay exec playerctl play-pause
