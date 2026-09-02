@@ -23,6 +23,7 @@ function install_packages() {
   echo "==> Install packages."
   sudo pacman -S --noconfirm --needed \
     foot                   `# terminal emulator` \
+    alsa-ucm-conf          `# ALSA device profiles` \
     alsa-utils             `# ALSA audio tools` \
     brightnessctl          `# brightness control` \
     grim                   `# screenshot tool` \
@@ -33,6 +34,7 @@ function install_packages() {
     pavucontrol            `# graphical audio control` \
     pipewire               `# multimedia server` \
     pipewire-alsa          `# ALSA compatibility` \
+    pipewire-audio         `# PipeWire audio support` \
     pipewire-pulse         `# PulseAudio compatibility` \
     playerctl              `# media control` \
     slurp                  `# screen region selector` \
@@ -116,6 +118,7 @@ function install_fonts() {
 function configure_audio() {
   echo "==> Configure audio."
 
+  sudo mkinitcpio -P
   systemctl --user enable --now pipewire.socket pipewire-pulse.socket wireplumber.service
   systemctl --user restart pipewire pipewire-pulse wireplumber
 }
@@ -344,6 +347,9 @@ exec_always ~/.config/sway/scripts/waybar.sh
 
 # notification
 exec_always ~/.config/sway/scripts/mako.sh
+
+# mute microphone on session startup
+exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 1
 
 include /etc/sway/config.d/*
 EOF
@@ -969,6 +975,8 @@ function finish() {
   fi
 
   sudo -k
+
+  echo "Installation complete. Reboot if SOF firmware was installed during this run."
 }
 
 main
