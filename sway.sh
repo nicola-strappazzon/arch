@@ -3,6 +3,7 @@
 function main() {
   install_packages
   install_yay
+  install_yay_packages
   install_fonts
   configure_sway
   configure_waybar
@@ -26,6 +27,8 @@ function install_packages() {
     lxqt-policykit         `# authentication agent` \
     mako                   `# notificaciones` \
     mpv                    `# media player` \
+    pamixer                `# control de volumen` \
+    playerctl              `# control multimedia` \
     slurp                  `# seleccionar región screenshot` \
     sway                   `# window manager Wayland` \
     swaybg                 `# fondo de pantalla` \
@@ -34,7 +37,6 @@ function install_packages() {
     swaylock               `# lock screen` \
     touchegg               `# gestos para el touch mouse` \
     waybar                 `# barra superior` \
-    wlogout                `# ...` \
     wl-clipboard           `# clipboard` \
     xdg-desktop-portal-wlr `# compatibilidad con apps` \
     xdg-utils              `# ...` \
@@ -45,7 +47,6 @@ function install_packages() {
     nautilus-python        `# ...` \
     imv                    `# ...` \
     evince                 `# ...` \
-    mpv                    `# ...` \
     mpv-mpris              `# ...` \
     impala                 `# ...` \
     rofi-wayland           `# ...` \
@@ -86,6 +87,13 @@ function install_yay() {
     cd yay || return
     makepkg -sif --noconfirm &> /dev/null
   fi
+}
+
+function install_yay_packages() {
+    yay -Sy --noconfirm --needed \
+        wlogout                    `# YouTube player`            \
+        google-chrome              `# Google Chrome`             \
+    &> /dev/null
 }
 
 function install_fonts() {
@@ -821,7 +829,7 @@ function configure_calendar() {
   echo "==> Configure calendar."
 
   mkdir -p "$HOME"/.config/terminal-colors.d/
-  cat > "$HOME"/.config/rofi/config.rasi << 'EOF'
+  cat > "$HOME"/.config/terminal-colors.d/cal.conf << 'EOF'
 weekend 35
 today 1;41
 header yellow
