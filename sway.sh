@@ -118,9 +118,9 @@ function install_fonts() {
 function configure_audio() {
   echo "==> Configure audio."
 
-  sudo mkinitcpio -P
-  systemctl --user enable --now pipewire.socket pipewire-pulse.socket wireplumber.service
-  systemctl --user restart pipewire pipewire-pulse wireplumber
+  sudo mkinitcpio -P  &> /dev/null
+  systemctl --user enable --now pipewire.socket pipewire-pulse.socket wireplumber.service  &> /dev/null
+  systemctl --user restart pipewire pipewire-pulse wireplumber  &> /dev/null
 }
 
 function configure_sway() {
