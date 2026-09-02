@@ -656,9 +656,11 @@ function configure_waybar() {
   },
 
   "pulseaudio": {
-    "format": " ",
-    "format-muted": "",
-    "tooltip-format": "Volume: {volume}%"
+    "format": "  {volume}% {format_source}",
+    "format-muted": "  {volume}% {format_source}",
+    "format-source": "",
+    "format-source-muted": "",
+    "tooltip-format": "Output: {volume}%\nInput: {source_volume}%"
   },
 
   "network": {
