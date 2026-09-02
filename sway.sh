@@ -501,6 +501,9 @@ configuration {
     drun-display-format: "{name}";
     display-drun:        "";
     display-run:         "";
+    terminal:            "foot";
+    kb-row-select:       "Tab";
+    kb-row-tab:          "";
 }
 
 * {
