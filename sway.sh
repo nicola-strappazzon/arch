@@ -689,9 +689,10 @@ function configure_notification() {
   mkdir -p "$HOME"/.config/mako/
   cat > "$HOME"/.config/mako/config << 'EOF'
 font=JetBrains Mono 10
+format=<b>%s</b>\n%b
 background-color=#1e1e2e
 text-color=#cdd6f4
-border-color=#89b4fa
+border-color=#d08770
 border-size=2
 border-radius=8
 padding=10
@@ -701,13 +702,16 @@ anchor=top-right
 width=350
 height=120
 
+[urgency=low]
+border-color=#cccccc
+
+[urgency=normal]
+border-color=#d08770
+
 [urgency=critical]
+border-color=#bf616a
 default-timeout=0
 layer=overlay
-
-[urgency=high]
-border-color=#f38ba8
-default-timeout=0
 EOF
 }
 
