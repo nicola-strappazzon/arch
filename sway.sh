@@ -308,6 +308,7 @@ bindsym XF86KbdBrightnessDown exec brightnessctl -d smc::kbd_backlight set 20%-
 bindsym XF86AudioRaiseVolume exec pamixer -i 5
 bindsym XF86AudioLowerVolume exec pamixer -d 5
 bindsym XF86AudioMute exec pamixer -t
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # multimedia
 bindsym XF86AudioPlay exec playerctl play-pause
@@ -450,6 +451,7 @@ shortcuts() {
     "Brightness keys          →  Screen brightness|XF86MonBrightness" \
     "Keyboard brightness keys →  Keyboard brightness|XF86KbdBrightness" \
     "Volume keys              →  Volume and mute|XF86Audio" \
+    "Microphone mute          →  Microphone key (F4)|XF86AudioMicMute" \
     "Media keys               →  Play / next / previous|XF86Audio"
 }
 
