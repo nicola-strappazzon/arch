@@ -23,6 +23,7 @@ function install_packages() {
   sudo pacman -S --noconfirm --needed \
     foot                   `# terminal emulator` \
     brightnessctl          `# brightness control` \
+    chromium               `# web browser` \
     grim                   `# screenshot tool` \
     lxqt-policykit         `# authentication agent` \
     mako                   `# notification daemon` \
@@ -48,7 +49,6 @@ function install_packages() {
     mpv-mpris              `# MPV media integration` \
     impala                 `# Wi-Fi interface` \
     rofi-wayland           `# application launcher` \
-    firefox                `# web browser` \
     libnotify              `# notification tools` \
   &> /dev/null
 }
@@ -90,7 +90,6 @@ function install_yay() {
 function install_yay_packages() {
     yay -Sy --noconfirm --needed \
         wlogout                    `# Wayland logout menu`        \
-        google-chrome              `# web browser`                \
     &> /dev/null
 }
 
@@ -923,7 +922,7 @@ EOF
 
   cat > "$HOME"/.bashrc.d/env/general.sh << 'EOF'
 export MOZ_ENABLE_WAYLAND=1
-export BROWSER=firefox
+export BROWSER=chromium
 export CLICOLOR=1
 export EDITOR=helix
 export SUDO_EDITOR=$(which helix)
