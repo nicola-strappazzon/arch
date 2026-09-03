@@ -10,6 +10,7 @@ function main() {
   configure_wlogout
   configure_terminal
   configure_application_launcher
+  configure_applications
   configure_background
   configure_notification
   configure_helix
@@ -576,6 +577,53 @@ element-text {
     vertical-align: 0.5;
 }
 EOF
+}
+
+function configure_applications() {
+  echo "==> Configure application entries."
+
+  local source_dir="/usr/share/applications"
+  local target_dir="$HOME/.local/share/applications"
+  local application
+  local applications=(
+    avahi-discover.desktop
+    bssh.desktop
+    bvnc.desktop
+    com.google.Chrome.desktop
+    firefox.desktop
+    footclient.desktop
+    foot-server.desktop
+    google-chrome.desktop
+    imv-dir.desktop
+    links.desktop
+    lstopo.desktop
+    mimeinfo.cache
+    org.gnome.Evince.desktop
+    org.gnome.Evince-previewer.desktop
+    nautilus-autorun-software.desktop
+    org.gnupg.pinentry-qt.desktop
+    org.pulseaudio.pavucontrol.desktop
+    org.pwmt.zathura.desktop
+    org.pwmt.zathura-pdf-mupdf.desktop
+    qv4l2.desktop
+    qvidcap.desktop
+    rofi-theme-selector.desktop
+    swayimg.desktop
+    user-dirs-update-gtk.desktop
+    xdg-desktop-portal-gtk.desktop
+    xgps.desktop
+    xgpsspeed.desktop
+  )
+
+  mkdir -p "$target_dir"
+
+  for application in "${applications[@]}"; do
+    if [ -f "$source_dir/$application" ]; then
+      cp "$source_dir/$application" "$target_dir/$application"
+    else
+      echo "Could not find application entry: $source_dir/$application"
+    fi
+  done
 }
 
 function configure_background() {
