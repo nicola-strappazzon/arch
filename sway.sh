@@ -7,6 +7,7 @@ function main() {
   install_fonts
   configure_sway
   configure_waybar
+  configure_wlogout
   configure_terminal
   configure_application_launcher
   configure_background
@@ -713,7 +714,7 @@ function configure_waybar() {
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
-    "on-click": "wlogout"
+    "on-click": "wlogout --buttons-per-row 5"
   }
 }
 EOF
@@ -793,6 +794,96 @@ window#waybar {
 #pulseaudio,
 #custom-power {
     padding: 0 8px;
+}
+EOF
+}
+
+function configure_wlogout() {
+  echo "==> Configure wlogout."
+
+  mkdir -p "$HOME"/.config/wlogout/
+  cat > "$HOME"/.config/wlogout/layout << 'EOF'
+{
+  "label": "lock",
+  "action": "swaylock -f -c 000000",
+  "text": "Lock",
+  "keybind": "l"
+}
+{
+  "label": "suspend",
+  "action": "systemctl suspend",
+  "text": "Suspend",
+  "keybind": "s"
+}
+{
+  "label": "logout",
+  "action": "swaymsg exit",
+  "text": "Logout",
+  "keybind": "e"
+}
+{
+  "label": "reboot",
+  "action": "systemctl reboot",
+  "text": "Reboot",
+  "keybind": "r"
+}
+{
+  "label": "shutdown",
+  "action": "systemctl poweroff",
+  "text": "Shutdown",
+  "keybind": "p"
+}
+EOF
+
+  cat > "$HOME"/.config/wlogout/style.css << 'EOF'
+* {
+  background-image: none;
+  box-shadow: none;
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 16px;
+}
+
+window {
+  background-color: rgba(27, 38, 44, 0.95);
+}
+
+button {
+  color: #bbe1fa;
+  background-color: #073642;
+  border: 2px solid #89b4fa;
+  border-radius: 8px;
+  margin: 10px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 25%;
+}
+
+button:focus,
+button:active,
+button:hover {
+  color: #1B262C;
+  background-color: #89b4fa;
+  outline-style: none;
+}
+
+#lock {
+  background-image: image(url("/usr/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
+}
+
+#suspend {
+  background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
+}
+
+#logout {
+  background-image: image(url("/usr/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
+}
+
+#reboot {
+  background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
+}
+
+#shutdown {
+  background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
 }
 EOF
 }
