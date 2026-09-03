@@ -897,7 +897,7 @@ window {
 
 button {
   color: #bbe1fa;
-  background-color: #073642;
+  background-color: #1B262C;
   border: 2px solid #89b4fa;
   border-radius: 8px;
   margin: 10px;
@@ -909,8 +909,8 @@ button {
 button:focus,
 button:active,
 button:hover {
-  color: #1B262C;
-  background-color: #89b4fa;
+  color: #bbe1fa;
+  background-color: #073642;
   outline-style: none;
 }
 
