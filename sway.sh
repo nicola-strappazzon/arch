@@ -714,7 +714,7 @@ function configure_waybar() {
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
-    "on-click": "wlogout --buttons-per-row 5"
+    "on-click": "wlogout --buttons-per-row 3"
   }
 }
 EOF
