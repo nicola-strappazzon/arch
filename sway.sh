@@ -823,6 +823,7 @@ menu {
   background: #1B262C;
   border: 2px solid #89b4fa;
   border-radius: 8px;
+  margin-top: 8px;
   padding: 4px;
 }
 
