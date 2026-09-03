@@ -124,7 +124,7 @@ set $right l
 # Your preferred terminal emulator
 set $term foot
 # Your preferred application launcher
-set $menu rofi -show run -theme-str 'mainbox { children: [ inputbar ]; }'
+set $menu rofi -show drun -theme-str 'mainbox { children: [ inputbar ]; }'
 
 ### Idle configuration
 exec swayidle -w \
@@ -762,7 +762,7 @@ function configure_waybar() {
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
-    "on-click": "wlogout --buttons-per-row 3"
+    "on-click": "~/.config/sway/scripts/wlogout.sh"
   }
 }
 EOF
@@ -934,6 +934,31 @@ button:hover {
   background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
 }
 EOF
+
+  cat > "$HOME"/.config/sway/scripts/wlogout.sh << 'EOF'
+#!/usr/bin/env bash
+
+read -r screen_width screen_height < <(
+  swaymsg -t get_outputs -r |
+    jq -r '.[] | select(.focused) | "\(.rect.width) \(.rect.height)"'
+)
+
+buttons=5
+spacing=10
+margin_horizontal=$((screen_width / 10))
+button_size=$(((screen_width - (2 * margin_horizontal) - ((buttons - 1) * spacing)) / buttons))
+margin_vertical=$(((screen_height - button_size) / 2))
+
+exec wlogout \
+  --buttons-per-row "$buttons" \
+  --column-spacing "$spacing" \
+  --margin-left "$margin_horizontal" \
+  --margin-right "$margin_horizontal" \
+  --margin-top "$margin_vertical" \
+  --margin-bottom "$margin_vertical"
+EOF
+
+  chmod +x "$HOME"/.config/sway/scripts/wlogout.sh
 }
 
 function configure_notification() {
