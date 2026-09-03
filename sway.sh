@@ -2,12 +2,9 @@
 
 function main() {
   install_packages
-  install_yay
-  install_yay_packages
   install_fonts
   configure_sway
   configure_waybar
-  configure_wlogout
   configure_terminal
   configure_application_launcher
   configure_applications
@@ -53,46 +50,6 @@ function install_packages() {
     rofi-wayland           `# application launcher` \
     libnotify              `# notification tools` \
   &> /dev/null
-}
-
-function install_yay() {
-  echo "==> Install yay tool."
-  if ! type "git" > /dev/null; then
-    echo "Could not find: git"
-    exit 1
-  fi
-
-  if ! type "makepkg" > /dev/null; then
-    echo "Could not find: makepkg"
-    exit 1
-  fi
-
-  if ! type "go" > /dev/null; then
-    echo "Could not find: go"
-    exit 1
-  fi
-
-  if ! type "yay" &> /dev/null; then
-    tmp="$(mktemp -d)"
-
-    mkdir -p "$tmp"
-
-    if [[ ! "${tmp}" || ! -d "${tmp}" ]]; then
-      echo "Could not find ${tmp} dir"
-      exit 1
-    fi
-
-    cd "$tmp" || return
-    git clone https://aur.archlinux.org/yay.git &> /dev/null
-    cd yay || return
-    makepkg -sif --noconfirm &> /dev/null
-  fi
-}
-
-function install_yay_packages() {
-    yay -Sy --noconfirm --needed \
-        wlogout                    `# Wayland logout menu`        \
-    &> /dev/null
 }
 
 function install_fonts() {
@@ -762,12 +719,52 @@ function configure_waybar() {
   "custom/power": {
     "format": "⏻",
     "tooltip": false,
-    "on-click": "~/.config/sway/scripts/wlogout.sh"
+    "menu": "on-click",
+    "menu-file": "~/.config/waybar/power-menu.xml",
+    "menu-actions": {
+      "lock": "swaylock -f -c 000000",
+      "suspend": "systemctl suspend",
+      "logout": "swaymsg exit",
+      "reboot": "systemctl reboot",
+      "shutdown": "systemctl poweroff"
+    }
   }
 }
 EOF
 
-  mkdir -p "$HOME"/.config/waybar/
+  cat > "$HOME"/.config/waybar/power-menu.xml << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkMenu" id="menu">
+    <child>
+      <object class="GtkMenuItem" id="lock">
+        <property name="label">Lock</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="suspend">
+        <property name="label">Suspend</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="logout">
+        <property name="label">Logout</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="reboot">
+        <property name="label">Reboot</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="shutdown">
+        <property name="label">Shutdown</property>
+      </object>
+    </child>
+  </object>
+</interface>
+EOF
+
   cat > "$HOME"/.config/waybar/style.css << 'EOF'
 * {
   font-family: "JetBrainsMono Nerd Font";
@@ -821,6 +818,27 @@ window#waybar {
   color: #D53E0F;
 }
 
+menu {
+  color: #bbe1fa;
+  background: #1B262C;
+  border: 2px solid #89b4fa;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+menuitem {
+  color: #bbe1fa;
+  background: transparent;
+  border-radius: 0;
+  padding: 6px 12px;
+}
+
+menuitem:hover,
+menuitem:focus {
+  color: #bbe1fa;
+  background: #073642;
+}
+
 #battery {
   color: rgb(187, 225, 250);
 }
@@ -844,121 +862,6 @@ window#waybar {
     padding: 0 8px;
 }
 EOF
-}
-
-function configure_wlogout() {
-  echo "==> Configure wlogout."
-
-  mkdir -p "$HOME"/.config/wlogout/
-  cat > "$HOME"/.config/wlogout/layout << 'EOF'
-{
-  "label": "lock",
-  "action": "swaylock -f -c 000000",
-  "text": "Lock",
-  "keybind": "l"
-}
-{
-  "label": "suspend",
-  "action": "systemctl suspend",
-  "text": "Suspend",
-  "keybind": "s"
-}
-{
-  "label": "logout",
-  "action": "swaymsg exit",
-  "text": "Logout",
-  "keybind": "e"
-}
-{
-  "label": "reboot",
-  "action": "systemctl reboot",
-  "text": "Reboot",
-  "keybind": "r"
-}
-{
-  "label": "shutdown",
-  "action": "systemctl poweroff",
-  "text": "Shutdown",
-  "keybind": "p"
-}
-EOF
-
-  cat > "$HOME"/.config/wlogout/style.css << 'EOF'
-* {
-  background-image: none;
-  box-shadow: none;
-  font-family: "JetBrainsMono Nerd Font";
-  font-size: 16px;
-}
-
-window {
-  background-color: rgba(27, 38, 44, 0.95);
-}
-
-button {
-  color: #bbe1fa;
-  background-color: #1B262C;
-  border: 2px solid #89b4fa;
-  border-radius: 8px;
-  margin: 10px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 25%;
-}
-
-button:focus,
-button:active,
-button:hover {
-  color: #bbe1fa;
-  background-color: #073642;
-  outline-style: none;
-}
-
-#lock {
-  background-image: image(url("/usr/share/wlogout/icons/lock.png"), url("/usr/local/share/wlogout/icons/lock.png"));
-}
-
-#suspend {
-  background-image: image(url("/usr/share/wlogout/icons/suspend.png"), url("/usr/local/share/wlogout/icons/suspend.png"));
-}
-
-#logout {
-  background-image: image(url("/usr/share/wlogout/icons/logout.png"), url("/usr/local/share/wlogout/icons/logout.png"));
-}
-
-#reboot {
-  background-image: image(url("/usr/share/wlogout/icons/reboot.png"), url("/usr/local/share/wlogout/icons/reboot.png"));
-}
-
-#shutdown {
-  background-image: image(url("/usr/share/wlogout/icons/shutdown.png"), url("/usr/local/share/wlogout/icons/shutdown.png"));
-}
-EOF
-
-  cat > "$HOME"/.config/sway/scripts/wlogout.sh << 'EOF'
-#!/usr/bin/env bash
-
-read -r screen_width screen_height < <(
-  swaymsg -t get_outputs -r |
-    jq -r '.[] | select(.focused) | "\(.rect.width) \(.rect.height)"'
-)
-
-buttons=5
-spacing=10
-margin_horizontal=$((screen_width / 10))
-button_size=$(((screen_width - (2 * margin_horizontal) - ((buttons - 1) * spacing)) / buttons))
-margin_vertical=$(((screen_height - button_size) / 2))
-
-exec wlogout \
-  --buttons-per-row "$buttons" \
-  --column-spacing "$spacing" \
-  --margin-left "$margin_horizontal" \
-  --margin-right "$margin_horizontal" \
-  --margin-top "$margin_vertical" \
-  --margin-bottom "$margin_vertical"
-EOF
-
-  chmod +x "$HOME"/.config/sway/scripts/wlogout.sh
 }
 
 function configure_notification() {
