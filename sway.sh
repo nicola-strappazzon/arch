@@ -459,6 +459,7 @@ ShellRoot {
   Loader { source: "power-menu.qml" }
   Loader { source: "help-overlay.qml" }
   Loader { source: "calendar.qml" }
+  Loader { source: "network.qml" }
 }
 EOF
 
@@ -471,7 +472,11 @@ Item {
   id: root
   property int focusedWorkspace: 1
   property string networkStatus: ""
+  property string networkType: "offline"
   property string volumeStatus: ""
+  property bool volumeMuted: false
+  property string microphoneStatus: ""
+  property bool microphoneMuted: false
   property string batteryStatus: ""
 
   Process {
@@ -487,14 +492,38 @@ Item {
 
   Process {
     id: networkProbe
-    command: ["bash", "-c", "ssid=$(nmcli -t -f ACTIVE,SSID device wifi 2>/dev/null | sed -n 's/^yes://p' | head -n1); printf '%s\\n' \"${ssid:-Offline}\""]
-    stdout: SplitParser { onRead: function(line) { root.networkStatus = String(line).trim() } }
+    command: ["bash", "-c", "nmcli -t -f TYPE,STATE,CONNECTION device status 2>/dev/null | awk -F: '$2 == \"connected\" && ($1 == \"wifi\" || $1 == \"ethernet\") { print $1 \"\\t\" $3; found=1; exit } END { if (!found) print \"offline\\tOffline\" }'"]
+    stdout: SplitParser {
+      onRead: function(line) {
+        var parts = String(line).trim().split("\t")
+        root.networkType = parts[0] || "offline"
+        root.networkStatus = parts.slice(1).join(" ") || "Offline"
+      }
+    }
   }
 
   Process {
     id: volumeProbe
-    command: ["bash", "-c", "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null | awk '{ printf \"%d%%\", $2 * 100 }'"]
-    stdout: SplitParser { onRead: function(line) { root.volumeStatus = String(line).trim() } }
+    command: ["bash", "-c", "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null | awk '{ printf \"%d%%\\t%s\\n\", $2 * 100, /MUTED/ ? \"muted\" : \"active\" }'"]
+    stdout: SplitParser {
+      onRead: function(line) {
+        var parts = String(line).trim().split("\t")
+        root.volumeStatus = parts[0] || ""
+        root.volumeMuted = parts[1] === "muted"
+      }
+    }
+  }
+
+  Process {
+    id: microphoneProbe
+    command: ["bash", "-c", "wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null | awk '{ printf \"%d%%\\t%s\\n\", $2 * 100, /MUTED/ ? \"muted\" : \"active\" }'"]
+    stdout: SplitParser {
+      onRead: function(line) {
+        var parts = String(line).trim().split("\t")
+        root.microphoneStatus = parts[0] || ""
+        root.microphoneMuted = parts[1] === "muted"
+      }
+    }
   }
 
   Process {
@@ -504,7 +533,7 @@ Item {
   }
 
   Timer {
-    interval: 500
+    interval: 100
     running: true
     repeat: true
     triggeredOnStart: true
@@ -518,8 +547,18 @@ Item {
     triggeredOnStart: true
     onTriggered: {
       if (!networkProbe.running) networkProbe.running = true
-      if (!volumeProbe.running) volumeProbe.running = true
       if (!batteryProbe.running) batteryProbe.running = true
+    }
+  }
+
+  Timer {
+    interval: 100
+    running: true
+    repeat: true
+    triggeredOnStart: true
+    onTriggered: {
+      if (!volumeProbe.running) volumeProbe.running = true
+      if (!microphoneProbe.running) microphoneProbe.running = true
     }
   }
 
@@ -603,20 +642,53 @@ Item {
 
         Text {
           visible: root.networkStatus.length > 0
-          text: "  " + root.networkStatus
+          text: (root.networkType === "wifi" ? "  " : root.networkType === "ethernet" ? "󰈀 " : "󰖪 ") + root.networkStatus
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 14
           transform: Translate { y: 4 }
+
+          MouseArea {
+            anchors.fill: parent
+            anchors.margins: -6
+            onClicked: Quickshell.execDetached(["qs", "ipc", "call", "network", "toggle"])
+          }
         }
 
         Text {
           visible: root.volumeStatus.length > 0
-          text: "  " + root.volumeStatus
+          text: (root.volumeMuted ? "  " : "  ") + root.volumeStatus
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 14
           transform: Translate { y: 4 }
+
+          MouseArea {
+            anchors.fill: parent
+            anchors.margins: -6
+            onClicked: {
+              root.volumeMuted = !root.volumeMuted
+              Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"])
+            }
+          }
+        }
+
+        Text {
+          visible: root.microphoneStatus.length > 0
+          text: (root.microphoneMuted ? "  " : "  ") + root.microphoneStatus
+          color: root.microphoneMuted ? "#f38ba8" : "#bbe1fa"
+          font.family: "JetBrainsMono Nerd Font"
+          font.pixelSize: 14
+          transform: Translate { y: 4 }
+
+          MouseArea {
+            anchors.fill: parent
+            anchors.margins: -6
+            onClicked: {
+              root.microphoneMuted = !root.microphoneMuted
+              Quickshell.execDetached(["wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@", "toggle"])
+            }
+          }
         }
 
         Text {
@@ -918,6 +990,124 @@ PanelWindow {
             hoverEnabled: true
             onEntered: grid.currentIndex = index
             onClicked: root.copy(index)
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+  cat > "$HOME"/.config/quickshell/network.qml << 'EOF'
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+
+PanelWindow {
+  id: root
+  property bool opened: false
+
+  visible: opened
+  anchors { top: true; bottom: true; left: true; right: true }
+  color: "#99000000"
+  exclusionMode: ExclusionMode.Ignore
+  WlrLayershell.layer: WlrLayer.Overlay
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
+  ListModel { id: details }
+
+  Process {
+    id: infoProbe
+    command: ["bash", "-c", "iface=$(nmcli -t -f DEVICE,TYPE,STATE device status 2>/dev/null | awk -F: '$3 == \"connected\" && ($2 == \"wifi\" || $2 == \"ethernet\") { print $1; exit }'); if [ -z \"$iface\" ]; then printf 'Status\\tOffline\\n'; exit; fi; type=$(nmcli -t -f DEVICE,TYPE device status | awk -F: -v dev=\"$iface\" '$1 == dev { print $2; exit }'); connection=$(nmcli -g GENERAL.CONNECTION device show \"$iface\" | head -n1); ip=$(nmcli -g IP4.ADDRESS device show \"$iface\" | head -n1); mac=$(nmcli -g GENERAL.HWADDR device show \"$iface\" | head -n1); gateway=$(nmcli -g IP4.GATEWAY device show \"$iface\" | head -n1); dns=$(nmcli -g IP4.DNS device show \"$iface\" | awk 'NF { printf \"%s%s\", separator, $0; separator=\", \" } END { print \"\" }'); printf 'Connection\\t%s\\nType\\t%s\\nInterface\\t%s\\nIP address\\t%s\\nMAC address\\t%s\\nGateway\\t%s\\nDNS\\t%s\\n' \"$connection\" \"$type\" \"$iface\" \"${ip:-—}\" \"${mac:-—}\" \"${gateway:-—}\" \"${dns:-—}\"; if [ \"$type\" = wifi ]; then signal=$(nmcli -t -f IN-USE,SIGNAL device wifi list ifname \"$iface\" | awk -F: '$1 == \"*\" { print $2 \"%\"; exit }'); printf 'Signal quality\\t%s\\n' \"${signal:-—}\"; else speed=$(cat \"/sys/class/net/$iface/speed\" 2>/dev/null || true); printf 'Link speed\\t%s\\n' \"${speed:+$speed Mb/s}\"; fi"]
+    stdout: SplitParser {
+      onRead: function(line) {
+        var parts = String(line).trim().split("\t")
+        if (parts.length >= 2) details.append({ "label": parts[0], "value": parts.slice(1).join(" ") })
+      }
+    }
+  }
+
+  function toggle() {
+    opened = !opened
+    if (opened) {
+      details.clear()
+      infoProbe.running = true
+      Qt.callLater(function() { keys.forceActiveFocus() })
+    }
+  }
+
+  IpcHandler {
+    target: "network"
+    function toggle(): void { root.toggle() }
+  }
+
+  MouseArea { anchors.fill: parent; onClicked: root.opened = false }
+
+  Rectangle {
+    width: Math.min(520, root.width - 40)
+    height: Math.min(430, root.height - 80)
+    anchors.centerIn: parent
+    color: "#1b262c"
+    border.color: "#89b4fa"
+    border.width: 2
+    radius: 8
+
+    MouseArea { anchors.fill: parent; onClicked: function(mouse) { mouse.accepted = true } }
+
+    Item {
+      id: keys
+      anchors.fill: parent
+      focus: true
+      Keys.onEscapePressed: root.opened = false
+    }
+
+    Column {
+      anchors.fill: parent
+      anchors.margins: 18
+      spacing: 14
+
+      Text {
+        text: "Network information"
+        color: "#89b4fa"
+        font.family: "JetBrainsMono Nerd Font"
+        font.pixelSize: 18
+        font.bold: true
+      }
+
+      ListView {
+        width: parent.width
+        height: parent.height - 48
+        model: details
+        clip: true
+
+        delegate: Rectangle {
+          required property string label
+          required property string value
+          width: ListView.view.width
+          height: 40
+          color: "transparent"
+
+          Text {
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            width: 160
+            text: label
+            color: "#89b4fa"
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 13
+          }
+
+          Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 170
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            text: value || "—"
+            color: "#bbe1fa"
+            elide: Text.ElideRight
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 13
           }
         }
       }
