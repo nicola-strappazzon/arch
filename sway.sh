@@ -509,7 +509,7 @@ Item {
   }
 
   Timer {
-    interval: 750
+    interval: 500
     running: true
     repeat: true
     triggeredOnStart: true
@@ -570,10 +570,10 @@ Item {
             readonly property int workspaceNumber: index + 1
             text: "●"
             color: root.focusedWorkspace === workspaceNumber ? "#89b4fa" : "#6c7086"
-            font.pixelSize: 10
+            font.pixelSize: 12
             leftPadding: 5
             rightPadding: 5
-            transform: Translate { y: 2 }
+            transform: Translate { y: 4 }
 
             MouseArea {
               anchors.fill: parent
@@ -606,7 +606,7 @@ Item {
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 12
-          transform: Translate { y: 2 }
+          transform: Translate { y: 4 }
         }
 
         Text {
@@ -615,7 +615,7 @@ Item {
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 12
-          transform: Translate { y: 2 }
+          transform: Translate { y: 4 }
         }
 
         Text {
@@ -624,7 +624,7 @@ Item {
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 12
-          transform: Translate { y: 2 }
+          transform: Translate { y: 4 }
         }
 
         Text {
