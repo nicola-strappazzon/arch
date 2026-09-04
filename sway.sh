@@ -1030,6 +1030,7 @@ type=$(
 connection=$(nmcli -g GENERAL.CONNECTION device show "$interface" | head -n1)
 ip=$(nmcli -g IP4.ADDRESS device show "$interface" | head -n1)
 mac=$(nmcli -g GENERAL.HWADDR device show "$interface" | head -n1)
+mac=${mac//\\:/:}
 gateway=$(nmcli -g IP4.GATEWAY device show "$interface" | head -n1)
 dns=$(
   nmcli -g IP4.DNS device show "$interface" |
