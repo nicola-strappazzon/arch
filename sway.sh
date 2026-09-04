@@ -4,6 +4,8 @@ function main() {
   install_packages
   install_fonts
   configure_sway
+  configure_gtk
+  configure_qt
   configure_waybar
   configure_terminal
   configure_application_launcher
@@ -43,11 +45,13 @@ function install_packages() {
     zathura-pdf-mupdf      `# Zathura PDF support` \
     nautilus               `# file manager` \
     nautilus-python        `# Nautilus Python extensions` \
+    breeze                 `# dark theme for KDE/Qt applications` \
     imv                    `# image viewer` \
     evince                 `# document viewer` \
     mpv-mpris              `# MPV media integration` \
     impala                 `# Wi-Fi interface` \
     rofi-wayland           `# application launcher` \
+    rofimoji               `# emoji selector for Rofi` \
     libnotify              `# notification tools` \
   &> /dev/null
 }
@@ -55,7 +59,18 @@ function install_packages() {
 function install_fonts() {
   echo "==> Install fonts."
   sudo pacman -S --noconfirm --needed \
-    ttf-jetbrains-mono-nerd `# patched monospace font` \
+    adobe-source-code-pro-fonts \
+    noto-fonts \
+    noto-fonts-cjk \
+    noto-fonts-emoji \
+    noto-fonts-extra \
+    ttf-dejavu \
+    ttf-fira-code \
+    ttf-hack \
+    ttf-jetbrains-mono \
+    ttf-jetbrains-mono-nerd \
+    ttf-liberation \
+    ttf-roboto \
   &> /dev/null
 
   sudo fc-cache --force &> /dev/null
@@ -105,6 +120,9 @@ exec swayidle -w \
 
     # Show keyboard shortcuts and command help
     bindsym F1 exec ~/.config/sway/scripts/help.sh
+
+    # Search and copy an emoji to the clipboard
+    bindsym $mod+period exec rofimoji --selector rofi --action copy
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -232,6 +250,7 @@ mode "resize" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
+
 bindsym $mod+r mode "resize"
 
 # brightness
@@ -372,6 +391,7 @@ shortcuts() {
   show_tips "Sway shortcuts (Super = Logo key)" \
     "Super+Return             →  Open terminal|Super+Return" \
     "Super+Space              →  Application launcher|Super+Space" \
+    "Super+.                  →  Emoji selector|Super+period" \
     "F1                       →  Show this help|F1" \
     "Super+Shift+Q            →  Close window|Super+Shift+Q" \
     "Super+Shift+C            →  Reload Sway|Super+Shift+C" \
@@ -413,6 +433,32 @@ main
 EOF
 
   chmod +x "$HOME"/.config/sway/scripts/help.sh
+}
+
+function configure_gtk() {
+  echo "==> Configure GTK dark mode."
+
+  if [ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]; then
+    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+  else
+    dbus-run-session -- gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+    dbus-run-session -- gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+  fi
+}
+
+function configure_qt() {
+  echo "==> Configure KDE/Qt dark mode."
+
+  mkdir -p "$HOME"/.config
+  cat > "$HOME"/.config/kdeglobals << 'EOF'
+[General]
+ColorScheme=BreezeDark
+widgetStyle=Breeze
+
+[Icons]
+Theme=breeze-dark
+EOF
 }
 
 function configure_terminal() {
