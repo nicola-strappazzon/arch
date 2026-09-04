@@ -705,7 +705,7 @@ Item {
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 16
-          transform: Translate { y: 4 }
+          transform: Translate { y: 3 }
           MouseArea {
             anchors.fill: parent
             onClicked: Quickshell.execDetached(["qs", "ipc", "call", "help", "toggle"])
@@ -715,7 +715,7 @@ Item {
         Text {
           text: "⏻"
           color: "#f38ba8"
-          font.pixelSize: 17
+          font.pixelSize: 18
           MouseArea {
             anchors.fill: parent
             onClicked: Quickshell.execDetached(["qs", "ipc", "call", "power", "toggle"])
