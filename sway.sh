@@ -458,6 +458,7 @@ ShellRoot {
   Loader { source: "emoji-picker.qml" }
   Loader { source: "power-menu.qml" }
   Loader { source: "help-overlay.qml" }
+  Loader { source: "calendar.qml" }
 }
 EOF
 
@@ -567,7 +568,7 @@ Item {
             font.pixelSize: 12
             leftPadding: 5
             rightPadding: 5
-            transform: Translate { y: 4 }
+            transform: Translate { y: 2 }
 
             MouseArea {
               anchors.fill: parent
@@ -586,6 +587,12 @@ Item {
         color: "#bbe1fa"
         font.family: "JetBrainsMono Nerd Font"
         font.pixelSize: 14
+
+        MouseArea {
+          anchors.fill: parent
+          anchors.margins: -8
+          onClicked: Quickshell.execDetached(["qs", "ipc", "call", "calendar", "toggle"])
+        }
       }
 
       Row {
@@ -599,7 +606,7 @@ Item {
           text: "  " + root.networkStatus
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
-          font.pixelSize: 12
+          font.pixelSize: 14
           transform: Translate { y: 4 }
         }
 
@@ -608,7 +615,7 @@ Item {
           text: "  " + root.volumeStatus
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
-          font.pixelSize: 12
+          font.pixelSize: 14
           transform: Translate { y: 4 }
         }
 
@@ -617,7 +624,7 @@ Item {
           text: "󰁹 " + root.batteryStatus
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
-          font.pixelSize: 12
+          font.pixelSize: 14
           transform: Translate { y: 4 }
         }
 
@@ -626,6 +633,7 @@ Item {
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 16
+          transform: Translate { y: 4 }
           MouseArea {
             anchors.fill: parent
             onClicked: Quickshell.execDetached(["qs", "ipc", "call", "help", "toggle"])
@@ -910,6 +918,167 @@ PanelWindow {
             hoverEnabled: true
             onEntered: grid.currentIndex = index
             onClicked: root.copy(index)
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+  cat > "$HOME"/.config/quickshell/calendar.qml << 'EOF'
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+
+PanelWindow {
+  id: root
+  property bool opened: false
+  property date shownMonth: new Date()
+  property date today: new Date()
+  readonly property int year: shownMonth.getFullYear()
+  readonly property int month: shownMonth.getMonth()
+  readonly property int firstWeekday: (new Date(year, month, 1).getDay() + 6) % 7
+  readonly property int daysInMonth: new Date(year, month + 1, 0).getDate()
+  readonly property var monthNames: [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ]
+  readonly property var weekdayNames: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+
+  visible: opened
+  anchors { top: true; bottom: true; left: true; right: true }
+  color: "#99000000"
+  exclusionMode: ExclusionMode.Ignore
+  WlrLayershell.layer: WlrLayer.Overlay
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
+  function dayAt(index) {
+    var day = index - firstWeekday + 1
+    return day >= 1 && day <= daysInMonth ? day : 0
+  }
+
+  function moveMonth(offset) {
+    shownMonth = new Date(year, month + offset, 1)
+  }
+
+  function toggle() {
+    opened = !opened
+    if (opened) {
+      today = new Date()
+      shownMonth = today
+      Qt.callLater(function() { keys.forceActiveFocus() })
+    }
+  }
+
+  IpcHandler {
+    target: "calendar"
+    function toggle(): void { root.toggle() }
+  }
+
+  MouseArea { anchors.fill: parent; onClicked: root.opened = false }
+
+  Rectangle {
+    width: Math.min(390, root.width - 40)
+    height: 390
+    anchors.centerIn: parent
+    color: "#1b262c"
+    border.color: "#89b4fa"
+    border.width: 2
+    radius: 8
+
+    MouseArea { anchors.fill: parent; onClicked: function(mouse) { mouse.accepted = true } }
+
+    Item {
+      id: keys
+      anchors.fill: parent
+      focus: true
+      Keys.onEscapePressed: root.opened = false
+      Keys.onLeftPressed: root.moveMonth(-1)
+      Keys.onRightPressed: root.moveMonth(1)
+      Keys.onPressed: function(event) {
+        if (event.key === Qt.Key_Home) root.shownMonth = new Date()
+      }
+    }
+
+    Column {
+      anchors.fill: parent
+      anchors.margins: 16
+      spacing: 10
+
+      Item {
+        width: parent.width
+        height: 38
+
+        Text {
+          anchors.left: parent.left
+          anchors.verticalCenter: parent.verticalCenter
+          text: "‹"
+          color: "#89b4fa"
+          font.pixelSize: 28
+          MouseArea { anchors.fill: parent; anchors.margins: -8; onClicked: root.moveMonth(-1) }
+        }
+
+        Text {
+          anchors.centerIn: parent
+          text: root.monthNames[root.month] + " " + root.year
+          color: "#bbe1fa"
+          font.family: "JetBrainsMono Nerd Font"
+          font.pixelSize: 16
+          font.bold: true
+        }
+
+        Text {
+          anchors.right: parent.right
+          anchors.verticalCenter: parent.verticalCenter
+          text: "›"
+          color: "#89b4fa"
+          font.pixelSize: 28
+          MouseArea { anchors.fill: parent; anchors.margins: -8; onClicked: root.moveMonth(1) }
+        }
+      }
+
+      Grid {
+        width: parent.width
+        columns: 7
+        rowSpacing: 4
+        columnSpacing: 4
+
+        Repeater {
+          model: root.weekdayNames
+          delegate: Text {
+            required property var modelData
+            width: (parent.width - 24) / 7
+            height: 28
+            text: modelData
+            color: "#89b4fa"
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 12
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+          }
+        }
+
+        Repeater {
+          model: 42
+          delegate: Rectangle {
+            required property int index
+            readonly property int day: root.dayAt(index)
+            readonly property bool isToday: day > 0 && root.year === root.today.getFullYear()
+              && root.month === root.today.getMonth() && day === root.today.getDate()
+            width: (parent.width - 24) / 7
+            height: 38
+            radius: 5
+            color: isToday ? "#89b4fa" : "transparent"
+
+            Text {
+              anchors.centerIn: parent
+              text: parent.day > 0 ? String(parent.day) : ""
+              color: parent.isToday ? "#1b262c" : "#bbe1fa"
+              font.family: "JetBrainsMono Nerd Font"
+              font.pixelSize: 13
+            }
           }
         }
       }
