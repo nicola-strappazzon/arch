@@ -651,7 +651,9 @@ Item {
           MouseArea {
             anchors.fill: parent
             anchors.margins: -6
-            onClicked: Quickshell.execDetached(["qs", "ipc", "call", "network", "toggle"])
+            hoverEnabled: true
+            onEntered: Quickshell.execDetached(["qs", "ipc", "call", "network", "show"])
+            onExited: Quickshell.execDetached(["qs", "ipc", "call", "network", "hideDelayed"])
           }
         }
 
@@ -1014,59 +1016,89 @@ import Quickshell.Wayland
 PanelWindow {
   id: root
   property bool opened: false
+  property var info: ({})
+  property var pendingInfo: ({})
+  readonly property var rows: [
+    { "label": "Connection",     "value": info.connection || "—" },
+    { "label": "Type",           "value": info.type || "—" },
+    { "label": "Interface",      "value": info.interfaceName || "—" },
+    { "label": "IP address",     "value": info.ip || "—" },
+    { "label": "MAC address",    "value": info.mac || "—" },
+    { "label": "Gateway",        "value": info.gateway || "—" },
+    { "label": "DNS",            "value": info.dns || "—" },
+    { "label": info.type === "wifi" ? "Signal quality" : "Link speed",
+      "value": info.quality || "—" }
+  ]
 
   visible: opened
-  anchors { top: true; bottom: true; left: true; right: true }
-  color: "#99000000"
+  anchors { top: true; right: true }
+  margins { top: 42; right: 12 }
+  implicitWidth: 500
+  implicitHeight: 370
+  color: "transparent"
   exclusionMode: ExclusionMode.Ignore
-  WlrLayershell.layer: WlrLayer.Overlay
-  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-
-  ListModel { id: details }
+  WlrLayershell.layer: WlrLayer.Top
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
   Process {
     id: infoProbe
-    command: ["bash", "-c", "iface=$(nmcli -t -f DEVICE,TYPE,STATE device status 2>/dev/null | awk -F: '$3 == \"connected\" && ($2 == \"wifi\" || $2 == \"ethernet\") { print $1; exit }'); if [ -z \"$iface\" ]; then printf 'Status\\tOffline\\n'; exit; fi; type=$(nmcli -t -f DEVICE,TYPE device status | awk -F: -v dev=\"$iface\" '$1 == dev { print $2; exit }'); connection=$(nmcli -g GENERAL.CONNECTION device show \"$iface\" | head -n1); ip=$(nmcli -g IP4.ADDRESS device show \"$iface\" | head -n1); mac=$(nmcli -g GENERAL.HWADDR device show \"$iface\" | head -n1); gateway=$(nmcli -g IP4.GATEWAY device show \"$iface\" | head -n1); dns=$(nmcli -g IP4.DNS device show \"$iface\" | awk 'NF { printf \"%s%s\", separator, $0; separator=\", \" } END { print \"\" }'); printf 'Connection\\t%s\\nType\\t%s\\nInterface\\t%s\\nIP address\\t%s\\nMAC address\\t%s\\nGateway\\t%s\\nDNS\\t%s\\n' \"$connection\" \"$type\" \"$iface\" \"${ip:-—}\" \"${mac:-—}\" \"${gateway:-—}\" \"${dns:-—}\"; if [ \"$type\" = wifi ]; then signal=$(nmcli -t -f IN-USE,SIGNAL device wifi list ifname \"$iface\" | awk -F: '$1 == \"*\" { print $2 \"%\"; exit }'); printf 'Signal quality\\t%s\\n' \"${signal:-—}\"; else speed=$(cat \"/sys/class/net/$iface/speed\" 2>/dev/null || true); printf 'Link speed\\t%s\\n' \"${speed:+$speed Mb/s}\"; fi"]
+    command: ["bash", "-c", "iface=$(nmcli -t -f DEVICE,TYPE,STATE device status 2>/dev/null | awk -F: '$3 == \"connected\" && ($2 == \"wifi\" || $2 == \"ethernet\") { print $1; exit }'); if [ -z \"$iface\" ]; then printf 'status\\tOffline\\n'; exit; fi; type=$(nmcli -t -f DEVICE,TYPE device status | awk -F: -v dev=\"$iface\" '$1 == dev { print $2; exit }'); connection=$(nmcli -g GENERAL.CONNECTION device show \"$iface\" | head -n1); ip=$(nmcli -g IP4.ADDRESS device show \"$iface\" | head -n1); mac=$(nmcli -g GENERAL.HWADDR device show \"$iface\" | head -n1); gateway=$(nmcli -g IP4.GATEWAY device show \"$iface\" | head -n1); dns=$(nmcli -g IP4.DNS device show \"$iface\" | awk 'NF { printf \"%s%s\", separator, $0; separator=\", \" } END { print \"\" }'); printf 'connection\\t%s\\ntype\\t%s\\ninterfaceName\\t%s\\nip\\t%s\\nmac\\t%s\\ngateway\\t%s\\ndns\\t%s\\n' \"$connection\" \"$type\" \"$iface\" \"${ip:-—}\" \"${mac:-—}\" \"${gateway:-—}\" \"${dns:-—}\"; if [ \"$type\" = wifi ]; then quality=$(nmcli -t -f IN-USE,SIGNAL device wifi list ifname \"$iface\" --rescan no | awk -F: '$1 == \"*\" { print $2 \"%\"; exit }'); else speed=$(cat \"/sys/class/net/$iface/speed\" 2>/dev/null || true); quality=${speed:+$speed Mb/s}; fi; printf 'quality\\t%s\\n' \"${quality:-—}\""]
     stdout: SplitParser {
       onRead: function(line) {
         var parts = String(line).trim().split("\t")
-        if (parts.length >= 2) details.append({ "label": parts[0], "value": parts.slice(1).join(" ") })
+        if (parts.length < 2) return
+        var next = Object.assign({}, root.pendingInfo)
+        next[parts[0]] = parts.slice(1).join(" ")
+        root.pendingInfo = next
       }
+    }
+    onRunningChanged: {
+      if (running) root.pendingInfo = ({})
+      else if (Object.keys(root.pendingInfo).length > 0) root.info = root.pendingInfo
     }
   }
 
-  function toggle() {
-    opened = !opened
-    if (opened) {
-      details.clear()
-      infoProbe.running = true
-      Qt.callLater(function() { keys.forceActiveFocus() })
-    }
+  Timer {
+    interval: 5000
+    running: true
+    repeat: true
+    triggeredOnStart: true
+    onTriggered: if (!infoProbe.running) infoProbe.running = true
+  }
+
+  Timer {
+    id: hideTimer
+    interval: 250
+    onTriggered: root.opened = false
+  }
+
+  function showPopover() {
+    hideTimer.stop()
+    opened = true
+  }
+
+  function hideDelayed() {
+    hideTimer.restart()
   }
 
   IpcHandler {
     target: "network"
-    function toggle(): void { root.toggle() }
+    function show(): void { root.showPopover() }
+    function hideDelayed(): void { root.hideDelayed() }
   }
 
-  MouseArea { anchors.fill: parent; onClicked: root.opened = false }
-
   Rectangle {
-    width: Math.min(520, root.width - 40)
-    height: Math.min(430, root.height - 80)
-    anchors.centerIn: parent
+    anchors.fill: parent
     color: "#1b262c"
     border.color: "#89b4fa"
     border.width: 2
     radius: 8
 
-    MouseArea { anchors.fill: parent; onClicked: function(mouse) { mouse.accepted = true } }
-
-    Item {
-      id: keys
+    MouseArea {
       anchors.fill: parent
-      focus: true
-      Keys.onEscapePressed: root.opened = false
+      hoverEnabled: true
+      onEntered: hideTimer.stop()
+      onExited: root.hideDelayed()
     }
 
     Column {
@@ -1082,24 +1114,18 @@ PanelWindow {
         font.bold: true
       }
 
-      ListView {
-        width: parent.width
-        height: parent.height - 48
-        model: details
-        clip: true
-
-        delegate: Rectangle {
-          required property string label
-          required property string value
-          width: ListView.view.width
-          height: 40
-          color: "transparent"
+      Repeater {
+        model: root.rows
+        delegate: Item {
+          required property var modelData
+          width: parent.width
+          height: 32
 
           Text {
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            width: 160
-            text: label
+            width: 150
+            text: modelData.label
             color: "#89b4fa"
             font.family: "JetBrainsMono Nerd Font"
             font.pixelSize: 13
@@ -1107,10 +1133,10 @@ PanelWindow {
 
           Text {
             anchors.left: parent.left
-            anchors.leftMargin: 170
+            anchors.leftMargin: 160
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            text: value || "—"
+            text: modelData.value
             color: "#bbe1fa"
             elide: Text.ElideRight
             font.family: "JetBrainsMono Nerd Font"
