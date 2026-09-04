@@ -777,6 +777,13 @@ PanelWindow {
     Quickshell.execDetached(["gtk-launch", id + ".desktop"])
   }
 
+  Connections {
+    target: DesktopEntries.applications
+    function onValuesChanged() {
+      if (root.opened) root.rebuild()
+    }
+  }
+
   IpcHandler {
     target: "launcher"
     function toggle(): void { root.toggle() }
