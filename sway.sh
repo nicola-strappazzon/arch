@@ -1035,8 +1035,8 @@ PanelWindow {
   visible: opened
   anchors { top: true; right: true }
   margins { top: 42; right: 12 }
-  implicitWidth: 500
-  implicitHeight: 370
+  implicitWidth: 400
+  implicitHeight: 228
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
   WlrLayershell.layer: WlrLayer.Top
@@ -1106,7 +1106,7 @@ PanelWindow {
     Column {
       anchors.fill: parent
       anchors.margins: 18
-      spacing: 14
+      spacing: 4
 
       Text {
         text: "Network information"
@@ -1121,7 +1121,7 @@ PanelWindow {
         delegate: Item {
           required property var modelData
           width: parent.width
-          height: 32
+          height: 16
 
           Text {
             anchors.left: parent.left
@@ -1130,7 +1130,7 @@ PanelWindow {
             text: modelData.label
             color: "#89b4fa"
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 13
+            font.pixelSize: 14
           }
 
           Text {
@@ -1142,7 +1142,7 @@ PanelWindow {
             color: "#bbe1fa"
             elide: Text.ElideRight
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 13
+            font.pixelSize: 14
           }
         }
       }
@@ -1504,8 +1504,8 @@ PanelWindow {
   MouseArea { anchors.fill: parent; onClicked: root.opened = false }
 
   Rectangle {
-    width: Math.min(440, root.width - 40)
-    height: 112
+    width: 605
+    height: 128
     anchors.centerIn: parent
     color: "#1b262c"
     border.color: "#89b4fa"
@@ -1530,13 +1530,13 @@ PanelWindow {
       anchors.margins: 12
       orientation: ListView.Horizontal
       model: root.actions
-      spacing: 4
+      spacing: 8
       currentIndex: 0
 
       delegate: Rectangle {
         required property int index
         required property var modelData
-        width: (actionsView.width - actionsView.spacing * 4) / 5
+        width: 110
         height: actionsView.height
         radius: 5
         color: ListView.isCurrentItem ? "#073642" : "transparent"
@@ -1549,14 +1549,14 @@ PanelWindow {
             text: modelData.icon
             color: modelData.label === "Shut down" ? "#f38ba8" : "#bbe1fa"
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 24
+            font.pixelSize: 32
           }
           Text {
             anchors.horizontalCenter: parent.horizontalCenter
             text: modelData.label
             color: "#bbe1fa"
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 16
+            font.pixelSize: 18
           }
         }
 
