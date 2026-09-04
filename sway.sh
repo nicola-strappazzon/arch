@@ -1009,6 +1009,56 @@ PanelWindow {
 }
 EOF
 
+  cat > "$HOME"/.config/quickshell/network.sh << 'EOF'
+#!/usr/bin/env bash
+set -eu
+
+interface=$(
+  nmcli -t -f DEVICE,TYPE,STATE device status 2>/dev/null |
+    awk -F: '$3 == "connected" && ($2 == "wifi" || $2 == "ethernet") { print $1; exit }'
+)
+
+if [ -z "$interface" ]; then
+  printf 'status\tOffline\n'
+  exit 0
+fi
+
+type=$(
+  nmcli -t -f DEVICE,TYPE device status |
+    awk -F: -v interface="$interface" '$1 == interface { print $2; exit }'
+)
+connection=$(nmcli -g GENERAL.CONNECTION device show "$interface" | head -n1)
+ip=$(nmcli -g IP4.ADDRESS device show "$interface" | head -n1)
+mac=$(nmcli -g GENERAL.HWADDR device show "$interface" | head -n1)
+gateway=$(nmcli -g IP4.GATEWAY device show "$interface" | head -n1)
+dns=$(
+  nmcli -g IP4.DNS device show "$interface" |
+    awk 'NF { printf "%s%s", separator, $0; separator=", " } END { print "" }'
+)
+
+printf 'connection\t%s\n' "${connection:-—}"
+printf 'type\t%s\n' "${type:-—}"
+printf 'interfaceName\t%s\n' "$interface"
+printf 'ip\t%s\n' "${ip:-—}"
+printf 'mac\t%s\n' "${mac:-—}"
+printf 'gateway\t%s\n' "${gateway:-—}"
+printf 'dns\t%s\n' "${dns:-—}"
+
+if [ "$type" = "wifi" ]; then
+  quality=$(
+    nmcli -t -f IN-USE,SIGNAL device wifi list ifname "$interface" --rescan no |
+      awk -F: '$1 == "*" { print $2 "%"; exit }'
+  )
+else
+  speed=$(cat "/sys/class/net/$interface/speed" 2>/dev/null || true)
+  quality=${speed:+$speed Mb/s}
+fi
+
+printf 'quality\t%s\n' "${quality:-—}"
+EOF
+
+  chmod +x "$HOME"/.config/quickshell/network.sh
+
   cat > "$HOME"/.config/quickshell/network.qml << 'EOF'
 import QtQuick
 import Quickshell
@@ -1044,7 +1094,7 @@ PanelWindow {
 
   Process {
     id: infoProbe
-    command: ["bash", "-c", "iface=$(nmcli -t -f DEVICE,TYPE,STATE device status 2>/dev/null | awk -F: '$3 == \"connected\" && ($2 == \"wifi\" || $2 == \"ethernet\") { print $1; exit }'); if [ -z \"$iface\" ]; then printf 'status\\tOffline\\n'; exit; fi; type=$(nmcli -t -f DEVICE,TYPE device status | awk -F: -v dev=\"$iface\" '$1 == dev { print $2; exit }'); connection=$(nmcli -g GENERAL.CONNECTION device show \"$iface\" | head -n1); ip=$(nmcli -g IP4.ADDRESS device show \"$iface\" | head -n1); mac=$(nmcli -g GENERAL.HWADDR device show \"$iface\" | head -n1); gateway=$(nmcli -g IP4.GATEWAY device show \"$iface\" | head -n1); dns=$(nmcli -g IP4.DNS device show \"$iface\" | awk 'NF { printf \"%s%s\", separator, $0; separator=\", \" } END { print \"\" }'); printf 'connection\\t%s\\ntype\\t%s\\ninterfaceName\\t%s\\nip\\t%s\\nmac\\t%s\\ngateway\\t%s\\ndns\\t%s\\n' \"$connection\" \"$type\" \"$iface\" \"${ip:-—}\" \"${mac:-—}\" \"${gateway:-—}\" \"${dns:-—}\"; if [ \"$type\" = wifi ]; then quality=$(nmcli -t -f IN-USE,SIGNAL device wifi list ifname \"$iface\" --rescan no | awk -F: '$1 == \"*\" { print $2 \"%\"; exit }'); else speed=$(cat \"/sys/class/net/$iface/speed\" 2>/dev/null || true); quality=${speed:+$speed Mb/s}; fi; printf 'quality\\t%s\\n' \"${quality:-—}\""]
+    command: [Quickshell.env("HOME") + "/.config/quickshell/network.sh"]
     stdout: SplitParser {
       onRead: function(line) {
         var parts = String(line).trim().split("\t")
