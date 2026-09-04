@@ -1067,7 +1067,7 @@ import Quickshell.Wayland
 
 PanelWindow {
   id: root
-  property bool opened: false
+  property bool opened
   property var info: ({})
   property var pendingInfo: ({})
   readonly property var rows: [
@@ -1090,7 +1090,6 @@ PanelWindow {
   color: "transparent"
   exclusionMode: ExclusionMode.Ignore
   WlrLayershell.layer: WlrLayer.Top
-  WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
 
   Process {
     id: infoProbe
