@@ -447,12 +447,6 @@ function configure_quickshell() {
   echo "==> Configure Quickshell."
 
   mkdir -p "$HOME"/.config/quickshell
-  rm -f \
-    "$HOME"/.config/quickshell/Bar.qml \
-    "$HOME"/.config/quickshell/Launcher.qml \
-    "$HOME"/.config/quickshell/EmojiPicker.qml \
-    "$HOME"/.config/quickshell/HelpOverlay.qml \
-    "$HOME"/.config/quickshell/PowerMenu.qml
 
   cat > "$HOME"/.config/quickshell/shell.qml << 'EOF'
 import QtQuick
