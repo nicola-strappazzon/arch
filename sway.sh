@@ -653,8 +653,9 @@ Item {
             anchors.fill: parent
             anchors.margins: -6
             hoverEnabled: true
-            onEntered: Quickshell.execDetached(["qs", "ipc", "call", "network", "show"])
+            onEntered: Quickshell.execDetached(["qs", "ipc", "call", "network", "open"])
             onExited: Quickshell.execDetached(["qs", "ipc", "call", "network", "hideDelayed"])
+            onClicked: Quickshell.execDetached(["qs", "ipc", "call", "network", "open"])
           }
         }
 
@@ -1069,7 +1070,7 @@ PanelWindow {
 
   Timer {
     id: hideTimer
-    interval: 250
+    interval: 800
     onTriggered: root.opened = false
   }
 
@@ -1084,7 +1085,7 @@ PanelWindow {
 
   IpcHandler {
     target: "network"
-    function show(): void { root.showPopover() }
+    function open(): void { root.showPopover() }
     function hideDelayed(): void { root.hideDelayed() }
   }
 
@@ -1322,21 +1323,40 @@ PanelWindow {
   property bool opened: false
   readonly property var shortcuts: [
     { "key": "Super+Return",          "description": "Open terminal" },
-    { "key": "Super+Space",           "description": "Application launcher" },
+    { "key": "Super+Space / F3 / F4", "description": "Application launcher" },
+    { "key": "F1",                    "description": "Show this help" },
     { "key": "Super+.",               "description": "Emoji selector" },
     { "key": "Super+Shift+E",         "description": "Session and power menu" },
     { "key": "Super+Shift+Q",         "description": "Close window" },
     { "key": "Super+Shift+C",         "description": "Reload Sway" },
-    { "key": "Super+H/J/K/L",         "description": "Move focus" },
-    { "key": "Super+Shift+H/J/K/L",   "description": "Move window" },
+    { "key": "Super+H/J/K/L",         "description": "Move focus with Vim keys" },
+    { "key": "Super+Arrow keys",      "description": "Move focus" },
+    { "key": "Super+Shift+H/J/K/L",   "description": "Move window with Vim keys" },
+    { "key": "Super+Shift+Arrows",    "description": "Move window" },
     { "key": "Super+[1-0]",           "description": "Go to workspace" },
     { "key": "Super+Shift+[1-0]",     "description": "Move window to workspace" },
     { "key": "Super+B / Super+V",     "description": "Split horizontal / vertical" },
+    { "key": "Super+S",               "description": "Stacking layout" },
+    { "key": "Super+W",               "description": "Tabbed layout" },
+    { "key": "Super+E",               "description": "Toggle split layout" },
     { "key": "Super+F",               "description": "Toggle fullscreen" },
     { "key": "Super+Shift+Space",     "description": "Toggle floating" },
+    { "key": "Super+A",               "description": "Focus parent container" },
+    { "key": "Super+Shift+-",         "description": "Send window to scratchpad" },
+    { "key": "Super+-",               "description": "Show scratchpad" },
     { "key": "Super+R",               "description": "Resize mode" },
-    { "key": "Print",                 "description": "Take screenshot" },
-    { "key": "Super+Shift+O",         "description": "Select screen region" }
+    { "key": "H/J/K/L or Arrows",     "description": "Resize in resize mode" },
+    { "key": "Return / Escape",       "description": "Leave resize mode" },
+    { "key": "Imp Pt",                "description": "Take screenshot" },
+    { "key": "Super+Shift+P",         "description": "Take screenshot" },
+    { "key": "Super+Shift+O",         "description": "Select screen region" },
+    { "key": "Brightness keys",       "description": "Change screen brightness" },
+    { "key": "Keyboard light keys",   "description": "Change keyboard brightness" },
+    { "key": "Volume up/down",        "description": "Change output volume" },
+    { "key": "Volume mute",           "description": "Toggle output mute" },
+    { "key": "Microphone mute",       "description": "Toggle microphone mute" },
+    { "key": "Media play",            "description": "Play or pause media" },
+    { "key": "Media next/previous",   "description": "Change media track" }
   ]
 
   visible: opened
@@ -1529,14 +1549,14 @@ PanelWindow {
             text: modelData.icon
             color: modelData.label === "Shut down" ? "#f38ba8" : "#bbe1fa"
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 23
+            font.pixelSize: 24
           }
           Text {
             anchors.horizontalCenter: parent.horizontalCenter
             text: modelData.label
             color: "#bbe1fa"
             font.family: "JetBrainsMono Nerd Font"
-            font.pixelSize: 9
+            font.pixelSize: 16
           }
         }
 
