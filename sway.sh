@@ -6,9 +6,9 @@ function main() {
   configure_sway
   configure_gtk
   configure_qt
+  configure_quickshell
   configure_waybar
   configure_terminal
-  configure_application_launcher
   configure_applications
   configure_background
   configure_notification
@@ -37,6 +37,7 @@ function install_packages() {
     swaylock               `# screen locker` \
     touchegg               `# touchpad gestures` \
     waybar                 `# status bar` \
+    quickshell             `# Wayland desktop shell` \
     wl-clipboard           `# clipboard tools` \
     xdg-desktop-portal-wlr `# Wayland desktop portal` \
     xdg-utils              `# desktop utilities` \
@@ -50,8 +51,8 @@ function install_packages() {
     evince                 `# document viewer` \
     mpv-mpris              `# MPV media integration` \
     impala                 `# Wi-Fi interface` \
-    rofi-wayland           `# application launcher` \
-    rofimoji               `# emoji selector for Rofi` \
+    unicode-emoji          `# Unicode emoji catalogue` \
+    jq                     `# parse Sway state for Quickshell` \
     libnotify              `# notification tools` \
   &> /dev/null
 }
@@ -96,7 +97,7 @@ set $right l
 # Your preferred terminal emulator
 set $term foot
 # Your preferred application launcher
-set $menu rofi -show drun -theme-str 'mainbox { children: [ inputbar ]; }'
+set $menu qs ipc call launcher toggle
 
 ### Idle configuration
 exec swayidle -w \
@@ -119,10 +120,10 @@ exec swayidle -w \
     bindsym $mod+space exec $menu
 
     # Show keyboard shortcuts and command help
-    bindsym F1 exec ~/.config/sway/scripts/help.sh
+    bindsym F1 exec qs ipc call help toggle
 
     # Search and copy an emoji to the clipboard
-    bindsym $mod+period exec rofimoji --selector rofi --action copy
+    bindsym $mod+period exec qs ipc call emojis toggle
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -135,7 +136,7 @@ exec swayidle -w \
     bindsym $mod+Shift+c reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+    bindsym $mod+Shift+e exec qs ipc call power toggle
 
     # Screenshot
     bindsym $mod+Shift+p exec grim
@@ -276,8 +277,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # launcher
-bindsym XF86LaunchA exec rofi -show drun # F3
-bindsym XF86LaunchB exec rofi -show drun # F4
+bindsym XF86LaunchA exec qs ipc call launcher toggle # F3
+bindsym XF86LaunchB exec qs ipc call launcher toggle # F4
 
 # windows theme
 #                       border  background text    indicator child_border
@@ -300,7 +301,7 @@ smart_borders on
 output * bg ~/Pictures/wallpaper.jpg fill
 
 # bar
-exec_always ~/.config/sway/scripts/waybar.sh
+exec_always ~/.config/sway/scripts/quickshell.sh
 
 # notification
 exec_always ~/.config/sway/scripts/mako.sh
@@ -342,97 +343,6 @@ EOF
 
   chmod +x "$HOME"/.config/sway/scripts/mako.sh
 
-  cat > "$HOME"/.config/sway/scripts/help.sh << 'EOF'
-#!/usr/bin/env bash
-set -euo pipefail
-
-ROFI=(rofi -dmenu -i)
-
-show_tips() {
-  local title="$1"
-  shift
-  local -a pairs=("$@") labels=()
-  local pair
-
-  for pair in "${pairs[@]}"; do
-    labels+=("${pair%%|*}")
-  done
-
-  local choice
-  choice=$(printf '%s\n' "${labels[@]}" | "${ROFI[@]}" -p "$title") || return 0
-  [ -z "$choice" ] && return 0
-
-  for pair in "${pairs[@]}"; do
-    if [ "${pair%%|*}" = "$choice" ]; then
-      local command="${pair#*|}"
-      printf '%s' "$command" | wl-copy
-      notify-send "Copied to clipboard" "$command"
-      return 0
-    fi
-  done
-}
-
-wifi() {
-  show_tips "Wi-Fi (nmcli)" \
-    "List available networks|nmcli device wifi list" \
-    "Rescan networks|nmcli device wifi rescan" \
-    "Connect to a new network|nmcli device wifi connect \"SSID\" password \"PASSWORD\"" \
-    "Connect to a saved network|nmcli connection up \"SSID\"" \
-    "Show active connection|nmcli connection show --active" \
-    "List saved connections|nmcli connection show" \
-    "Disconnect Wi-Fi|nmcli device disconnect wlan0" \
-    "Forget a network|nmcli connection delete \"SSID\"" \
-    "Turn Wi-Fi on|nmcli radio wifi on" \
-    "Turn Wi-Fi off|nmcli radio wifi off" \
-    "Wi-Fi radio status|nmcli radio wifi"
-}
-
-shortcuts() {
-  show_tips "Sway shortcuts (Super = Logo key)" \
-    "Super+Return             →  Open terminal|Super+Return" \
-    "Super+Space              →  Application launcher|Super+Space" \
-    "Super+.                  →  Emoji selector|Super+period" \
-    "F1                       →  Show this help|F1" \
-    "Super+Shift+Q            →  Close window|Super+Shift+Q" \
-    "Super+Shift+C            →  Reload Sway|Super+Shift+C" \
-    "Super+Shift+E            →  Exit Sway|Super+Shift+E" \
-    "Super+H / J / K / L      →  Move focus|Super+H J K L" \
-    "Super+Shift+H/J/K/L      →  Move window|Super+Shift+H J K L" \
-    "Super+[1-0]              →  Go to workspace|Super+1..0" \
-    "Super+Shift+[1-0]        →  Move window to workspace|Super+Shift+1..0" \
-    "Super+B / Super+V        →  Split horizontal / vertical|Super+B / Super+V" \
-    "Super+S                  →  Stacking layout|Super+S" \
-    "Super+W                  →  Tabbed layout|Super+W" \
-    "Super+E                  →  Toggle split|Super+E" \
-    "Super+F                  →  Toggle fullscreen|Super+F" \
-    "Super+Shift+Space        →  Toggle floating|Super+Shift+Space" \
-    "Super+A                  →  Focus parent|Super+A" \
-    "Super+Shift+-            →  Send to scratchpad|Super+Shift+minus" \
-    "Super+-                  →  Show scratchpad|Super+minus" \
-    "Super+R                  →  Enter resize mode|Super+R" \
-    "Super+Shift+P / Print    →  Take screenshot|grim" \
-    "Super+Shift+O            →  Select screen region|slurp" \
-    "Brightness keys          →  Screen brightness|XF86MonBrightness" \
-    "Keyboard brightness keys →  Keyboard brightness|XF86KbdBrightness" \
-    "Volume keys              →  Volume and mute|XF86Audio" \
-    "Microphone mute          →  Microphone key (F4)|XF86AudioMicMute" \
-    "Media keys               →  Play / next / previous|XF86Audio"
-}
-
-main() {
-  local category
-  category=$(printf '%s\n' "󰌌  Shortcuts" "󰖩  Wi-Fi" | "${ROFI[@]}" -p "Help") || exit 0
-
-  case "$category" in
-    *Shortcuts*) shortcuts ;;
-    *Wi-Fi*)     wifi ;;
-  esac
-}
-
-main
-EOF
-
-  chmod +x "$HOME"/.config/sway/scripts/help.sh
 }
 
 function configure_gtk() {
@@ -480,108 +390,6 @@ primary-paste=Super+v
 EOF
 }
 
-function configure_application_launcher() {
-  echo "==> Configure application launcher."
-
-  mkdir -p "$HOME"/.config/rofi/
-  cat > "$HOME"/.config/rofi/config.rasi << 'EOF'
-configuration {
-    modi:                "drun,run";
-    show-icons:          false;
-    drun-display-format: "{name}";
-    display-drun:        "";
-    display-run:         "";
-}
-
-* {
-    bg:     #1B262C;
-    bg-alt: #073642;
-    fg:     #bbe1fa;
-    fg-alt: #93a1a1;
-    accent: #89b4fa;
-    urgent: #dc322f;
-
-    background-color: transparent;
-    text-color:       @fg;
-    font:             "JetBrainsMono Nerd Font 10";
-}
-
-window {
-    background-color: @bg;
-    border:           2px;
-    border-color:     @accent;
-    border-radius:    8px;
-    width:            40%;
-    padding:          10px;
-}
-
-mainbox {
-    children: [ inputbar, listview ];
-}
-
-inputbar {
-    background-color: @bg-alt;
-    text-color:       @accent;
-    padding:          8px;
-    border-radius:    6px;
-    spacing:          8px;
-    children:         [ prompt, entry ];
-}
-
-prompt {
-    text-color: @accent;
-}
-
-entry {
-    text-color:        @accent;
-    placeholder:       "";
-    placeholder-color: @fg;
-}
-
-listview {
-    lines:     10;
-    spacing:   4px;
-    scrollbar: false;
-}
-
-element {
-    background-color: transparent;
-    text-color:       @fg;
-    border:           0px;
-    border-radius:    0px;
-    padding:          6px 8px;
-}
-
-element normal.normal,
-element normal.active,
-element normal.urgent,
-element alternate.normal,
-element alternate.active,
-element alternate.urgent {
-    background-color: transparent;
-    text-color:       @fg;
-}
-
-element selected.normal,
-element selected.active,
-element selected.urgent {
-    background-color: @bg-alt;
-    text-color:       @fg;
-}
-
-element-icon {
-    size:    1.1em;
-    padding: 0 6px 0 0;
-}
-
-element-text {
-    background-color: inherit;
-    text-color:     inherit;
-    vertical-align: 0.5;
-}
-EOF
-}
-
 function configure_applications() {
   echo "==> Configure application entries."
 
@@ -610,7 +418,6 @@ function configure_applications() {
     org.pwmt.zathura-pdf-mupdf.desktop
     qv4l2.desktop
     qvidcap.desktop
-    rofi-theme-selector.desktop
     swayimg.desktop
     user-dirs-update-gtk.desktop
     xdg-desktop-portal-gtk.desktop
@@ -636,6 +443,725 @@ function configure_background() {
   wget --quiet --output-document="${HOME}/Pictures/wallpaper.jpg" "https://raw.githubusercontent.com/nicola-strappazzon/arch/refs/heads/main/wallpaper/apple-grass-blades.jpg"
 }
 
+function configure_quickshell() {
+  echo "==> Configure Quickshell."
+
+  mkdir -p "$HOME"/.config/quickshell
+
+  cat > "$HOME"/.config/quickshell/shell.qml << 'EOF'
+import Quickshell
+
+ShellRoot {
+  Bar {}
+  Launcher {}
+  EmojiPicker {}
+  PowerMenu {}
+  HelpOverlay {}
+}
+EOF
+
+  cat > "$HOME"/.config/quickshell/Bar.qml << 'EOF'
+import QtQuick
+import Quickshell
+import Quickshell.Io
+
+Item {
+  id: root
+  property int focusedWorkspace: 1
+  property string networkStatus: ""
+  property string volumeStatus: ""
+  property string batteryStatus: ""
+
+  Process {
+    id: workspaceProbe
+    command: ["bash", "-c", "swaymsg -t get_workspaces -r | jq -r '.[] | select(.focused).num'"]
+    stdout: SplitParser {
+      onRead: function(line) {
+        var value = parseInt(String(line).trim())
+        if (!isNaN(value)) root.focusedWorkspace = value
+      }
+    }
+  }
+
+  Process {
+    id: networkProbe
+    command: ["bash", "-c", "ssid=$(nmcli -t -f ACTIVE,SSID device wifi 2>/dev/null | sed -n 's/^yes://p' | head -n1); printf '%s\\n' \"${ssid:-Offline}\""]
+    stdout: SplitParser { onRead: function(line) { root.networkStatus = String(line).trim() } }
+  }
+
+  Process {
+    id: volumeProbe
+    command: ["bash", "-c", "wpctl get-volume @DEFAULT_AUDIO_SINK@ 2>/dev/null | awk '{ printf \"%d%%\", $2 * 100 }'"]
+    stdout: SplitParser { onRead: function(line) { root.volumeStatus = String(line).trim() } }
+  }
+
+  Process {
+    id: batteryProbe
+    command: ["bash", "-c", "for battery in /sys/class/power_supply/BAT*; do [ -r \"$battery/capacity\" ] && { printf '%s%%\\n' \"$(cat \"$battery/capacity\")\"; break; }; done"]
+    stdout: SplitParser { onRead: function(line) { root.batteryStatus = String(line).trim() } }
+  }
+
+  Timer {
+    interval: 750
+    running: true
+    repeat: true
+    triggeredOnStart: true
+    onTriggered: if (!workspaceProbe.running) workspaceProbe.running = true
+  }
+
+  Timer {
+    interval: 5000
+    running: true
+    repeat: true
+    triggeredOnStart: true
+    onTriggered: {
+      if (!networkProbe.running) networkProbe.running = true
+      if (!volumeProbe.running) volumeProbe.running = true
+      if (!batteryProbe.running) batteryProbe.running = true
+    }
+  }
+
+  SystemClock {
+    id: clock
+    precision: SystemClock.Minutes
+  }
+
+  Variants {
+    model: Quickshell.screens
+
+    delegate: PanelWindow {
+      required property var modelData
+      screen: modelData
+      anchors { top: true; left: true; right: true }
+      implicitHeight: 34
+      color: "#1b262c"
+
+      Row {
+        anchors.left: parent.left
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 4
+
+        Text {
+          text: "󰣇"
+          color: "#89b4fa"
+          font.family: "JetBrainsMono Nerd Font"
+          font.pixelSize: 17
+          leftPadding: 4
+          rightPadding: 8
+
+          MouseArea {
+            anchors.fill: parent
+            onClicked: Quickshell.execDetached(["qs", "ipc", "call", "launcher", "toggle"])
+          }
+        }
+
+        Repeater {
+          model: 10
+          delegate: Text {
+            required property int index
+            readonly property int workspaceNumber: index + 1
+            text: "●"
+            color: root.focusedWorkspace === workspaceNumber ? "#89b4fa" : "#6c7086"
+            font.pixelSize: 10
+            leftPadding: 5
+            rightPadding: 5
+
+            MouseArea {
+              anchors.fill: parent
+              onClicked: Quickshell.execDetached(["swaymsg", "workspace", "number", String(parent.workspaceNumber)])
+            }
+          }
+        }
+      }
+
+      Text {
+        anchors.centerIn: parent
+        text: Qt.formatDateTime(clock.date, "HH:mm")
+        color: "#bbe1fa"
+        font.family: "JetBrainsMono Nerd Font"
+        font.pixelSize: 14
+      }
+
+      Row {
+        anchors.right: parent.right
+        anchors.rightMargin: 12
+        anchors.verticalCenter: parent.verticalCenter
+        spacing: 16
+
+        Text {
+          visible: root.networkStatus.length > 0
+          text: "  " + root.networkStatus
+          color: "#bbe1fa"
+          font.family: "JetBrainsMono Nerd Font"
+          font.pixelSize: 12
+        }
+
+        Text {
+          visible: root.volumeStatus.length > 0
+          text: "  " + root.volumeStatus
+          color: "#bbe1fa"
+          font.family: "JetBrainsMono Nerd Font"
+          font.pixelSize: 12
+        }
+
+        Text {
+          visible: root.batteryStatus.length > 0
+          text: "󰁹 " + root.batteryStatus
+          color: "#bbe1fa"
+          font.family: "JetBrainsMono Nerd Font"
+          font.pixelSize: 12
+        }
+
+        Text {
+          text: "󰌌"
+          color: "#bbe1fa"
+          font.family: "JetBrainsMono Nerd Font"
+          font.pixelSize: 16
+          MouseArea {
+            anchors.fill: parent
+            onClicked: Quickshell.execDetached(["qs", "ipc", "call", "help", "toggle"])
+          }
+        }
+
+        Text {
+          text: "⏻"
+          color: "#f38ba8"
+          font.pixelSize: 17
+          MouseArea {
+            anchors.fill: parent
+            onClicked: Quickshell.execDetached(["qs", "ipc", "call", "power", "toggle"])
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+  cat > "$HOME"/.config/quickshell/Launcher.qml << 'EOF'
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+
+PanelWindow {
+  id: root
+  property bool opened: false
+  property var entries: []
+
+  visible: opened
+  anchors { top: true; bottom: true; left: true; right: true }
+  color: "#99000000"
+  exclusionMode: ExclusionMode.Ignore
+  WlrLayershell.layer: WlrLayer.Overlay
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
+  function rebuild() {
+    var query = search.text.toLowerCase()
+    var values = DesktopEntries.applications.values || []
+    var matches = []
+    for (var i = 0; i < values.length; ++i) {
+      var entry = values[i]
+      var name = String(entry.name || entry.id || "")
+      if (!query || name.toLowerCase().indexOf(query) >= 0)
+        matches.push({ "name": name, "id": String(entry.id || "") })
+    }
+    matches.sort(function(a, b) { return a.name.localeCompare(b.name) })
+    entries = matches.slice(0, 100)
+    apps.currentIndex = entries.length ? 0 : -1
+  }
+
+  function openOverlay() {
+    opened = true
+    search.text = ""
+    rebuild()
+    Qt.callLater(function() { search.forceActiveFocus() })
+  }
+
+  function hide() { opened = false }
+  function toggle() { opened ? hide() : openOverlay() }
+
+  function launch(index) {
+    if (index < 0 || index >= entries.length) return
+    var id = entries[index].id
+    hide()
+    Quickshell.execDetached(["gtk-launch", id + ".desktop"])
+  }
+
+  IpcHandler {
+    target: "launcher"
+    function toggle(): void { root.toggle() }
+  }
+
+  MouseArea { anchors.fill: parent; onClicked: root.hide() }
+
+  Rectangle {
+    width: Math.min(560, root.width - 40)
+    height: Math.min(600, root.height - 80)
+    anchors.centerIn: parent
+    color: "#1b262c"
+    border.color: "#89b4fa"
+    border.width: 2
+    radius: 8
+
+    MouseArea { anchors.fill: parent; onClicked: function(mouse) { mouse.accepted = true } }
+
+    Column {
+      anchors.fill: parent
+      anchors.margins: 14
+      spacing: 10
+
+      TextInput {
+        id: search
+        width: parent.width
+        height: 38
+        color: "#bbe1fa"
+        font.family: "JetBrainsMono Nerd Font"
+        font.pixelSize: 16
+        leftPadding: 10
+        verticalAlignment: TextInput.AlignVCenter
+        onTextChanged: root.rebuild()
+        Keys.onEscapePressed: root.hide()
+        Keys.onDownPressed: apps.currentIndex = Math.min(apps.count - 1, apps.currentIndex + 1)
+        Keys.onUpPressed: apps.currentIndex = Math.max(0, apps.currentIndex - 1)
+        Keys.onReturnPressed: root.launch(apps.currentIndex)
+
+        Rectangle { anchors.fill: parent; z: -1; color: "#073642"; radius: 6 }
+      }
+
+      ListView {
+        id: apps
+        width: parent.width
+        height: parent.height - search.height - parent.spacing
+        model: root.entries
+        clip: true
+        spacing: 3
+
+        delegate: Rectangle {
+          required property int index
+          required property var modelData
+          width: apps.width
+          height: 38
+          radius: 4
+          color: ListView.isCurrentItem ? "#073642" : "transparent"
+
+          Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            text: modelData.name
+            color: "#bbe1fa"
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 14
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: apps.currentIndex = index
+            onClicked: root.launch(index)
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+  cat > "$HOME"/.config/quickshell/EmojiPicker.qml << 'EOF'
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+
+PanelWindow {
+  id: root
+  property bool opened: false
+  property var allEmojis: []
+  property var matches: []
+
+  visible: opened
+  anchors { top: true; bottom: true; left: true; right: true }
+  color: "#99000000"
+  exclusionMode: ExclusionMode.Ignore
+  WlrLayershell.layer: WlrLayer.Overlay
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
+  Process {
+    running: true
+    command: ["awk", "-F# ", "/; fully-qualified/ { value=$2; sub(/ E[0-9.]+ /, \"\\t\", value); print value }", "/usr/share/unicode/emoji/emoji-test.txt"]
+    stdout: SplitParser {
+      onRead: function(line) {
+        var parts = String(line).trim().split("\t")
+        if (parts.length < 2) return
+        var next = root.allEmojis.slice()
+        next.push({ "emoji": parts[0], "name": parts.slice(1).join(" ") })
+        root.allEmojis = next
+      }
+    }
+  }
+
+  function rebuild() {
+    var query = search.text.trim().toLowerCase()
+    var result = []
+    for (var i = 0; i < allEmojis.length && result.length < 300; ++i) {
+      var item = allEmojis[i]
+      if (!query || item.name.toLowerCase().indexOf(query) >= 0) result.push(item)
+    }
+    matches = result
+    grid.currentIndex = matches.length ? 0 : -1
+  }
+
+  onAllEmojisChanged: if (opened) rebuild()
+
+  function openOverlay() {
+    opened = true
+    search.text = ""
+    rebuild()
+    Qt.callLater(function() { search.forceActiveFocus() })
+  }
+
+  function hide() { opened = false }
+  function toggle() { opened ? hide() : openOverlay() }
+
+  function copy(index) {
+    if (index < 0 || index >= matches.length) return
+    Quickshell.execDetached(["wl-copy", matches[index].emoji])
+    hide()
+  }
+
+  IpcHandler {
+    target: "emojis"
+    function toggle(): void { root.toggle() }
+  }
+
+  MouseArea { anchors.fill: parent; onClicked: root.hide() }
+
+  Rectangle {
+    width: Math.min(560, root.width - 40)
+    height: Math.min(560, root.height - 80)
+    anchors.centerIn: parent
+    color: "#1b262c"
+    border.color: "#89b4fa"
+    border.width: 2
+    radius: 8
+
+    MouseArea { anchors.fill: parent; onClicked: function(mouse) { mouse.accepted = true } }
+
+    Column {
+      anchors.fill: parent
+      anchors.margins: 14
+      spacing: 10
+
+      TextInput {
+        id: search
+        width: parent.width
+        height: 38
+        color: "#bbe1fa"
+        font.family: "JetBrainsMono Nerd Font"
+        font.pixelSize: 16
+        leftPadding: 10
+        verticalAlignment: TextInput.AlignVCenter
+        onTextChanged: root.rebuild()
+        Keys.onEscapePressed: root.hide()
+        Keys.onLeftPressed: grid.currentIndex = Math.max(0, grid.currentIndex - 1)
+        Keys.onRightPressed: grid.currentIndex = Math.min(grid.count - 1, grid.currentIndex + 1)
+        Keys.onUpPressed: grid.currentIndex = Math.max(0, grid.currentIndex - Math.max(1, Math.floor(grid.width / grid.cellWidth)))
+        Keys.onDownPressed: grid.currentIndex = Math.min(grid.count - 1, grid.currentIndex + Math.max(1, Math.floor(grid.width / grid.cellWidth)))
+        Keys.onReturnPressed: root.copy(grid.currentIndex)
+        Rectangle { anchors.fill: parent; z: -1; color: "#073642"; radius: 6 }
+      }
+
+      GridView {
+        id: grid
+        width: parent.width
+        height: parent.height - search.height - parent.spacing
+        model: root.matches
+        clip: true
+        cellWidth: 58
+        cellHeight: 58
+
+        delegate: Rectangle {
+          required property int index
+          required property var modelData
+          width: grid.cellWidth
+          height: grid.cellHeight
+          radius: 5
+          color: GridView.isCurrentItem ? "#073642" : "transparent"
+
+          Text {
+            anchors.centerIn: parent
+            text: modelData.emoji
+            font.family: "Noto Color Emoji"
+            font.pixelSize: 28
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: grid.currentIndex = index
+            onClicked: root.copy(index)
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+  cat > "$HOME"/.config/quickshell/HelpOverlay.qml << 'EOF'
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+
+PanelWindow {
+  id: root
+  property bool opened: false
+  readonly property var shortcuts: [
+    { "key": "Super+Return",          "description": "Open terminal" },
+    { "key": "Super+Space",           "description": "Application launcher" },
+    { "key": "Super+.",               "description": "Emoji selector" },
+    { "key": "Super+Shift+E",         "description": "Session and power menu" },
+    { "key": "Super+Shift+Q",         "description": "Close window" },
+    { "key": "Super+Shift+C",         "description": "Reload Sway" },
+    { "key": "Super+H/J/K/L",         "description": "Move focus" },
+    { "key": "Super+Shift+H/J/K/L",   "description": "Move window" },
+    { "key": "Super+[1-0]",           "description": "Go to workspace" },
+    { "key": "Super+Shift+[1-0]",     "description": "Move window to workspace" },
+    { "key": "Super+B / Super+V",     "description": "Split horizontal / vertical" },
+    { "key": "Super+F",               "description": "Toggle fullscreen" },
+    { "key": "Super+Shift+Space",     "description": "Toggle floating" },
+    { "key": "Super+R",               "description": "Resize mode" },
+    { "key": "Print",                 "description": "Take screenshot" },
+    { "key": "Super+Shift+O",         "description": "Select screen region" }
+  ]
+
+  visible: opened
+  anchors { top: true; bottom: true; left: true; right: true }
+  color: "#99000000"
+  exclusionMode: ExclusionMode.Ignore
+  WlrLayershell.layer: WlrLayer.Overlay
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
+  function toggle() {
+    opened = !opened
+    if (opened) Qt.callLater(function() { keys.forceActiveFocus() })
+  }
+
+  IpcHandler {
+    target: "help"
+    function toggle(): void { root.toggle() }
+  }
+
+  MouseArea { anchors.fill: parent; onClicked: root.opened = false }
+
+  Rectangle {
+    width: Math.min(620, root.width - 40)
+    height: Math.min(650, root.height - 80)
+    anchors.centerIn: parent
+    color: "#1b262c"
+    border.color: "#89b4fa"
+    border.width: 2
+    radius: 8
+
+    MouseArea { anchors.fill: parent; onClicked: function(mouse) { mouse.accepted = true } }
+
+    Item {
+      id: keys
+      anchors.fill: parent
+      focus: true
+      Keys.onEscapePressed: root.opened = false
+      Keys.onUpPressed: list.currentIndex = Math.max(0, list.currentIndex - 1)
+      Keys.onDownPressed: list.currentIndex = Math.min(list.count - 1, list.currentIndex + 1)
+    }
+
+    Column {
+      anchors.fill: parent
+      anchors.margins: 16
+      spacing: 12
+
+      Text {
+        text: "Keyboard shortcuts"
+        color: "#89b4fa"
+        font.family: "JetBrainsMono Nerd Font"
+        font.pixelSize: 18
+        font.bold: true
+      }
+
+      ListView {
+        id: list
+        width: parent.width
+        height: parent.height - 40
+        model: root.shortcuts
+        clip: true
+        currentIndex: 0
+
+        delegate: Rectangle {
+          required property int index
+          required property var modelData
+          width: list.width
+          height: 34
+          color: ListView.isCurrentItem ? "#073642" : "transparent"
+          radius: 4
+
+          Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 10
+            anchors.verticalCenter: parent.verticalCenter
+            width: 230
+            text: modelData.key
+            color: "#89b4fa"
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 13
+          }
+
+          Text {
+            anchors.left: parent.left
+            anchors.leftMargin: 250
+            anchors.verticalCenter: parent.verticalCenter
+            text: modelData.description
+            color: "#bbe1fa"
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 13
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: list.currentIndex = index
+          }
+        }
+      }
+    }
+  }
+}
+EOF
+
+  cat > "$HOME"/.config/quickshell/PowerMenu.qml << 'EOF'
+import QtQuick
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+
+PanelWindow {
+  id: root
+  property bool opened: false
+  readonly property var actions: [
+    { "label": "Lock",       "icon": "󰌾", "command": ["swaylock", "-f", "-c", "000000"] },
+    { "label": "Suspend",    "icon": "󰤄", "command": ["systemctl", "suspend"] },
+    { "label": "Hibernate",  "icon": "󰒲", "command": ["systemctl", "hibernate"] },
+    { "label": "Log out",    "icon": "󰍃", "command": ["swaymsg", "exit"] },
+    { "label": "Restart",    "icon": "󰜉", "command": ["systemctl", "reboot"] },
+    { "label": "Shut down",  "icon": "󰐥", "command": ["systemctl", "poweroff"] }
+  ]
+
+  visible: opened
+  anchors { top: true; bottom: true; left: true; right: true }
+  color: "#99000000"
+  exclusionMode: ExclusionMode.Ignore
+  WlrLayershell.layer: WlrLayer.Overlay
+  WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
+  function toggle() {
+    opened = !opened
+    if (opened) Qt.callLater(function() { keys.forceActiveFocus() })
+  }
+
+  function run(index) {
+    if (index < 0 || index >= actions.length) return
+    var command = actions[index].command
+    opened = false
+    Quickshell.execDetached(command)
+  }
+
+  IpcHandler {
+    target: "power"
+    function toggle(): void { root.toggle() }
+  }
+
+  MouseArea { anchors.fill: parent; onClicked: root.opened = false }
+
+  Rectangle {
+    width: Math.min(440, root.width - 40)
+    height: 112
+    anchors.centerIn: parent
+    color: "#1b262c"
+    border.color: "#89b4fa"
+    border.width: 2
+    radius: 8
+
+    MouseArea { anchors.fill: parent; onClicked: function(mouse) { mouse.accepted = true } }
+
+    Item {
+      id: keys
+      anchors.fill: parent
+      focus: true
+      Keys.onEscapePressed: root.opened = false
+      Keys.onLeftPressed: actionsView.currentIndex = Math.max(0, actionsView.currentIndex - 1)
+      Keys.onRightPressed: actionsView.currentIndex = Math.min(actionsView.count - 1, actionsView.currentIndex + 1)
+      Keys.onReturnPressed: root.run(actionsView.currentIndex)
+    }
+
+    ListView {
+      id: actionsView
+      anchors.fill: parent
+      anchors.margins: 12
+      orientation: ListView.Horizontal
+      model: root.actions
+      spacing: 4
+      currentIndex: 0
+
+      delegate: Rectangle {
+        required property int index
+        required property var modelData
+        width: (actionsView.width - actionsView.spacing * 5) / 6
+        height: actionsView.height
+        radius: 5
+        color: ListView.isCurrentItem ? "#073642" : "transparent"
+
+        Column {
+          anchors.centerIn: parent
+          spacing: 8
+          Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: modelData.icon
+            color: modelData.label === "Shut down" ? "#f38ba8" : "#bbe1fa"
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 23
+          }
+          Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: modelData.label
+            color: "#bbe1fa"
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 9
+          }
+        }
+
+        MouseArea {
+          anchors.fill: parent
+          hoverEnabled: true
+          onEntered: actionsView.currentIndex = index
+          onClicked: root.run(index)
+        }
+      }
+    }
+  }
+}
+EOF
+
+  cat > "$HOME"/.config/sway/scripts/quickshell.sh << 'EOF'
+#!/usr/bin/env bash
+
+pkill -x quickshell 2>/dev/null || true
+exec quickshell
+EOF
+
+  chmod +x "$HOME"/.config/sway/scripts/quickshell.sh
+}
+
 function configure_waybar() {
   echo "==> Configure waybar."
 
@@ -652,7 +1178,7 @@ function configure_waybar() {
   "custom/launcher": {
     "format": "󰣇",
     "tooltip": false,
-    "on-click": "rofi -show drun"
+    "on-click": "qs ipc call launcher toggle"
   },
 
   "sway/workspaces": {
