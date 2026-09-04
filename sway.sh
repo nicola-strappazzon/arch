@@ -22,6 +22,7 @@ function main() {
 function install_packages() {
   echo "==> Install packages."
   sudo pacman -S --noconfirm --needed \
+    alacritty              `# terminal emulator` \
     foot                   `# terminal emulator` \
     brightnessctl          `# brightness control` \
     chromium               `# web browser` \
