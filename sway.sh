@@ -1418,7 +1418,6 @@ PanelWindow {
   readonly property var actions: [
     { "label": "Lock",       "icon": "󰌾", "command": ["swaylock", "-f", "-c", "000000"] },
     { "label": "Suspend",    "icon": "󰤄", "command": ["systemctl", "suspend"] },
-    { "label": "Hibernate",  "icon": "󰒲", "command": ["systemctl", "hibernate"] },
     { "label": "Log out",    "icon": "󰍃", "command": ["swaymsg", "exit"] },
     { "label": "Restart",    "icon": "󰜉", "command": ["systemctl", "reboot"] },
     { "label": "Shut down",  "icon": "󰐥", "command": ["systemctl", "poweroff"] }
@@ -1483,7 +1482,7 @@ PanelWindow {
       delegate: Rectangle {
         required property int index
         required property var modelData
-        width: (actionsView.width - actionsView.spacing * 5) / 6
+        width: (actionsView.width - actionsView.spacing * 4) / 5
         height: actionsView.height
         radius: 5
         color: ListView.isCurrentItem ? "#073642" : "transparent"
