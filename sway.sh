@@ -447,20 +447,27 @@ function configure_quickshell() {
   echo "==> Configure Quickshell."
 
   mkdir -p "$HOME"/.config/quickshell
+  rm -f \
+    "$HOME"/.config/quickshell/Bar.qml \
+    "$HOME"/.config/quickshell/Launcher.qml \
+    "$HOME"/.config/quickshell/EmojiPicker.qml \
+    "$HOME"/.config/quickshell/HelpOverlay.qml \
+    "$HOME"/.config/quickshell/PowerMenu.qml
 
   cat > "$HOME"/.config/quickshell/shell.qml << 'EOF'
+import QtQuick
 import Quickshell
 
 ShellRoot {
-  Bar {}
-  Launcher {}
-  EmojiPicker {}
-  PowerMenu {}
-  HelpOverlay {}
+  Loader { source: "bar.qml" }
+  Loader { source: "launcher.qml" }
+  Loader { source: "emoji-picker.qml" }
+  Loader { source: "power-menu.qml" }
+  Loader { source: "help-overlay.qml" }
 }
 EOF
 
-  cat > "$HOME"/.config/quickshell/Bar.qml << 'EOF'
+  cat > "$HOME"/.config/quickshell/bar.qml << 'EOF'
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -566,10 +573,14 @@ Item {
             font.pixelSize: 10
             leftPadding: 5
             rightPadding: 5
+            transform: Translate { y: 2 }
 
             MouseArea {
               anchors.fill: parent
-              onClicked: Quickshell.execDetached(["swaymsg", "workspace", "number", String(parent.workspaceNumber)])
+              onClicked: {
+                root.focusedWorkspace = parent.workspaceNumber
+                Quickshell.execDetached(["swaymsg", "workspace", "number", String(parent.workspaceNumber)])
+              }
             }
           }
         }
@@ -595,6 +606,7 @@ Item {
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 12
+          transform: Translate { y: 2 }
         }
 
         Text {
@@ -603,6 +615,7 @@ Item {
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 12
+          transform: Translate { y: 2 }
         }
 
         Text {
@@ -611,6 +624,7 @@ Item {
           color: "#bbe1fa"
           font.family: "JetBrainsMono Nerd Font"
           font.pixelSize: 12
+          transform: Translate { y: 2 }
         }
 
         Text {
@@ -639,7 +653,7 @@ Item {
 }
 EOF
 
-  cat > "$HOME"/.config/quickshell/Launcher.qml << 'EOF'
+  cat > "$HOME"/.config/quickshell/launcher.qml << 'EOF'
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -769,7 +783,7 @@ PanelWindow {
 }
 EOF
 
-  cat > "$HOME"/.config/quickshell/EmojiPicker.qml << 'EOF'
+  cat > "$HOME"/.config/quickshell/emoji-picker.qml << 'EOF'
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -910,7 +924,7 @@ PanelWindow {
 }
 EOF
 
-  cat > "$HOME"/.config/quickshell/HelpOverlay.qml << 'EOF'
+  cat > "$HOME"/.config/quickshell/help-overlay.qml << 'EOF'
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -1039,7 +1053,7 @@ PanelWindow {
 }
 EOF
 
-  cat > "$HOME"/.config/quickshell/PowerMenu.qml << 'EOF'
+  cat > "$HOME"/.config/quickshell/power-menu.qml << 'EOF'
 import QtQuick
 import Quickshell
 import Quickshell.Io
